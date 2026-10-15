@@ -111,7 +111,6 @@ export const canvas = {
     },
   },
   accents: {
-    emphasis: palette.canvasTeal1,
     special: {
       one: palette.canvasTeal1,
       two: palette.canvasViolet1,

@@ -18,7 +18,7 @@ cursor_fg = "${theme.ui.surface.editor.background}"
 selection_bg = "${theme.ui.selection.background}"
 selection_fg = "${theme.ui.text.primary}"
 split = "${theme.ui.border.separator}"
-compose_cursor = "${theme.accents.emphasis}"
+compose_cursor = "${theme.accents.primary}"
 scrollbar_thumb = "${theme.ui.scrollbar.thumb}"
 
 ansi = [

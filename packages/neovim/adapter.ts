@@ -27,7 +27,7 @@ export function neovimRoles(theme: ThemeDefinition) {
       border: theme.ui.border.default,
       header1: theme.ui.heading.primary,
       header2: theme.ui.heading.secondary,
-      special: theme.accents.emphasis,
+      special: theme.accents.primary,
       nontext: theme.ui.editor.nontext,
       whitespace: theme.ui.editor.whitespace,
       win_separator: theme.ui.border.separator,

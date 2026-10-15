@@ -8,6 +8,19 @@ describe("shared color preparation", function()
 	end)
 
 	for _, variant in ipairs({ "ink", "canvas" }) do
+		it(variant .. " keeps emphasis and primary overrides independent", function()
+			local defaults = source.prepare(variant).theme
+			assert.same(defaults.accent.accent1, defaults.ui.special)
+			for _, override in ipairs({
+				{ ui = { special = "#123456" } },
+				{ accent = { accent1 = "#abcdef" } },
+			}) do
+				local result = colors.setup({ _theme = variant, colors = { theme = { [variant] = override } } }).theme
+				assert.same(override.ui and "#123456" or defaults.ui.special, result.ui.special)
+				assert.same(override.accent and "#abcdef" or defaults.accent.accent1, result.accent.accent1)
+			end
+		end)
+
 		it(variant .. " preserves Neovim palette and role overrides", function()
 			local palette_name = variant == "ink" and "fujiWhite" or "canvasGray3"
 			local result = colors.setup({

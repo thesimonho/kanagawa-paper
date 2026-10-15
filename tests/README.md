@@ -13,7 +13,7 @@ agent:
 | `neovim/` | Lua runtime specs and standalone runtime probes called by TypeScript |
 | `release/` | Python release/assembly/publication checks and the TypeScript VSCE OIDC contract |
 | `support/` | Shared file hashing and independent artifact-fixture comparison |
-| `fixtures/` | Immutable pre-migration baselines; see its README for provenance |
+| `fixtures/` | Migration baselines with documented, approved behavior changes; see its README for provenance |
 
 Run `npm test` for the shared and target TypeScript suites after installing root dependencies. Neovim must be available for installed-runtime checks. `npm run test:release` separately runs the OIDC contract after installing the Node dependencies in `scripts/ci/release`; core build tests do not require Marketplace tooling.
 

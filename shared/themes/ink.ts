@@ -111,7 +111,6 @@ export const ink = {
     },
   },
   accents: {
-    emphasis: palette.dragonAqua,
     special: {
       one: palette.dragonYellow,
       two: palette.springViolet1,

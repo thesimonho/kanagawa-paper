@@ -110,7 +110,6 @@ export interface ThemeDefinition {
     };
   };
   accents: {
-    emphasis: ColorExpression;
     special: {
       one: ColorExpression;
       two: ColorExpression;

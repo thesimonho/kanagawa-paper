@@ -20,7 +20,7 @@ gui:
       - "${theme.ui.search.match.background}"
       - "bold"
     optionsTextColor:
-      - "${theme.accents.emphasis}"
+      - "${theme.accents.primary}"
     selectedLineBgColor:
       - "${theme.ui.editor.currentLine.background}"
     cherryPickedCommitFgColor:

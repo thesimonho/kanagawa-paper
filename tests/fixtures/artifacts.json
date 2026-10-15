@@ -4,13 +4,13 @@
   "extras/foot/kanagawa-paper-canvas.ini": "67dfee8d52739280a42c0620bea232f1d661a52f1cdefe70b4b77b3901c73118",
   "extras/foot/kanagawa-paper-ink.ini": "faf354288137e04621a92927b2917d5576ff08ef567802199c32941d3b8c7ed0",
   "extras/fzf/kanagawa-paper-canvas.rc": "b7d0b2d1abde087d359f6c09f1f564d849e74f55e31e6fe70212dc8f45b2b8fe",
-  "extras/fzf/kanagawa-paper-ink.rc": "7551e069983cdb474d0124441ad1274aabac0e8a35812f594c1be3a19f2595bd",
+  "extras/fzf/kanagawa-paper-ink.rc": "dfec18468ac0a8c954db8babe6aebebe8b6534879e0c78b8d338b6bf2147b223",
   "extras/ghostty/kanagawa-paper-canvas": "2689cca5238914cbe56174944eaa3e0f77742f3fdcee68fd6f70e907a5b0e42c",
   "extras/ghostty/kanagawa-paper-ink": "8f5db7c699a1e58fa6719f75d0fd9c8d1074ebc58ad251c91a99b208a9c152b5",
   "extras/kitty/kanagawa-paper-canvas.conf": "8b9cc80cd4432ca7069da194031776fdb11df7a7ee33b8fe53fbede188f18f06",
   "extras/kitty/kanagawa-paper-ink.conf": "ca4b3f6acfc41a730bffa551e0f9bd148d5e53d662c76096ba73f05938b73293",
   "extras/lazygit/kanagawa-paper-canvas.yml": "8945e6192f1766497428193b90c868930becc060193ed583bfac2aa6e2b8b003",
-  "extras/lazygit/kanagawa-paper-ink.yml": "c899e2ce45f40016b7b393a1ae27b7f2b5924522dc6c118ecdbaf54e05bdaeb3",
+  "extras/lazygit/kanagawa-paper-ink.yml": "37f6aad43dd6945fb82d8c498d7fa6384e5cfae1cfd96d422796accb8fd50747",
   "extras/nchat/kanagawa-paper-canvas-color.conf": "3bdf0552094f5d323622a403e9a0498b94b82e9069ae926477a0e8361e59a607",
   "extras/nchat/kanagawa-paper-canvas-usercolor.conf": "77cee2af1ddb4c064e4002ef458c9f0b5389763fb32f4dea073d96dff44a4923",
   "extras/nchat/kanagawa-paper-ink-color.conf": "cf338f8f995af210f3098df033ac4936588a28eb753752860c04a1319cffcd09",
@@ -31,7 +31,7 @@
   "extras/vscode_terminal/kanagawa-paper-canvas.jsonc": "c4b737a39e1e6ed49b03ca6e4fa8e674c3dc86922a6c2c1d851c4e32870d609b",
   "extras/vscode_terminal/kanagawa-paper-ink.jsonc": "5889a22267a93e4ab5e5a0ec7ea4a02bc32788919b80b42d1a097b7e33961451",
   "extras/wezterm/kanagawa-paper-canvas.toml": "d65f93a03e896ecfa30e72292762de044761b0088e1389610ff7bf19bc464f4d",
-  "extras/wezterm/kanagawa-paper-ink.toml": "5ff36ec28bc7798505e42d8022124618a6ed5077f7da6bbf97ab7cb346c45fbc",
+  "extras/wezterm/kanagawa-paper-ink.toml": "73f2e740687196268dd8905ca778bf4927756b6c8e6576850d45bd82d415b325",
   "extras/wezterm_tabline/kanagawa-paper-canvas.lua": "04fa5411a062b81c05d3ffe5a83b306d8dbd877ac5cccef57de2c89b077db0e8",
   "extras/wezterm_tabline/kanagawa-paper-ink.lua": "ad073ee036781cb3a7799855c8d4f8f5f3801c1037190ce9c4a82f1675a7f8db",
   "extras/windows_terminal/kanagawa-paper-canvas.jsonc": "c12a6ed86bee763fe7757ade82712ce155bf263d24c947989c16750455d0b5a4",
@@ -39,5 +39,5 @@
   "extras/zellij/kanagawa-paper-canvas.kdl": "0f5f5550899d905277b3950c970d16f5b42c6981e95aa396a55749e10026608d",
   "extras/zellij/kanagawa-paper-ink.kdl": "90af59ee680c89b7c9e5f2ed340ae5dccfdd860df9978c78f0db191b72198fdd",
   "vscode/themes/kanagawa-paper-canvas-color-theme.json": "30cac42599a5f2047c95e0fadbbd3f05e645f8a62642bb79de659be4d2a33a53",
-  "vscode/themes/kanagawa-paper-ink-color-theme.json": "0362288907be08acd355e19e23f104e7b8bc7887164b62d4fdc49e767a9390f9"
+  "vscode/themes/kanagawa-paper-ink-color-theme.json": "3bbfe6d5766cdc6dbd32f6221e049aea4ff5856c4efeabbea253a9f7f41c9f9d"
 }

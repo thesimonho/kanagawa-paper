@@ -14,7 +14,7 @@ export function generate(theme: Theme, meta: Metadata): Record<string, string> {
 
 --color=bg:-1,bg+:${theme.ui.editor.currentLine.background},fg:-1,fg+:${theme.ui.text.primary},hl:${theme.modes.visual},hl+:${theme.syntax.symbol}
 --color=header:${theme.ui.heading.secondary},info:${theme.status.info.base},pointer:${theme.ui.editor.mark}
---color=marker:${theme.ui.editor.mark},prompt:${theme.ui.navigation.target},spinner:${theme.accents.emphasis}
+--color=marker:${theme.ui.editor.mark},prompt:${theme.ui.navigation.target},spinner:${theme.accents.primary}
 `,
   };
 }
