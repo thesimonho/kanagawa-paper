@@ -390,7 +390,7 @@ For an already assembled distribution, select its root directory in step 2; no b
 
 ## Releases
 
-Applications have independent versions and changelogs. Tags such as `neovim-4.2.0` identify installable distributions; `neovim-source-4.2.0` identifies their development source. There is no moving latest tag. Use the repository’s **Deployments → View deployment** links for each application’s latest successful publication, or the [release list](https://github.com/thesimonho/kanagawa-paper/releases) and [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=SimonHo.kanagawa-paper) directly. GitHub’s repository-wide Latest label can refer to either application.
+Applications have independent versions and changelogs. Tags such as `neovim-4.2.0` identify installable distributions; `neovim-source-4.2.0` identifies their development source. There is no moving latest tag. Use the repository’s **Deployments → View deployment** links for each application’s latest successful publication, or the [release list](https://github.com/thesimonho/kanagawa-paper/releases) and [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=SimonHo.kanagawa-paper) directly. GitHub’s repository-wide Latest label can refer to any application.
 
 ## 🔥 Contributing
 
@@ -407,7 +407,7 @@ How to add a new extra template:
 3. Open a PR. CI checks that the extras, palette, and Neovim help generators run successfully. For an optional local preview, run `just generate`.
 
 > [!IMPORTANT]
-> After merge, automation generates and commits the extras, palette preview, and Neovim help to the default branch. You do not need to generate or commit these outputs locally, including when contributing from a fork.
+> When `KANAGAWA_RELEASES_ENABLED=true`, post-merge automation on `main` generates and commits the extras, palette preview, and Neovim help. You do not need to generate or commit these outputs locally, including when contributing from a fork.
 
 ## 👏 Acknowledgements
 

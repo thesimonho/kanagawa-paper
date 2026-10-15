@@ -9,6 +9,6 @@ agent:
 
 # Extras
 
-These files are generated automatically after source changes merge. The bot commits updated output to the default branch; contributors do not need to generate or commit it locally.
+When `KANAGAWA_RELEASES_ENABLED=true`, automation generates these files after source changes merge into `main`. The bot commits updated output to `main`; contributors do not need to generate or commit it locally.
 
 Edit the shared theme sources or templates in `packages/extras/` instead of these generated files, which will be overwritten.

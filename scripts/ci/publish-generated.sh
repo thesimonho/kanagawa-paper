@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-# This is the approved post-merge automation exception to direct main pushes.
+# Publish generated output only from main.
 [[ "$(git branch --show-current)" == main ]] || { echo "Generation publication requires main" >&2; exit 1; }
 # The shared generation action has already produced these outputs. Refuse to
 # include any unrelated staged, tracked, or untracked changes in the bot commit.

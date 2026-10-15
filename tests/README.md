@@ -13,7 +13,7 @@ agent:
 | `neovim/`   | Lua runtime specs and standalone runtime probes called by TypeScript                                                       |
 | `release/`  | Python release/assembly/publication checks and TypeScript VSCE OIDC and authentication-probe contracts                     |
 | `support/`  | Shared file hashing and independent artifact-fixture comparison                                                            |
-| `fixtures/` | Migration baselines with documented, approved behavior changes; see its README for provenance                              |
+| `fixtures/` | Regression fixtures and documented behavior differences; see its README                                                   |
 
 Run `npm test` for the shared and target TypeScript suites after installing root dependencies. Neovim must be available for installed-runtime checks. `npm run test:release` separately runs the OIDC and authentication-probe contracts after installing the Node dependencies in `scripts/ci/release`; core build tests do not require Marketplace tooling.
 
@@ -21,6 +21,4 @@ Run `npm test` for the shared and target TypeScript suites after installing root
 
 Run Python automation tests with `python3 -m unittest discover -s tests/release -p 'test_*.py'` after installing the pinned release dependencies. `just test-targets` runs those plus the OIDC and authentication-probe contracts. `just check` and CI both call `npm run check`, which includes all suites, builds every registered target, and packages/validates every release-enabled target without publishing.
 
-The ignored `languages/` directory contains local visual specimens. It is not part of automated test discovery, typechecking or formatting. Do not move or modify it during test maintenance.
-
-Do not rewrite baseline fixtures as part of test reorganization. The generation action requires fresh, nonempty vimdoc output; repeatability checks use the pinned panvimdoc runtime outside these suites.
+Do not rewrite baseline fixtures to make a regression pass. The generation action requires fresh, nonempty vimdoc output; repeatability checks use the pinned panvimdoc runtime outside these suites.

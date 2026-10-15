@@ -10,7 +10,7 @@ Install Node 22 or later, then `npm ci --ignore-scripts` at the repository root.
 
 `build/build.ts` is the common dispatcher. `build/assemble.py` is a compatibility wrapper for Python release tooling. `test/bootstrap.lua` loads only `dist/neovim` for tests; `just test` builds it first and isolates Neovim state under `.tests`. `just check` runs the build, type, format, Node, Lua, and Python checks. Release checks also need the pinned Python dependencies in `scripts/ci/release/requirements.txt` and Node dependencies installed with `npm ci --prefix scripts/ci/release --ignore-scripts`.
 
-`generate.ts` updates extras and the palette Markdown. The generation action uses it plus panvimdoc to produce Neovim help from the root README. Never hand-edit generated help. PR validation generates these files and uploads them for inspection. The approved post-merge publisher commits only generated files; normal source work still requires PR review. `ci/release/` owns independent versions and frozen artifact publication.
+`generate.ts` updates extras and the palette Markdown. The generation action uses it plus panvimdoc to produce Neovim help from the root README. Never hand-edit generated help. PR validation generates these files and uploads them for inspection. The post-merge publisher commits only generated files; normal source work still requires PR review. `ci/release/` owns independent versions and frozen artifact publication.
 
 `ci/` contains hosted publication entry points and their dependencies. `build/` contains shared build and assembly tools; `test/` contains test runners and bootstrap code. Generation and syntax preview scripts remain at this level.
 
