@@ -118,6 +118,23 @@ describe("group config", function()
 				assert.same(groups["RenderMarkdownH" .. index].fg, groups["Headline" .. index].fg)
 			end
 		end)
+		it(variant .. " resolves plugin captures through current highlight groups", function()
+			require("kanagawa-paper").setup({
+				_theme = variant,
+				all_plugins = true,
+				auto_plugins = false,
+				cache = false,
+			})
+			require("kanagawa-paper").load()
+			for name, target in pairs({
+				TelescopeResultsField = "@variable.member",
+				GrugFarResultsRgCmdHeader = "@markup.link.url",
+			}) do
+				local expected = vim.api.nvim_get_hl(0, { name = target, link = false })
+				assert.is_true(expected.fg ~= nil)
+				assert.same(expected, vim.api.nvim_get_hl(0, { name = name, link = false }))
+			end
+		end)
 		it(variant .. " shares indent scope overrides across plugins", function()
 			local opts = Config.extend({
 				_theme = variant,

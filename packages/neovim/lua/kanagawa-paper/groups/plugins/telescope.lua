@@ -18,7 +18,7 @@ function M.get(colors, opts)
 		TelescopeResultsBorder = { link = "FloatBorder" },
 		TelescopeResultsClass = { link = "Structure" },
 		TelescopeResultsStruct = { link = "Structure" },
-		TelescopeResultsField = { link = "@field" },
+		TelescopeResultsField = { link = "@variable.member" },
 		TelescopeResultsMethod = { link = "Function" },
 		TelescopeResultsVariable = { link = "@variable" },
 		TelescopeResultsTitle = { bg = theme.accent.accent2, bold = true },

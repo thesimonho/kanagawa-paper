@@ -24,7 +24,7 @@ function M.get(colors, opts)
 		GrugFarResultsLineNo = { link = "LineNr" },
 		GrugFarResultsLineColumn = { link = "LineNr" },
 		GrugFarResultsChangeIndicator = { link = "@diff.delta" },
-		GrugFarResultsRgCmdHeader = { link = "@text.uri" },
+		GrugFarResultsRgCmdHeader = { link = "@markup.link.url" },
 	}
 end
 
