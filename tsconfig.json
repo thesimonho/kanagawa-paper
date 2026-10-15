@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "shared/**/*.ts",
+    "packages/*/*.ts",
+    "generators/**/*.ts",
+    "scripts/*.ts",
+    "tests/*.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
+}

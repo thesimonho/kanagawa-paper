@@ -12,3 +12,4 @@ nvim.log
 !/dist/README.md
 /.venv/
 **/__pycache__/
+node_modules/

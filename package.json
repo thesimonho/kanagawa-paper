@@ -1,0 +1,23 @@
+{
+  "name": "kanagawa-paper-source",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsx scripts/build.ts",
+    "watch": "tsx scripts/watch.ts",
+    "generate": "tsx scripts/generate.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "format:check": "prettier --check shared/**/*.ts packages/*/*.ts generators/**/*.ts scripts/*.ts tests/*.ts"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "chokidar": "4.0.3",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "prettier": "3.6.2"
+  }
+}
