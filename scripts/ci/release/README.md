@@ -15,6 +15,16 @@ Python Semantic Release 10.7.0 selects commits and prepares versions and changel
 
 `npm run test:release` runs the TypeScript VSCE credential-boundary check after both root and release Node dependencies are installed. Python tests under `tests/release/test_release.py` own coordinator behavior; `tests/release/test_assemble.py` owns its Python assembly wrapper. The target package contracts are TypeScript suites under `tests/targets/`. See `tests/README.md` for the complete ownership map.
 
+## Target definitions
+
+Every `*.toml` here is an explicit release definition and the PSR configuration for its filename's target. Add `[kanagawa.release]` with `profile = "git-archive"` or `profile = "vscode-marketplace"`. Discovery is sorted and uses the current source checkout. `definitions.py` validates definitions before preparation or publication; a missing or unsupported profile is an error.
+
+The existing PSR settings provide the version file/key, changelog path and source tag format. Use exactly one `version_variables` entry in `path:key` form, with either a JSON field or a quoted text assignment. Version and changelog files must live under `packages/{target}/`; the source tag format must be `{target}-source-{version}`. Marketplace profiles read the publisher and extension name from that JSON package. The target must also exist in the build registry. Unsupported declarations fail before release edits.
+
+`git-archive` uses the deterministic tar and GitHub release/channel path. `vscode-marketplace` packages with VSCE and confirms the frozen payload in Marketplace before advancing its channel. Both use the same candidate sealing and retry rules below. A new target using either profile needs its package, builder registration, release TOML, approved baseline and tests; common workflow YAML and coordinator routing remain unchanged. A different publisher or toolchain needs a separate implementation. Zed and extras have no release definition and remain build-only.
+
+`python scripts/ci/release/coordinator.py check-packages` packages and validates every release-enabled target from `dist/` using the same helpers as publication. Build first. It writes only temporary artifacts and performs no Git or registry publication. The shared `npm run check` pipeline builds all targets immediately before this step; CI and `just check` call that pipeline.
+
 ## Selection and preparation
 
 Run `python scripts/ci/release/coordinator.py prepare` on a clean `main` checkout with complete history and source tags. This command writes prepared files locally; it does not commit, push, or publish. Each target configuration includes its package, shared TypeScript sources and root build dependencies, root README/license, assembly helper, and release tooling. Both targets install the root lockfile in the exact release-source worktree before assembly. Conventional `fix` and `feat` commits trigger the configured bumps. Ordinary `docs` and `chore` commits do not. Shared releasable changes select both targets even if their output is unchanged.

@@ -6,6 +6,7 @@
     "node": ">=22"
   },
   "scripts": {
+    "check": "bash scripts/test/check.sh",
     "build": "tsx scripts/build/build.ts",
     "watch": "tsx scripts/build/watch.ts",
     "generate": "tsx scripts/generate.ts",

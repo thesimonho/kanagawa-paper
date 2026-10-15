@@ -19,7 +19,7 @@ Run `npm test` for the shared and target TypeScript suites after installing root
 
 `just test` runs the Lua specs in `neovim/`. The other Lua files there are probes invoked by target tests, not standalone test suites. Keep Neovim operations in Lua rather than embedding Lua strings in another language.
 
-Run Python automation tests with `python3 -m unittest discover -s tests/release -p 'test_*.py'` after installing the pinned release dependencies. `just test-targets` runs those plus the OIDC contract. `just check` and CI include all suites.
+Run Python automation tests with `python3 -m unittest discover -s tests/release -p 'test_*.py'` after installing the pinned release dependencies. `just test-targets` runs those plus the OIDC contract. `just check` and CI both call `npm run check`, which includes all suites, builds every registered target, and packages/validates every release-enabled target without publishing.
 
 The ignored `languages/` directory contains local visual specimens. It is not part of automated test discovery, typechecking or formatting. Do not move or modify it during test maintenance.
 

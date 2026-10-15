@@ -107,8 +107,12 @@ if (
   // cleanup before exiting; the watcher stops scheduling further builds.
   process.on("SIGINT", () => {});
   process.on("SIGTERM", () => {});
-  run(options(process.argv.slice(2))).catch((error) => {
-    console.error(error.message);
-    process.exitCode = 1;
-  });
+  if (process.argv.length === 3 && process.argv[2] === "--list-targets") {
+    process.stdout.write(JSON.stringify(targets) + "\n");
+  } else {
+    run(options(process.argv.slice(2))).catch((error) => {
+      console.error(error.message);
+      process.exitCode = 1;
+    });
+  }
 }

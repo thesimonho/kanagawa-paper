@@ -12,4 +12,4 @@ agent:
 
 `release/` owns release preparation, frozen artifact publication, and pinned publication dependencies. See its README for release commands and hosted setup requirements.
 
-The workflows in `.github/workflows/` call these entry points. Build and assembly commands in `scripts/build/`, test runners in `scripts/test/`, and generation commands in `scripts/` remain shared with local development. Run CI entry points from the repository root.
+The workflows in `.github/workflows/` call these entry points. Validation calls `npm run check`; application build and release lists belong in their registries, not workflow YAML. Runner toolchains and permissions remain explicit workflow setup. Build and assembly commands in `scripts/build/`, test runners in `scripts/test/`, and generation commands in `scripts/` remain shared with local development. Run CI entry points from the repository root.

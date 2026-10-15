@@ -1,3 +1,6 @@
+[kanagawa.release]
+profile = "git-archive"
+
 [semantic_release]
 commit_parser = "conventional-monorepo"
 tag_format = "neovim-source-{version}"

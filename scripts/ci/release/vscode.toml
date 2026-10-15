@@ -1,3 +1,6 @@
+[kanagawa.release]
+profile = "vscode-marketplace"
+
 [semantic_release]
 commit_parser = "conventional-monorepo"
 tag_format = "vscode-source-{version}"

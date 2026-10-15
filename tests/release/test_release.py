@@ -37,21 +37,34 @@ class Selection(unittest.TestCase):
             ["git", "init", "--bare", str(remote)], check=True, capture_output=True
         )
         self.git("remote", "add", "origin", str(remote))
-        for target in release.TARGETS:
+        for target in release.release_targets():
             for name in (
                 f"scripts/ci/release/{target}.toml",
-                f"packages/{target}/CHANGELOG.md",
-                f"packages/{target}/"
-                + ("version.txt" if target == "neovim" else "package.json"),
+                *release.prepared_paths(target),
             ):
                 path = self.root / name
                 path.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(ROOT / name, path)
+        (self.root / "node_modules").symlink_to(
+            ROOT / "node_modules", target_is_directory=True
+        )
+        (self.root / ".git/info/exclude").write_text("node_modules\n")
+        self.register_builds(*release.release_targets())
         (self.root / "shared").mkdir()
         (self.root / "shared/palette.ts").write_text("baseline\n")
         (self.root / "README.md").write_text("baseline\n")
-        (self.root / "package.json").write_text(json.dumps({"name": "release-fixture", "private": True}))
-        (self.root / "package-lock.json").write_text(json.dumps({"name": "release-fixture", "lockfileVersion": 3, "packages": {"": {"name": "release-fixture"}}}))
+        (self.root / "package.json").write_text(
+            json.dumps({"name": "release-fixture", "private": True})
+        )
+        (self.root / "package-lock.json").write_text(
+            json.dumps(
+                {
+                    "name": "release-fixture",
+                    "lockfileVersion": 3,
+                    "packages": {"": {"name": "release-fixture"}},
+                }
+            )
+        )
         self.commit("chore: baseline")
         for target, version in (("neovim", "4.1.0"), ("vscode", "2.2.1")):
             self.git("tag", f"{target}-source-{version}")
@@ -62,6 +75,28 @@ class Selection(unittest.TestCase):
         self.run_patch.start()
         self.env_patch = patch.dict(os.environ, {"SEMANTIC_RELEASE": SEMANTIC})
         self.env_patch.start()
+
+    def register_builds(self, *targets):
+        script = self.root / "scripts/build/build.ts"
+        script.parent.mkdir(parents=True, exist_ok=True)
+        script.write_text(
+            f"process.stdout.write(JSON.stringify({json.dumps(targets)}));\n"
+        )
+
+    def add_archive_target(self):
+        target = "fixture"
+        package = self.root / "packages" / target
+        package.mkdir()
+        (package / "version.txt").write_text('VERSION = "1.0.0"\n')
+        (package / "CHANGELOG.md").write_text("# Changelog\n\n<!-- version list -->\n")
+        config = (self.root / "scripts/ci/release/neovim.toml").read_text()
+        (self.root / "scripts/ci/release/fixture.toml").write_text(
+            config.replace("neovim", target)
+        )
+        self.register_builds(*release.release_targets())
+        self.commit("chore: add fixture application")
+        self.git("tag", "fixture-source-1.0.0")
+        return target
 
     def tearDown(self):
         self.env_patch.stop()
@@ -101,6 +136,83 @@ class Selection(unittest.TestCase):
         )
         self.commit(message)
 
+    def test_added_archive_target_is_discovered_prepared_and_packaged(self):
+        target = self.add_archive_target()
+        self.change("packages/fixture/runtime", "fix: fixture runtime")
+        plan = release.prepare()
+        self.assertEqual(set(plan["targets"]), {target})
+        self.assertEqual(plan["targets"][target]["version"], "1.0.1")
+        with tempfile.TemporaryDirectory() as temporary:
+            artifact = Path(temporary) / "fixture.tar"
+            tree = self.root / "packages/fixture"
+            release.package_artifact(target, tree, artifact)
+            release.validate_artifact(target, artifact, tree)
+        # Package checks discover the same target and cannot invoke remote tooling.
+        for name in release.release_targets():
+            tree = self.root / "dist" / name
+            tree.mkdir(parents=True)
+            (tree / "README.md").write_text("fixture package")
+        original = release.package_artifact
+        seen = []
+
+        def package(name, tree, artifact):
+            seen.append(name)
+            if name == "vscode":
+                with zipfile.ZipFile(artifact, "w") as archive:
+                    archive.writestr("extension/readme.md", "fixture package")
+            else:
+                original(name, tree, artifact)
+
+        with (
+            patch.object(release, "package_artifact", side_effect=package),
+            patch.object(
+                release,
+                "gh",
+                side_effect=AssertionError("package checks must not publish"),
+            ),
+            patch.object(
+                release,
+                "git",
+                side_effect=AssertionError("package checks must not mutate Git"),
+            ),
+        ):
+            release.check_packages()
+        self.assertEqual(seen, sorted(release.release_targets()))
+
+    def test_invalid_definitions_fail_before_preparation(self):
+        path = self.root / "scripts/ci/release/vscode.toml"
+        original = path.read_text()
+        cases = (
+            original.replace('profile = "vscode-marketplace"', 'profile = "unknown"'),
+            original.replace('profile = "vscode-marketplace"', ""),
+            original.replace(
+                "package.json:version", "package.json:version:unsupported"
+            ),
+            original.replace(
+                "packages/vscode/package.json:version", "../escape:version"
+            ),
+        )
+        for content in cases:
+            with self.subTest(content=content):
+                path.write_text(content)
+                self.commit("chore: invalid release definition fixture")
+                with patch.object(release, "psr") as psr, self.assertRaises(ValueError):
+                    release.prepare()
+                psr.assert_not_called()
+        path.write_text(original)
+        self.register_builds("neovim")
+        self.commit("chore: missing builder fixture")
+        with (
+            patch.object(release, "psr") as psr,
+            self.assertRaisesRegex(ValueError, "no registered builder"),
+        ):
+            release.prepare()
+        psr.assert_not_called()
+
+    def test_package_checks_require_built_distributions(self):
+        with self.assertRaisesRegex(ValueError, "Build neovim"):
+            release.check_packages()
+
     def test_target_local(self):
         self.change("packages/vscode/mapping.json", "fix: application mapping")
         plan = release.prepare()
@@ -129,7 +241,7 @@ class Selection(unittest.TestCase):
             {t: v["version"] for t, v in plan["targets"].items()},
             {"neovim": "4.2.0", "vscode": "2.3.0"},
         )
-        for target in release.TARGETS:
+        for target in release.release_targets():
             self.assertIn("shared palette", plan["targets"][target]["notes"].lower())
             self.assertIn(
                 "<!-- version list -->",
@@ -222,10 +334,16 @@ class Selection(unittest.TestCase):
         self.change("packages/neovim/runtime.lua", "fix: subsequent runtime")
         latest = self.git("rev-parse", "HEAD")
         self.git("push", "origin", "main", "--tags")
-        with patch.object(release, "open_pr") as open_pr, patch.dict(os.environ, {
-            "ACTIONS_ID_TOKEN_REQUEST_URL": "https://example.invalid/oidc",
-            "ACTIONS_ID_TOKEN_REQUEST_TOKEN": "fixture-token",
-        }):
+        with (
+            patch.object(release, "open_pr") as open_pr,
+            patch.dict(
+                os.environ,
+                {
+                    "ACTIONS_ID_TOKEN_REQUEST_URL": "https://example.invalid/oidc",
+                    "ACTIONS_ID_TOKEN_REQUEST_TOKEN": "fixture-token",
+                },
+            ),
+        ):
             release.workflow()
         self.assertEqual(record.read_text(), source)
         next_plan = open_pr.call_args.args[0]
@@ -249,6 +367,7 @@ class Selection(unittest.TestCase):
         self.assertNotIn("shared palette", second["targets"]["neovim"]["notes"].lower())
 
     def test_publication_retry_keeps_frozen_artifact(self):
+        self.add_archive_target()
         self.change("shared/palette.ts", "fix: shared palette")
         plan = release.prepare()
         self.commit("chore(release): prepare application releases")
@@ -310,7 +429,8 @@ class Selection(unittest.TestCase):
                 return ""
             return original_run(*args, cwd=cwd, **kwargs)
 
-        def marketplace(version, path):
+        def marketplace(target, version, path):
+            self.assertEqual(target, "vscode")
             if not published:
                 return False
             if timeout[0]:
@@ -345,6 +465,11 @@ class Selection(unittest.TestCase):
             first_assets = dict(uploaded)
             release.publish(plan, source)
             self.assertFalse(releases["vscode-2.2.2"]["draft"])
+            self.assertFalse(releases["fixture-1.0.1"]["draft"])
+            self.assertEqual(
+                release.remote_branch("fixture"),
+                release.ref_sha("refs/tags/fixture-1.0.1"),
+            )
             self.assertEqual(first_assets, uploaded)
             self.assertEqual(len(package_count), 1)
             self.assertEqual(len(published), 1)
@@ -398,21 +523,30 @@ class ArtifactValidation(unittest.TestCase):
             missing = json.dumps({"data": {"repository": {"release": None}}})
             with patch.object(release, "gh", return_value=missing):
                 self.assertIsNone(release.release("neovim-1.0.0"))
-            with patch.object(
-                release,
-                "gh",
-                side_effect=subprocess.CalledProcessError(
-                    1, ["gh", "api"], stderr="denied"
+            with (
+                patch.object(
+                    release,
+                    "gh",
+                    side_effect=subprocess.CalledProcessError(
+                        1, ["gh", "api"], stderr="denied"
+                    ),
                 ),
-            ), self.assertRaises(subprocess.CalledProcessError):
+                self.assertRaises(subprocess.CalledProcessError),
+            ):
                 release.release("neovim-1.0.0")
-            with patch.object(
-                release,
-                "gh",
-                return_value=json.dumps(
-                    {"data": {"repository": None}, "errors": [{"message": "denied"}]}
+            with (
+                patch.object(
+                    release,
+                    "gh",
+                    return_value=json.dumps(
+                        {
+                            "data": {"repository": None},
+                            "errors": [{"message": "denied"}],
+                        }
+                    ),
                 ),
-            ), self.assertRaises(ValueError):
+                self.assertRaises(ValueError),
+            ):
                 release.release("neovim-1.0.0")
 
     def test_deterministic_archive_and_reject_mismatch(self):

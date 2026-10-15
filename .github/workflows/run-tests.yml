@@ -26,20 +26,11 @@ jobs:
       - uses: ./.github/actions/generate
       - run: pip install -r scripts/ci/release/requirements.txt
       - run: npm ci --prefix scripts/ci/release --ignore-scripts
-      - run: npm run typecheck
-      - run: npm run format:check
       - uses: rhysd/action-setup-vim@v1
         with:
           neovim: true
           version: v0.11.5
-      - run: npm test
-      - run: npm run test:release
-      - run: bash scripts/test/test.sh
-      - run: python -m unittest discover -s tests/release -p 'test_*.py'
-      - run: python scripts/build/assemble.py
-      - name: Package VS Code
-        working-directory: dist/vscode
-        run: ../../scripts/ci/release/node_modules/.bin/vsce package --out ../vscode.vsix
+      - run: npm run check
       - name: Check release freshness
         if: github.head_ref == 'automation/release' || github.ref == 'refs/heads/automation/release'
         run: |

@@ -19,7 +19,9 @@ from functools import cache
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
-TARGETS = ("neovim", "vscode")
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from definitions import discover
+
 PLAN = ".release-plan.json"
 BRANCH = "automation/release"
 VERSION = re.compile(r"\d+\.\d+\.\d+\Z")
@@ -78,24 +80,32 @@ def remote_branch(target: str) -> str | None:
     return rows.split()[0] if rows else None
 
 
+def release_targets(*, validate_builds: bool = False) -> dict:
+    definitions = discover(ROOT)
+    if validate_builds:
+        registered = json.loads(
+            run("node", "--import", "tsx", "scripts/build/build.ts", "--list-targets")
+        )
+        unknown = set(definitions) - set(registered)
+        if unknown:
+            raise ValueError(
+                f"Release targets have no registered builder: {sorted(unknown)}"
+            )
+    return definitions
+
+
 def package_version(target: str) -> str:
-    if target == "vscode":
-        return json.loads((ROOT / "packages/vscode/package.json").read_text())[
-            "version"
-        ]
-    return re.search(
-        r'VERSION = "([^"]+)"', (ROOT / "packages/neovim/version.txt").read_text()
-    )[1]
+    return release_targets()[target].version(ROOT)
 
 
 def psr(target: str, *args: str) -> str:
     executable = os.environ.get("SEMANTIC_RELEASE", "semantic-release")
-    return run(executable, "-c", f"scripts/ci/release/{target}.toml", "version", *args)
+    return run(executable, "-c", release_targets()[target].config, "version", *args)
 
 
 def prepared_paths(target: str) -> tuple[str, str]:
-    version_file = "package.json" if target == "vscode" else "version.txt"
-    return f"packages/{target}/CHANGELOG.md", f"packages/{target}/{version_file}"
+    definition = release_targets()[target]
+    return definition.changelog, definition.version_file
 
 
 def validate_plan(plan: dict, source: str | None = None) -> None:
@@ -103,7 +113,9 @@ def validate_plan(plan: dict, source: str | None = None) -> None:
         r"[a-f0-9]{40}", plan.get("prepared_from", "")
     ):
         raise ValueError("Invalid release plan schema or source")
-    if not plan.get("targets") or set(plan["targets"]) - set(TARGETS):
+    if not plan.get("targets") or set(plan["targets"]) - set(
+        release_targets(validate_builds=True)
+    ):
         raise ValueError("Invalid release targets")
     for target, item in plan["targets"].items():
         for key in ("version", "previous_version"):
@@ -152,7 +164,7 @@ def prepare() -> dict | None:
     source = git("rev-parse", "HEAD")
     selected = {}
     allowed = {PLAN}
-    for target in TARGETS:
+    for target, definition in release_targets(validate_builds=True).items():
         current = package_version(target)
         baseline = f"{target}-source-{current}"
         if not ref_sha("refs/tags/" + baseline):
@@ -170,7 +182,7 @@ def prepare() -> dict | None:
             continue
         if not VERSION.fullmatch(next_version):
             raise ValueError(f"Unexpected PSR version: {next_version}")
-        changelog = ROOT / f"packages/{target}/CHANGELOG.md"
+        changelog = ROOT / definition.changelog
         before = changelog.read_text()
         psr(
             target,
@@ -425,14 +437,12 @@ def candidate(target: str, item: dict, source: str, output: Path) -> dict:
             "--notes-file",
             str(notes),
         )
-    filename = f"{tag}." + ("vsix" if target == "vscode" else "tar")
+    filename = f"{tag}.{release_targets()[target].extension}"
     artifact = output / filename
     if filename in assets:
         download_asset(assets[filename], artifact)
-    elif target == "vscode":
-        run(str(VSCE), "package", "--out", str(artifact), cwd=tree)
     else:
-        archive_tree(tree, artifact)
+        package_artifact(target, tree, artifact)
     validate_artifact(target, artifact, tree)
     if filename not in assets:
         gh("release", "upload", tag, str(artifact))
@@ -451,8 +461,29 @@ def candidate(target: str, item: dict, source: str, output: Path) -> dict:
     return candidate(target, item, source, output)
 
 
+def package_artifact(target: str, tree: Path, artifact: Path) -> None:
+    if release_targets()[target].profile == "vscode-marketplace":
+        run(str(VSCE), "package", "--out", str(artifact), cwd=tree)
+    else:
+        archive_tree(tree, artifact)
+
+
+def check_packages() -> None:
+    # Build first with the common build command. Package checks never publish.
+    definitions = release_targets(validate_builds=True)
+    with tempfile.TemporaryDirectory(prefix="kanagawa-packages-") as temporary:
+        for target, definition in definitions.items():
+            tree = ROOT / "dist" / target
+            if not tree.is_dir():
+                raise ValueError(f"Build {target} before checking its package")
+            artifact = Path(temporary) / f"{target}.{definition.extension}"
+            package_artifact(target, tree, artifact)
+            validate_artifact(target, artifact, tree)
+            print(f"Validated {target} package")
+
+
 def validate_artifact(target: str, artifact: Path, tree: Path) -> None:
-    if target == "vscode":
+    if release_targets()[target].profile == "vscode-marketplace":
         with zipfile.ZipFile(artifact) as archive:
             entries = {
                 name.lower(): archive.read(name)
@@ -483,8 +514,16 @@ def validate_artifact(target: str, artifact: Path, tree: Path) -> None:
             raise ValueError("Archive does not match distribution")
 
 
-def marketplace_matches(version: str, artifact: Path) -> bool:
-    url = f"https://marketplace.visualstudio.com/_apis/public/gallery/publishers/SimonHo/vsextensions/kanagawa-paper/{version}/vspackage"
+def marketplace_url(target: str) -> str:
+    publisher, extension = release_targets()[target].marketplace
+    return (
+        f"https://marketplace.visualstudio.com/items?itemName={publisher}.{extension}"
+    )
+
+
+def marketplace_matches(target: str, version: str, artifact: Path) -> bool:
+    publisher, extension = release_targets()[target].marketplace
+    url = f"https://marketplace.visualstudio.com/_apis/public/gallery/publishers/{publisher}/vsextensions/{extension}/{version}/vspackage"
     try:
         with urllib.request.urlopen(url, timeout=60) as response:
             remote = response.read()
@@ -573,15 +612,21 @@ def publish(plan: dict, source: str) -> None:
             current = release(tag)
             url = f"https://github.com/{repo_name()}/releases/tag/{tag}"
             if current["draft"]:
-                if target == "vscode":
+                if release_targets()[target].profile == "vscode-marketplace":
                     artifact = output / target / next(iter(sealed[target]["artifacts"]))
-                    if not marketplace_matches(item["version"], artifact):
-                        run(str(VSCE), "publish", "--oidc", "--packagePath", str(artifact))
-                        if not marketplace_matches(item["version"], artifact):
+                    if not marketplace_matches(target, item["version"], artifact):
+                        run(
+                            str(VSCE),
+                            "publish",
+                            "--oidc",
+                            "--packagePath",
+                            str(artifact),
+                        )
+                        if not marketplace_matches(target, item["version"], artifact):
                             raise ValueError(
                                 "Marketplace has not confirmed the frozen package; retry later"
                             )
-                    url = "https://marketplace.visualstudio.com/items?itemName=SimonHo.kanagawa-paper"
+                    url = marketplace_url(target)
                 current_branch = remote_branch(target)
                 expected = item["previous_distribution"]
                 if current_branch not in (expected, sealed[target]["distribution"]):
@@ -594,8 +639,8 @@ def publish(plan: dict, source: str) -> None:
                     f"{sealed[target]['distribution']}:refs/heads/{target}",
                 )
                 gh("release", "edit", tag, "--draft=false", "--latest")
-            if target == "vscode":
-                url = "https://marketplace.visualstudio.com/items?itemName=SimonHo.kanagawa-paper"
+            if release_targets()[target].profile == "vscode-marketplace":
+                url = marketplace_url(target)
             deployment(target, source, url)
 
 
@@ -642,9 +687,13 @@ def main() -> None:
     global VSCE
     VSCE = Path(os.environ.get("KANAGAWA_VSCE", str(VSCE)))
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("prepare", "publish", "run", "check-plan"))
+    parser.add_argument(
+        "command", choices=("prepare", "publish", "run", "check-plan", "check-packages")
+    )
     args = parser.parse_args()
-    if args.command == "prepare":
+    if args.command == "check-packages":
+        check_packages()
+    elif args.command == "prepare":
         prepare()
     elif args.command == "run":
         workflow()
