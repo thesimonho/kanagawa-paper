@@ -15,8 +15,8 @@
   "extras/nchat/kanagawa-paper-canvas-usercolor.conf": "77cee2af1ddb4c064e4002ef458c9f0b5389763fb32f4dea073d96dff44a4923",
   "extras/nchat/kanagawa-paper-ink-color.conf": "cf338f8f995af210f3098df033ac4936588a28eb753752860c04a1319cffcd09",
   "extras/nchat/kanagawa-paper-ink-usercolor.conf": "2b220feae0ae094888abb3c7c8001a987fe235dd952de532e5113c7ef01d8de0",
-  "extras/nushell/kanagawa-paper-canvas.nu": "89a7e44d727b5bf0952aa762e31d9934e0cdb6044e9b875c399772102a796166",
-  "extras/nushell/kanagawa-paper-ink.nu": "927e82b61a1c1d74b0652d46927a04109d1dad426d565e10b157dcbc7ed16ad9",
+  "extras/nushell/kanagawa-paper-canvas.nu": "69def2a9acf4aae1e1ca924c4cc95d3ec4b14fc1303e1c5cffedd3a0e0cb6694",
+  "extras/nushell/kanagawa-paper-ink.nu": "c629584d3e5e8786be63afa59ad4471a8d0a72be646e9c1ca1e79a463bdd386c",
   "extras/tailwind/kanagawa-paper-canvas.css": "bbf73c433f1c8f62cd70c16c224cd378efb55628799f021835779f3fbc34b01c",
   "extras/tailwind/kanagawa-paper-ink.css": "9bd9de517900d35af765f5f21fbf7b8cd538f4463f3612b96d5aa34672ab6fb8",
   "extras/tailwind/kanagawa-paper-palette.css": "787765ef2405a8433c6e0c8623839ee7da7a34f1372e18abc17adc331f52f7a9",
@@ -36,8 +36,8 @@
   "extras/wezterm_tabline/kanagawa-paper-ink.lua": "ad073ee036781cb3a7799855c8d4f8f5f3801c1037190ce9c4a82f1675a7f8db",
   "extras/windows_terminal/kanagawa-paper-canvas.jsonc": "c12a6ed86bee763fe7757ade82712ce155bf263d24c947989c16750455d0b5a4",
   "extras/windows_terminal/kanagawa-paper-ink.jsonc": "e6f1bb21fa89d739fc13518dd51729297fdb049c883d52cc8476f8098c1aaca1",
-  "extras/zellij/kanagawa-paper-canvas.kdl": "0f5f5550899d905277b3950c970d16f5b42c6981e95aa396a55749e10026608d",
-  "extras/zellij/kanagawa-paper-ink.kdl": "90af59ee680c89b7c9e5f2ed340ae5dccfdd860df9978c78f0db191b72198fdd",
+  "extras/zellij/kanagawa-paper-canvas.kdl": "334c78fc9dbdc4cf436f68c26c5082db54cc0575c1c03402dbad0e2b4f1a847b",
+  "extras/zellij/kanagawa-paper-ink.kdl": "c96650c044e9d6f387edb11912f875911e836f2ed05f11356a9dd72269f76b35",
   "vscode/themes/kanagawa-paper-canvas-color-theme.json": "30cac42599a5f2047c95e0fadbbd3f05e645f8a62642bb79de659be4d2a33a53",
   "vscode/themes/kanagawa-paper-ink-color-theme.json": "3bbfe6d5766cdc6dbd32f6221e049aea4ff5856c4efeabbea253a9f7f41c9f9d"
 }

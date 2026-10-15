@@ -64,7 +64,7 @@ export def main [] {
         shape_filepath: '#8ea49e'
         shape_flag: { fg: '#435965' attr: 'b' }
         shape_float: { fg: '#cc928e' attr: 'b' }
-        shape_garbage: { fg: '${fg.dim}' bg: '#c4746e' attr: 'b' } # Keeping red and white for garbage
+        shape_garbage: { fg: '#9e9b93' bg: '#c4746e' attr: 'b' }
         shape_glob_interpolation: { fg: '#8ea49e' attr: 'b' }
         shape_globpattern: { fg: '#8ea49e' attr: 'b' }
         shape_int: { fg: '#c4746e' attr: 'b' }

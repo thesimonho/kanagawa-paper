@@ -8,6 +8,6 @@ agent:
 
 These maintained TypeScript functions return files for the registry in `../registry.ts`. Simple formats use native template literals with typed role references. Multi-file adapters return named suffixes. Tailwind also produces the complete palette.
 
-The first migration preserves existing output bytes. Two pre-existing issues are intentionally visible pending separate correction: Nushell's unresolved `fg.dim` placeholder and Zellij's unresolved header metadata. They are not supported templating syntax in this implementation. All actual color references are typed expressions.
+Color references use typed shared roles; headers use the registry metadata fields. Do not emit legacy template placeholders in generated output.
 
 Use `npm run build -- extras` or `npm run watch -- extras --only kitty` from the repository root. A filtered build preserves other adapters' output; the selected adapter owns its generated subdirectory.

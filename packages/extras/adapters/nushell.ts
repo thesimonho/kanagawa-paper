@@ -69,7 +69,7 @@ export def main [] {
         shape_filepath: '${theme.terminal.normal.cyan}'
         shape_flag: { fg: '${theme.terminal.normal.blue}' attr: 'b' }
         shape_float: { fg: '${theme.terminal.bright.red}' attr: 'b' }
-        shape_garbage: { fg: '\${fg.dim}' bg: '${theme.status.error.base}' attr: 'b' } # Keeping red and white for garbage
+        shape_garbage: { fg: '${theme.ui.text.secondary}' bg: '${theme.status.error.base}' attr: 'b' }
         shape_glob_interpolation: { fg: '${theme.terminal.normal.cyan}' attr: 'b' }
         shape_globpattern: { fg: '${theme.terminal.normal.cyan}' attr: 'b' }
         shape_int: { fg: '${theme.terminal.normal.red}' attr: 'b' }

@@ -12,26 +12,45 @@ Remixed light and dark Kanagawa color scheme with muted colors. For Neovim and V
 <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/thesimonho/kanagawa-paper?style=for-the-badge&labelColor=1F1F28&color=5d7a88">
 
 <img alt="GitHub branch check runs" src="https://img.shields.io/github/check-runs/thesimonho/kanagawa-paper/main?style=for-the-badge&label=build&labelColor=1F1F28&color=699469">
-
 </p>
+
+**Get started:** [VS Code](#vs-code) · [Neovim](#neovim) · [Other applications](#other-applications)
 
 ## 💡 Motivation
 
 I love the original [kanagawa.nvim](https://github.com/rebelot/kanagawa.nvim) color scheme, but I found some of the colors a bit too bright and distracting. What I wanted was a more muted theme overall, using less saturated colors inspired by the original theme. You can see a visual preview of the color palette [here](https://github.com/thesimonho/kanagawa-paper/blob/main/palette_colors.md).
 
-Both a light theme and a dark theme are provided.
+**Ink** is the dark variant for late nights. **Canvas** is the light variant for sunny days. Both are available for Neovim and VS Code, with matching colors for terminals and other applications.
 
-Install the [VS Code extension](https://marketplace.visualstudio.com/items?itemName=SimonHo.kanagawa-paper) or use the Neovim installation below.
+### Ink
+
 ![ink](https://github.com/user-attachments/assets/68d6e82f-8dbb-4b96-9844-dcde55b264ee)
+
+### Canvas
+
 ![canvas](https://github.com/user-attachments/assets/b653e9a0-260d-462a-8ad8-93290deed0b8)
 
-## ⚡️ Requirements
+## VS Code
+
+### Installation
+
+1. Install [**Kanagawa Paper** from the Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=SimonHo.kanagawa-paper). The extension identity is `SimonHo.kanagawa-paper`.
+2. Open the Command Palette and run **Preferences: Color Theme**.
+3. Choose **Kanagawa Paper Ink** for a dark theme or **Kanagawa Paper Canvas** for a light theme.
+
+### Customization
+
+Use VS Code's `workbench.colorCustomizations` setting for interface colors and `editor.tokenColorCustomizations` for syntax colors. See the [VS Code theme customization guide](https://code.visualstudio.com/docs/configure/themes#_customizing-a-color-theme) for examples and theme-specific overrides.
+
+## Neovim
+
+### Requirements
 
 - [Neovim](https://github.com/neovim/neovim) >= [0.8.0](https://github.com/neovim/neovim/releases/tag/v0.8.0)
 - truecolor terminal support
 - undercurl terminal support (optional)
 
-## 📦 Installation
+### Installation
 
 Install the theme with your preferred package manager, such as [lazy.nvim](https://github.com/folke/lazy.nvim):
 
@@ -47,15 +66,7 @@ Install the theme with your preferred package manager, such as [lazy.nvim](https
 
 The `neovim` branch contains the installable runtime. The `main` branch contains development source. To pin a release, replace `branch` with `tag = "neovim-X.Y.Z"` using a published Neovim version. Historical `v*` tags remain available; they do not receive a separate update track.
 
-## VS Code
-
-Install **Kanagawa Paper** by **SimonHo** from the Marketplace, then select **Kanagawa Paper Ink** or **Kanagawa Paper Canvas**. The extension identity remains `SimonHo.kanagawa-paper`.
-
-## Releases
-
-Applications have independent versions and changelogs. Tags such as `neovim-4.2.0` identify installable distributions; `neovim-source-4.2.0` identifies their development source. There is no moving latest tag. Use the repository’s **Deployments → View deployment** links for each application’s latest successful publication, or the [release list](https://github.com/thesimonho/kanagawa-paper/releases) and [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=SimonHo.kanagawa-paper) directly. GitHub’s repository-wide Latest label can refer to either application.
-
-## 🚀 Usage
+### Usage
 
 Kanagawa Paper comes in a few variants:
 
@@ -100,7 +111,7 @@ return {
 }
 ```
 
-## 🛠️ Configuration
+### Configuration
 
 > [!NOTE]
 > Config options have changed between v1 and v2 of the color scheme.
@@ -109,6 +120,9 @@ return {
 > Set the configuration **BEFORE** loading the color scheme to ensure the settings are applied, otherwise defaults will be used.
 
 The default configuration can be found [here](https://github.com/thesimonho/kanagawa-paper/blob/main/packages/neovim/lua/kanagawa-paper/config.lua)
+
+<details>
+<summary>Default configuration</summary>
 
 ```lua
 require("kanagawa-paper").setup({
@@ -172,7 +186,9 @@ require("kanagawa-paper").setup({
 })
 ```
 
-### Cache
+</details>
+
+#### Cache
 
 The color scheme comes with a cache option that can be used to speed up startup time.
 
@@ -182,17 +198,17 @@ Any changes you make to your config (e.g. overriding colors or highlight groups)
 
 In rare cases where this doesn't happen and you notice your changes aren't being applied, you can manually rebuild the cache by running `:KanagawaPaperCache`.
 
-## 👥 Integrations
+### Integrations
 
-### Terminals
+#### Terminals
 
-Matching colorschemes for a number of terminals are provided (e.g. WezTerm, ghostty, etc; see [Extras](https://github.com/thesimonho/kanagawa-paper#-extras)).
+Matching colorschemes for a number of terminals are provided (e.g. WezTerm, ghostty, etc; see [Extras](#other-applications)).
 
 The automatic variant of `kanagawa-paper` switches between light and dark mode based on the value of `vim.o.background`. This value will generally follow the color mode of your terminal, i.e. if your terminal is set to dark mode via your OS, neovim will pick that up and the theme will automatically be changed to `kanagawa-paper-ink`.
 
 Tip: if this auto switching is not working for you, the _first_ thing to check is whether the value of `vim.o.background` is what you expect it to be.
 
-### [Lualine](https://github.com/nvim-lualine/lualine.nvim)
+#### [Lualine](https://github.com/nvim-lualine/lualine.nvim)
 
 This color scheme comes with matching Lualine themes for both `ink` and `canvas` variants.
 
@@ -239,11 +255,11 @@ Examples of situations where this might be useful:
 - You want to change background color mid-session (either by manually setting `vim.o.background` or with something like dark background toggle in LazyVim)
 - You use a plugin for live previews of color schemes
 
-### [WezTerm](https://wezfurlong.org/wezterm/) and [WezTerm Tabline](https://github.com/michaelbrusegard/tabline.wez) (deprecated)
+#### [WezTerm](https://wezfurlong.org/wezterm/) and [WezTerm Tabline](https://github.com/michaelbrusegard/tabline.wez) (deprecated)
 
 This feature has been deprecated. If you'd like to use it, you can still find the old script and instructions (README) in [v3.1](https://github.com/thesimonho/kanagawa-paper/tree/v3.1?tab=readme-ov-file#-integrations)
 
-## 🔧 Customizing Colors
+### Customizing colors
 
 There are two kinds of colors: `PaletteColors` and `ThemeColors`.
 
@@ -303,7 +319,7 @@ require("kanagawa-paper").setup({
 
 You can find a more detailed explanation of color customization [here](https://github.com/thesimonho/kanagawa-paper/issues/3#issuecomment-2183665367).
 
-### Extracting colors
+#### Extracting colors
 
 You can get the palette and theme colors from the colors module like this:
 
@@ -340,7 +356,7 @@ and use them in your `opts` function. Example:
 }
 ```
 
-## 🍭 Extras
+## Other applications
 
 - [alacritty](https://github.com/thesimonho/kanagawa-paper/tree/main/extras/alacritty)
 - [foot](https://github.com/thesimonho/kanagawa-paper/tree/main/extras/foot)
@@ -354,12 +370,15 @@ and use them in your `opts` function. Example:
 - [tilix](https://github.com/thesimonho/kanagawa-paper/tree/main/extras/tilix)
 - [vivid](https://github.com/thesimonho/kanagawa-paper/tree/main/extras/vivid)
 - [zellij](https://github.com/thesimonho/kanagawa-paper/tree/main/extras/zellij)
-- [vscode](https://github.com/thesimonho/kanagawa-paper.vscode) (official port)
 - [vscode terminal](https://github.com/thesimonho/kanagawa-paper/tree/main/extras/vscode_terminal) (guide: [Visual Studio Code Theme Color](https://code.visualstudio.com/api/references/theme-color))
 - [fzf](https://github.com/thesimonho/kanagawa-paper/tree/main/extras/fzf) (guide: [fzf color schemes](https://github.com/junegunn/fzf/wiki/Color-schemes))
 - [wezterm](https://github.com/thesimonho/kanagawa-paper/tree/main/extras/wezterm) (guide: [Defining a Color Scheme in a separate file](https://wezfurlong.org/wezterm/config/appearance.html#defining-a-color-scheme-in-a-separate-file))
 - [wezterm tabline](https://github.com/thesimonho/kanagawa-paper/tree/main/extras/wezterm_tabline) (guide: [tabline.wez](https://github.com/michaelbrusegard/tabline.wez))
 - [windows terminal](https://github.com/thesimonho/kanagawa-paper/tree/main/extras/windows_terminal) (guide: [Color schemes in Windows Terminal](https://learn.microsoft.com/en-us/windows/terminal/customize-settings/color-schemes))
+
+## Releases
+
+Applications have independent versions and changelogs. Tags such as `neovim-4.2.0` identify installable distributions; `neovim-source-4.2.0` identifies their development source. There is no moving latest tag. Use the repository’s **Deployments → View deployment** links for each application’s latest successful publication, or the [release list](https://github.com/thesimonho/kanagawa-paper/releases) and [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=SimonHo.kanagawa-paper) directly. GitHub’s repository-wide Latest label can refer to either application.
 
 ## 🔥 Contributing
 
@@ -388,12 +407,12 @@ How to add a new extra template:
 
 Run `just test` for Neovim tests, `just test-targets` for package tests, and `just build` to assemble both installable trees under `dist/`. Build tools are Python 3 and Neovim; release tooling is pinned separately under `scripts/ci/release/`.
 
-Open Neovim from the repository root with your existing lazy.nvim setup. The local `.lazy.lua` selects `packages/neovim`, adds `shared` to the runtime, activates Canvas, and reloads theme modules on save. After this file changes, review it and run `:trust` from its buffer so Neovim can load the updated local specification. No dotfile change or build per Lua edit is required.
+Open Neovim from the repository root with your existing lazy.nvim setup. The local `.lazy.lua` selects `packages/neovim`, adds `shared` to the runtime, activates Canvas, and reloads theme modules on save. After this file changes, review the current file, run `:trust` from its buffer, then restart Neovim so Lazy can apply the updated plugin path.
 
-| Directory | Purpose |
-| --- | --- |
-| `shared/` | Shared palette, semantic roles, and color calculations |
-| `packages/` | Neovim, VS Code, Zed, and extras build targets |
-| `extras/` | Copyable generated application configurations |
-| `scripts/` | Tests, package assembly, and release coordination |
-| `tests/` | Runtime and package checks |
+| Directory     | Purpose                                                |
+| ------------- | ------------------------------------------------------ |
+| `shared/`     | Shared palette, semantic roles, and color calculations |
+| `packages/`   | Neovim, VS Code, Zed, and extras build targets        |
+| `extras/`     | Copyable generated application configurations          |
+| `scripts/`    | Tests, package assembly, and release coordination      |
+| `tests/`      | Runtime and package checks                             |

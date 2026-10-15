@@ -6,9 +6,9 @@ const rgb = (hex: string) =>
 export function generate(theme: Theme, meta: Metadata): Record<string, string> {
   return {
     "": `// -----------------------------------------------------------------------------
-// \${_style_name}
-// Upstream: \${_upstream_url}
-// URL: \${_url}
+// ${meta.styleName}
+// Upstream: ${meta.upstreamUrl}
+// URL: ${meta.url}
 // -----------------------------------------------------------------------------
 
 themes {

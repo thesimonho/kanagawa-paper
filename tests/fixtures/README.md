@@ -16,3 +16,5 @@ Captured before switching the Lua build to TypeScript, from local source based o
 The runtime fixture records the theme's calculated groups, not editor-version-specific builtin highlights. Fixtures are verification evidence, not source inputs. Change an expectation only for a separately explained and accepted behavior change.
 
 Approved change, 2026-10-15: UI emphasis shares the primary accent. Ink's `ui.special` changes from `#8ea49e` to `#658594`; Canvas stays unchanged. The color fixture, three Ink runtime hashes, and Ink artifact hashes for VS Code, fzf, Lazygit and WezTerm include this change. Before/after outputs were compared before updating these expectations; palette values, syntax special roles and independent public overrides remain intact.
+
+Approved change, 2026-10-15: Nushell `shape_garbage` resolves its foreground from `ui.text.secondary` (legacy `ui.fg_dim`), and Zellij resolves its three header metadata fields. Only the four affected Ink/Canvas artifact hashes changed; all other generated content was compared unchanged.
