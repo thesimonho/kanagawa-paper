@@ -1,6 +1,6 @@
 ---
 agent:
-  instruction: Keep Ink and Canvas structurally consistent and preserve exact palette values; semantic regrouping must follow the delivery plan.
+  instruction: Keep Ink and Canvas structurally consistent and preserve exact palette values and independent public overrides.
   on-change: shared/themes/**
 ---
 

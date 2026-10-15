@@ -27,7 +27,7 @@ The existing PSR settings provide the version file/key, changelog path and sourc
 
 ## Selection and preparation
 
-Run `python scripts/ci/release/coordinator.py prepare` on a clean `main` checkout with complete history and source tags. This command writes prepared files locally; it does not commit, push, or publish. Each target configuration includes its package, shared TypeScript sources and root build dependencies, root README/license, assembly helper, and release tooling. All release targets install the root lockfile in the exact release-source worktree before assembly. Conventional `fix` and `feat` commits trigger the configured bumps. Ordinary `docs` and `chore` commits do not. Shared releasable changes select both targets even if their output is unchanged.
+Run `python scripts/ci/release/coordinator.py prepare` on a clean `main` checkout with complete history and source tags. This command writes prepared files locally; it does not commit, push, or publish. Each target configuration includes its package, shared TypeScript sources and root build dependencies, root README/license, assembly helper, and release tooling. All release targets install the root lockfile in the exact release-source worktree before assembly. Conventional `fix` and `feat` commits trigger the configured bumps. Ordinary `docs` and `chore` commits do not. Shared releasable changes select all consuming targets even if their output is unchanged.
 
 The generated `.release-plan.json` records the prepared source, previous source tags, previous distribution commits, selected versions, and release notes. It is machine coordination state. The bot puts only this file, version files, and package changelogs into the combined PR. Historical changelog content below the PSR marker is retained.
 
@@ -47,51 +47,22 @@ Archive publication for Neovim and Zed advances the target’s installable branc
 
 The workflow serializes release work and blocks the next release PR until the previous batch finishes. Ordinary source commits can continue meanwhile. Retry a failed run with workflow dispatch. Do not edit `.release-plan.json`, move tags, delete candidates, or manufacture another version to bypass a failed publication.
 
-## Hosted cutover
+## Authentication probe
 
-Before enabling the workflow:
-
-1. Rename the repository to `kanagawa-paper` and the default branch to `main`. Preserve the old repository name's redirect and historical tags.
-2. Resolve the trusted-publishing blockers below and pass the authentication-only workflow check. Confirm a write-enabled `DEPLOY_KEY` and permission for Actions to create pull requests. The deploy key makes automation branch pushes trigger validation; `GITHUB_TOKEN` alone does not trigger those ordinary follow-up workflows. Fork PR validation uses read-only credentials.
-3. Enable required validation with an up-to-date base. Confirm the stable `neovim`, `vscode`, and `zed` deployment links are visible to users.
-4. Seed `neovim-source-4.1.0`, `vscode-source-2.2.1`, and `zed-source-0.1.0` at an explicitly reviewed source baseline. For the unchanged VS Code import, this must be a main commit containing the package. Never fabricate an ancestor before import or let PSR replay unrelated old commits from version zero. If the consolidation is squash-merged, seed all three baselines at that reviewed merge, then make an intentional shared `feat` commit to produce the first consolidated releases.
-5. Run and verify the combined release PR, publication, installation from the Neovim channel/tag, Marketplace update, Zed archive installation, and deployment links. Archive the old VS Code repository only after successful publication and add a pointer to this repository.
-
-These steps require live verification. Local fixtures do not establish hosted permissions, registry access, public UI, or a successful release.
-
-VSCE uses `publish --oidc --packagePath` with no PAT fallback. The release and authentication-only jobs receive `id-token: write`. The publisher trust configuration must match the final repository name, workflow filename, and any environment restriction. Configure and verify this in Marketplace before enabling publication; local tests only verify invocation and inherited CI environment.
-
-## Trusted-publishing readiness
-
-As checked on 2026-10-15, direct Marketplace trusted publishing is not ready for this cutover:
-
-- **Marketplace backend and policy setup:** a [VSCE maintainer reported on October 5](https://github.com/microsoft/vscode-vsce/issues/1275#issuecomment-5990771209) that backend support was incomplete and the README was published early. The [Marketplace team described policy UI work on September 14](https://github.com/microsoft/vsmarketplace/issues/2121#issuecomment-5668459437). Recheck those upstream reports and the publisher portal before proceeding.
-- **Released client:** the pinned VSCE 4.0.0 sends `Bearer` authorization to the unversioned token endpoint. The [upstream correction](https://github.com/microsoft/vscode-vsce/commit/c960f2e97da3360899f2bfe93390fa4890c69327) uses `FederatedToken` and `?api-version=7.2-preview.1`. Wait for a released version with that change, then update the pinned dependency and its tests. Do not patch the publisher client locally or add a PAT fallback.
-- **Publisher trust:** configure the final repository identity (`thesimonho/kanagawa-paper`), `.github/workflows/release.yml`, and any required environment restriction in Marketplace. The current workflow jobs have no GitHub environment restriction; deployment records do not set a job environment.
-
-Check the installed client's protocol locally, without network or credentials:
+`check-marketplace-auth.mts` checks the installed VSCE credential helper's token endpoint, authorization scheme, audience, and publisher before making live requests. Run the offline check from the repository root:
 
 ```sh
 node --import tsx scripts/ci/release/check-marketplace-auth.mts --check-client
 ```
 
-This command is expected to fail with VSCE 4.0.0. Offline tests verify that it blocks the old client, accepts a fixture of the corrected protocol, and hides secrets on failure. Passing fixture tests does not establish live Marketplace access.
+The pinned VSCE 4.0.0 fails this protocol check. Offline tests cover the rejection, a compatible protocol fixture, and secret-free errors. The probe does not patch the installed client.
 
-After the backend, policy, and released client are ready, manually run **Generate files and release applications** on `main` with **authentication_only** enabled. This uses the same workflow identity as publication. It only requests a GitHub OIDC token and exchanges it through the installed VSCE helper; it discards the returned credential. It does not generate files, create releases or PRs, push branches or tags, or publish an extension. The check refuses redirects, limits request time, and omits response bodies and credentials from errors. Dispatching this mode on another branch skips all jobs.
+The `authentication_only` dispatch input in `.github/workflows/release.yml` runs the live check on `main` with `contents: read` and `id-token: write`. It skips generation and publication. The probe requests a GitHub OIDC token, exchanges it through the installed VSCE helper, and discards the credential. It rejects redirects, limits request time, and omits response bodies and credentials from errors. Other branches skip this mode. A successful exchange establishes authentication only, not package publication.
 
-A successful live check proves token exchange at that time. It does not prove package publication, Marketplace propagation, or the rest of the release workflow. Leave publication for the separately approved cutover. Ordinary workflow dispatch with **authentication_only** disabled retains the release/retry behavior described above.
+Publication uses `vsce publish --oidc --packagePath` with no PAT fallback. Publisher trust must match the repository, workflow filename, and any job environment restriction. Deployment records do not set a job environment.
 
-## Zed registry handoff
+## Zed archive
 
-The `zed` definition reads `packages/zed/extension.toml:version`. Its `0.1.0` source baseline is not a published registry version. With zero versions allowed and `major_on_zero = false`, a fix selects `0.1.1`; a feature or breaking change selects `0.2.0`. Seed the baseline only at a reviewed source commit containing the package and release definition. Ordinary release preparation must fail if that marker is missing.
+`zed.toml` reads the version from `packages/zed/extension.toml` and writes the package changelog. With `allow_zero_version = true` and `major_on_zero = false`, fixes advance the patch version; features and breaking changes below 1.0 advance the minor version. Preparation requires a matching source baseline tag.
 
-The common archive path supplies `zed-X.Y.Z.tar`, an immutable distribution commit/tag, and the `zed` branch. The successful `zed` deployment links to this GitHub Release. It does not assert acceptance by the Zed registry.
-
-After separately approving registry publication:
-
-1. Install and test the exact published distribution commit in Zed. Confirm the manifest ID `kanagawa-paper-theme`, its version, both theme names, and the included MIT license.
-2. Follow [Zed's publishing guide](https://zed.dev/docs/extensions/publishing/publishing-guide). In a fork of `zed-industries/extensions`, add `https://github.com/thesimonho/kanagawa-paper.git` as the `extensions/kanagawa-paper-theme` submodule, using the `zed` branch and pinning the reviewed distribution commit. The registry requires HTTPS and a commit reachable from a branch.
-3. Add `[kanagawa-paper-theme]` to the registry's `extensions.toml`, with `submodule = "extensions/kanagawa-paper-theme"` and the exact manifest version. No `path` field is needed because the distribution has `extension.toml` at its root. Run the registry's sorting command and submit one extension per PR.
-4. Wait for registry acceptance, then verify installation from Zed's Extensions view. For later versions, update the same submodule commit and version in a new PR. Follow [Zed's update guide](https://zed.dev/docs/extensions/publishing/updating-and-maintenance).
-
-Local fixture tests exercise Zed selection, archives, source markers, distribution branches and retry behavior using temporary Git remotes. They do not submit a registry PR or establish hosted publication.
+The archive profile produces `zed-X.Y.Z.tar`, an immutable distribution commit/tag, and the `zed` branch. Its deployment links to the GitHub Release. The distribution contains `extension.toml`, generated `themes/`, the README, license, and changelog. This tooling does not submit or update Zed registry entries.

@@ -360,13 +360,13 @@ and use them in your `opts` function. Example:
 
 ## Zed
 
-The Zed extension contains **Kanagawa Paper Ink** and **Kanagawa Paper Canvas**. Registry publication is pending. To try it locally:
+The Zed extension contains **Kanagawa Paper Ink** and **Kanagawa Paper Canvas**. To build and install it locally:
 
 1. From the source checkout, install Node 22 or later and run `npm ci --ignore-scripts`, then `just build zed`.
 2. In Zed's Extensions view, choose **Install Dev Extension** and select the generated `dist/zed` directory.
 3. Open the theme selector and choose either Kanagawa Paper variant.
 
-For an already assembled distribution, select its root directory in step 2; no build is needed. A future published `zed` branch or `zed-X.Y.Z` tag will contain that installable layout. Source under `packages/zed` must be built first.
+For an already assembled distribution, select its root directory in step 2; no build is needed. Source under `packages/zed` must be built first.
 
 ## Other applications
 
@@ -417,13 +417,11 @@ How to add a new extra template:
 
 ## Development
 
-Install Node 22 or later and run `npm ci --ignore-scripts` at the repository root. Run `just build` to assemble Neovim, VS Code, Zed, and extras under `dist/`, or `just watch neovim` to rebuild the Neovim target after source edits. Zed has independent archive release preparation; submission to its extension registry is a separate step.
+Install Node 22 or later and run `npm ci --ignore-scripts` at the repository root. Run `just build` to assemble Neovim, VS Code, Zed, and extras under `dist/`, or `just watch neovim` to rebuild the Neovim target after source edits.
 
 Run `npm test` for shared logic and target contracts, `just test` for Neovim runtime tests, and `just test-targets` for release tooling tests. The complete gate is `just check`. It also needs Neovim, Python 3, and the pinned Python and Node release dependencies described in [the release README](https://github.com/thesimonho/kanagawa-paper/blob/main/scripts/ci/release/README.md).
 
 Build once, then open Neovim from the repository root with your existing lazy.nvim setup. The local `.lazy.lua` selects `dist/neovim`, activates Canvas, and reloads the theme after a successful build. Keep `just watch neovim` running while editing source. The preview reads generated swatches and does not write source colors. After `.lazy.lua` changes, review the file, run `:trust` from its buffer, then restart Neovim so Lazy can apply the updated plugin path.
-
-The consolidated repository name, install branches, and release workflow described here are pending hosted cutover. Maintainers must complete [the cutover checklist](https://github.com/thesimonho/kanagawa-paper/blob/main/scripts/ci/release/README.md#hosted-cutover) before treating these channels as published.
 
 | Directory   | Purpose                                                |
 | ----------- | ------------------------------------------------------ |

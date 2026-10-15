@@ -21,3 +21,6 @@ node_modules/
 /.extras-stage-*/
 /.extras-previous-*/
 /.palette_colors.md.tmp
+
+# Local planning records and visual review evidence
+/docs/plans/
