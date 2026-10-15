@@ -1,9 +1,9 @@
 import { cp, mkdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { extras, metadata, type Extra, type ExtraName } from "./registry.ts";
-import { resolveTheme } from "../shared/color/evaluate.ts";
-import { ink } from "../shared/themes/ink.ts";
-import { canvas } from "../shared/themes/canvas.ts";
+import { resolveTheme } from "../../shared/color/evaluate.ts";
+import { ink } from "../../shared/themes/ink.ts";
+import { canvas } from "../../shared/themes/canvas.ts";
 
 export async function buildExtras(
   root: string,

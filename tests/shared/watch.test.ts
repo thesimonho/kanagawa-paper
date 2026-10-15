@@ -26,7 +26,6 @@ test(
     for (const name of [
       "shared",
       "packages",
-      "generators",
       "scripts",
       "extras/README.md",
       "README.md",
@@ -86,7 +85,7 @@ test(
       await waitFor("[build] ready");
       const marker = join(output, ".extras-build.json");
       const original = await readFile(marker, "utf8");
-      const template = join(source, "generators/extras/kitty.ts");
+      const template = join(source, "packages/extras/adapters/kitty.ts");
       const originalSource = await readFile(template, "utf8");
       let offset = log.length;
       await writeFile(
@@ -112,9 +111,12 @@ test(
       // Unrelated extras are excluded by --only.
       offset = log.length;
       await writeFile(
-        join(source, "generators/extras/foot.ts"),
+        join(source, "packages/extras/adapters/foot.ts"),
         "// unrelated\n" +
-          (await readFile(join(source, "generators/extras/foot.ts"), "utf8")),
+          (await readFile(
+            join(source, "packages/extras/adapters/foot.ts"),
+            "utf8",
+          )),
       );
       await delay(500);
       assert.equal(log.slice(offset), "");

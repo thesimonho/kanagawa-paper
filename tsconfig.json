@@ -11,8 +11,7 @@
   },
   "include": [
     "shared/**/*.ts",
-    "packages/*/*.ts",
-    "generators/**/*.ts",
+    "packages/**/*.ts",
     "scripts/*.ts",
     "scripts/build/*.ts",
     "tests/shared/*.ts",

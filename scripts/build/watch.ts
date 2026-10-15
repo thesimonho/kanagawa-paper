@@ -8,7 +8,6 @@ const opts = options([...args]);
 const sourceRoots = [
   "shared",
   "scripts",
-  "generators",
   "packages",
   "README.md",
   "LICENSE",
@@ -25,16 +24,16 @@ let stopping = false;
 function affected(path: string): Target[] {
   const name = relative(root, path).replaceAll("\\", "/");
   if (name.startsWith("scripts/ci/release/")) return [];
-  if (name.startsWith("packages/"))
-    return selected.filter((target) => name.startsWith(`packages/${target}/`));
-  if (name.startsWith("generators/") || name === "extras/README.md")
+  if (name.startsWith("packages/extras/") || name === "extras/README.md")
     return selected.filter(
       (target) =>
         target === "extras" &&
         (!opts.only ||
-          !name.startsWith("generators/extras/") ||
-          name === `generators/extras/${opts.only}.ts`),
+          !name.startsWith("packages/extras/adapters/") ||
+          name === `packages/extras/adapters/${opts.only}.ts`),
     );
+  if (name.startsWith("packages/"))
+    return selected.filter((target) => name.startsWith(`packages/${target}/`));
   return selected;
 }
 function launch() {

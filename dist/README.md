@@ -14,7 +14,7 @@ agent:
 | `neovim/` | `packages/neovim/` and `shared/` |
 | `vscode/` | `packages/vscode/` and `shared/` |
 | `zed/` | `packages/zed/` and `shared/` |
-| `extras/` | `generators/` and `shared/` |
+| `extras/` | `packages/extras/` and `shared/` |
 
 The application READMEs and licenses are copied from the repository root. Neovim help is generated from the root README. The extras README is copied from `extras/README.md`.
 

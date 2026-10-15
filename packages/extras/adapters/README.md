@@ -1,7 +1,7 @@
 ---
 agent:
   instruction: Preserve each target's output contract and use typed role references; keep generated outputs out of this source directory.
-  on-change: generators/extras/**
+  on-change: packages/extras/adapters/**
 ---
 
 # Extras adapters

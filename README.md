@@ -371,8 +371,8 @@ For the [extras](https://github.com/thesimonho/kanagawa-paper/tree/main/extras/)
 
 How to add a new extra template:
 
-1. Create a new template file in [generators/lua/kanagawa-paper/extras](https://github.com/thesimonho/kanagawa-paper/tree/main/generators/lua/kanagawa-paper/extras).
-2. Add the name and output file extension to the `extras` table in [generators/lua/kanagawa-paper/extras/init.lua](https://github.com/thesimonho/kanagawa-paper/blob/main/generators/lua/kanagawa-paper/extras/init.lua).
+1. Create a new TypeScript adapter in [packages/extras/adapters](https://github.com/thesimonho/kanagawa-paper/tree/main/packages/extras/adapters).
+2. Register the adapter, name, and output file extension in the `extras` registry in [packages/extras/registry.ts](https://github.com/thesimonho/kanagawa-paper/blob/main/packages/extras/registry.ts).
 3. Open a PR. CI checks that the extras, palette, and Neovim help generators run successfully. For an optional local preview, run `just generate`.
 
 > [!IMPORTANT]
@@ -393,8 +393,7 @@ Open Neovim from the repository root with your existing lazy.nvim setup. The loc
 | Directory | Purpose |
 | --- | --- |
 | `shared/` | Shared palette, semantic roles, and color calculations |
-| `packages/` | Neovim runtime and VS Code application mappings |
-| `generators/` | Existing lightweight extras generators |
+| `packages/` | Neovim, VS Code, Zed, and extras build targets |
 | `extras/` | Copyable generated application configurations |
 | `scripts/` | Tests, package assembly, and release coordination |
 | `tests/` | Runtime and package checks |

@@ -1,8 +1,8 @@
 import { buildNeovim } from "../../packages/neovim/build.ts";
 import { buildVscode } from "../../packages/vscode/build.ts";
 import { buildZed } from "../../packages/zed/build.ts";
-import { buildExtras } from "../../generators/build.ts";
-import type { ExtraName } from "../../generators/registry.ts";
+import { buildExtras } from "../../packages/extras/build.ts";
+import type { ExtraName } from "../../packages/extras/registry.ts";
 
 type Builder = (
   root: string,

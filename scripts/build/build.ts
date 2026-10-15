@@ -4,7 +4,7 @@ import { realpath } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import { targets, renderTarget, type Target } from "./targets.ts";
 export { targets, type Target } from "./targets.ts";
-import { extras, type ExtraName } from "../../generators/registry.ts";
+import { extras, type ExtraName } from "../../packages/extras/registry.ts";
 import { rawPalette } from "../../shared/palette.ts";
 import { ink } from "../../shared/themes/ink.ts";
 import { canvas } from "../../shared/themes/canvas.ts";
@@ -74,7 +74,7 @@ export async function build(
     !local ||
     local === ".." ||
     (local.startsWith("../") && root.startsWith(destination + "/")) ||
-    /^(packages|shared|scripts|generators|tests|\.git)(\/|$)/.test(local)
+    /^(packages|shared|scripts|tests|\.git)(\/|$)/.test(local)
   ) {
     throw new Error(`Refusing to replace source directory: ${destination}`);
   }

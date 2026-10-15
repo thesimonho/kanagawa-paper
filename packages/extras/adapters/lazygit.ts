@@ -1,4 +1,4 @@
-import type { Theme } from "../../shared/theme.ts";
+import type { Theme } from "../../../shared/theme.ts";
 import type { Metadata } from "../registry.ts";
 
 export function generate(theme: Theme, meta: Metadata): Record<string, string> {

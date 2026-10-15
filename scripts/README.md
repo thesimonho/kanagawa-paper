@@ -25,9 +25,9 @@ Paths below use the default output root, `dist`. Build output is disposable; che
 | `shared/palette.ts`, `shared/themes/*.ts`, `packages/neovim/adapter.ts` | `packages/neovim/build.ts` | `dist/neovim/lua/kanagawa-paper/palette.lua`, `themes/{ink,canvas}.lua`, `generated_types.lua` |
 | Shared theme definitions and `packages/vscode/adapter.ts` | `packages/vscode/build.ts` | `dist/vscode/themes/kanagawa-paper-{ink,canvas}-color-theme.json` |
 | Shared theme definitions and `packages/zed/adapter.ts` | `packages/zed/build.ts` | `dist/zed/themes/kanagawa-paper.json` |
-| Shared theme definitions and `generators/extras/*.ts`; output names in `generators/registry.ts` | `generators/build.ts` | `dist/extras/**`; `scripts/generate.ts` publishes the same files to checked-in `extras/**` |
+| Shared theme definitions and `packages/extras/adapters/*.ts`; output names in `packages/extras/registry.ts` | `packages/extras/build.ts` | `dist/extras/**`; `scripts/generate.ts` publishes the same files to checked-in `extras/**` |
 | `shared/palette.ts` and shared theme definitions | `scripts/build/build.ts` success marker | `dist/.neovim-build.json` preview swatches consumed by `.lazy.lua` |
 | `shared/palette.ts` | `scripts/generate.ts` | Checked-in `palette_colors.md` |
 | Root `README.md` | panvimdoc in `.github/actions/generate/action.yml` | Checked-in `packages/neovim/doc/kanagawa-paper.nvim.txt`, copied into `dist/neovim/doc/` during assembly |
 
-Target builders also copy runtime files, package metadata, licenses, and assets into their distribution. Those copies remain owned by their source files. `scripts/build/targets.ts` registers application targets; `generators/registry.ts` registers extras. Edit the source or generator, then rebuild the affected output.
+Target builders also copy runtime files, package metadata, licenses, and assets into their distribution. Those copies remain owned by their source files. `scripts/build/targets.ts` registers application targets; `packages/extras/registry.ts` registers extras. Edit the source or generator, then rebuild the affected output.

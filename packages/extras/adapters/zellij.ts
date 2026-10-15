@@ -1,4 +1,4 @@
-import type { Theme } from "../../shared/theme.ts";
+import type { Theme } from "../../../shared/theme.ts";
 import type { Metadata } from "../registry.ts";
 const rgb = (hex: string) =>
   [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)).join(" ");
