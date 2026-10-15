@@ -5,6 +5,8 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { build } from "../../scripts/build/build.ts";
 import { zedTheme } from "../../packages/zed/adapter.ts";
+import { validateZedTheme } from "../../packages/zed/build.ts";
+import schema from "../../packages/zed/theme.schema.json" with { type: "json" };
 import { resolveTheme } from "../../shared/color/evaluate.ts";
 import { ink } from "../../shared/themes/ink.ts";
 import { canvas } from "../../shared/themes/canvas.ts";
@@ -23,6 +25,25 @@ test("Zed builds both variants with valid inherited colors and extension metadat
     for (const [index, definition] of [ink, canvas].entries()) {
       const theme = resolveTheme(definition),
         rendered = family.themes[index];
+      assert.deepEqual(
+        Object.keys(rendered.style).sort(),
+        Object.keys(schema.definitions.ThemeStyleContent.properties).sort(),
+      );
+      assert.equal(rendered.style["background.appearance"], "opaque");
+      assert.equal(rendered.style["border.transparent"].slice(-2), "00");
+      assert.equal(
+        rendered.style["panel.focused_border"],
+        theme.accents.primary,
+      );
+      assert.equal(
+        rendered.style["conflict.background"],
+        theme.status.warning.subtle,
+      );
+      assert.equal(rendered.style["renamed.border"], theme.changes.text.base);
+      assert.equal(
+        rendered.style["terminal.ansi.dim_red"],
+        theme.terminal.normal.red + "AA",
+      );
       assert.equal(rendered.style["editor.foreground"], theme.ui.text.primary);
       assert.equal(
         rendered.style["terminal.ansi.bright_red"],
@@ -30,6 +51,38 @@ test("Zed builds both variants with valid inherited colors and extension metadat
       );
       assert.equal(rendered.style.syntax.variable, undefined);
       assert.equal(rendered.style.syntax.function.color, theme.syntax.function);
+      assert.equal(
+        rendered.style.syntax["function.builtin"].color,
+        theme.accents.special.one,
+      );
+      assert.equal(
+        rendered.style.syntax["diff.plus"].color,
+        theme.changes.added.base,
+      );
+      assert.equal(
+        rendered.style.syntax["selector.pseudo"].color,
+        theme.syntax.attribute,
+      );
+      for (const scope of [
+        "namespace",
+        "primary",
+        "selector",
+        "punctuation.bracket",
+        "punctuation.delimiter",
+        "punctuation.list_marker",
+        "punctuation.markup",
+        "punctuation.special",
+        "string.special.symbol",
+        "text.literal",
+        "variable.special",
+        "variant",
+        "diff.minus",
+      ])
+        assert.match(
+          rendered.style.syntax[scope].color,
+          /^#[\da-f]{6}$/i,
+          scope,
+        );
       assert.equal(
         rendered.style.players[0].selection,
         theme.ui.selection.background,
@@ -39,6 +92,18 @@ test("Zed builds both variants with valid inherited colors and extension metadat
       await readFile(join(target, "extension.toml"), "utf8"),
       /themes = \["themes\/kanagawa-paper.json"\]/,
     );
+    const manifest = await readFile(join(target, "extension.toml"), "utf8");
+    assert.match(manifest, /^id = "kanagawa-paper-theme"$/m);
+    assert.match(manifest, /^version = "\d+\.\d+\.\d+"$/m);
+    assert.equal(
+      manifest,
+      await readFile(
+        new URL("../../packages/zed/extension.toml", import.meta.url),
+        "utf8",
+      ),
+    );
+    for (const name of ["README.md", "LICENSE", "CHANGELOG.md"])
+      assert.ok((await readFile(join(target, name), "utf8")).length > 0);
     assert.throws(
       () =>
         zedTheme(
@@ -52,5 +117,48 @@ test("Zed builds both variants with valid inherited colors and extension metadat
     );
   } finally {
     await rm(output, { recursive: true, force: true });
+  }
+});
+
+test("Zed rejects invalid colors, incomplete keys and invalid structured fields", () => {
+  const family = {
+    name: "Kanagawa Paper",
+    author: "Simon Ho",
+    themes: [zedTheme(resolveTheme(ink), "ink")],
+  };
+  validateZedTheme(family);
+  const invalid = [
+    (style: Record<string, any>) => {
+      style["editor.foreground"] = "none";
+    },
+    (style: Record<string, any>) => {
+      style.players[0].selection = "invalid";
+    },
+    (style: Record<string, any>) => {
+      style.syntax.function.background_color = "invalid";
+    },
+    (style: Record<string, any>) => {
+      style.accents[0] = "invalid";
+    },
+    (style: Record<string, any>) => {
+      style.accents[0] = { color: "#ffffff" };
+    },
+    (style: Record<string, any>) => {
+      style["background.appearance"] = "#ffffff";
+    },
+    (style: Record<string, any>) => {
+      style["unknown.color"] = "#ffffff";
+    },
+    (style: Record<string, any>) => {
+      delete style["panel.focused_border"];
+    },
+  ];
+  for (const mutate of invalid) {
+    const broken = structuredClone(family);
+    mutate(broken.themes[0].style);
+    assert.throws(
+      () => validateZedTheme(broken),
+      /Invalid Zed|Incomplete or unknown Zed/,
+    );
   }
 });

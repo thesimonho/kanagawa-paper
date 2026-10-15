@@ -1,7 +1,7 @@
 # 🌊 Kanagawa Paper
 
 <p align="center">
-Remixed light and dark Kanagawa color scheme with muted colors. For Neovim and VS Code.
+Remixed light and dark Kanagawa color scheme with muted colors. For Neovim, VS Code, and Zed.
 </p>
 
 <p align="center">
@@ -14,13 +14,13 @@ Remixed light and dark Kanagawa color scheme with muted colors. For Neovim and V
 <img alt="GitHub branch check runs" src="https://img.shields.io/github/check-runs/thesimonho/kanagawa-paper/main?style=for-the-badge&label=build&labelColor=1F1F28&color=699469">
 </p>
 
-**Get started:** [VS Code](#vs-code) · [Neovim](#neovim) · [Other applications](#other-applications)
+**Get started:** [VS Code](#vs-code) · [Neovim](#neovim) · [Zed](#zed) · [Other applications](#other-applications)
 
 ## 💡 Motivation
 
 I love the original [kanagawa.nvim](https://github.com/rebelot/kanagawa.nvim) color scheme, but I found some of the colors a bit too bright and distracting. What I wanted was a more muted theme overall, using less saturated colors inspired by the original theme. You can see a visual preview of the color palette [here](https://github.com/thesimonho/kanagawa-paper/blob/main/palette_colors.md).
 
-**Ink** is the dark variant for late nights. **Canvas** is the light variant for sunny days. Both are available for Neovim and VS Code, with matching colors for terminals and other applications.
+**Ink** is the dark variant for late nights. **Canvas** is the light variant for sunny days. Both have Neovim, VS Code, and Zed builds, with matching colors for terminals and other applications.
 
 ### Ink
 
@@ -358,6 +358,16 @@ and use them in your `opts` function. Example:
 }
 ```
 
+## Zed
+
+The Zed extension contains **Kanagawa Paper Ink** and **Kanagawa Paper Canvas**. Registry publication is pending. To try it locally:
+
+1. From the source checkout, install Node 22 or later and run `npm ci --ignore-scripts`, then `just build zed`.
+2. In Zed's Extensions view, choose **Install Dev Extension** and select the generated `dist/zed` directory.
+3. Open the theme selector and choose either Kanagawa Paper variant.
+
+For an already assembled distribution, select its root directory in step 2; no build is needed. A future published `zed` branch or `zed-X.Y.Z` tag will contain that installable layout. Source under `packages/zed` must be built first.
+
 ## Other applications
 
 - [alacritty](https://github.com/thesimonho/kanagawa-paper/tree/main/extras/alacritty)
@@ -407,7 +417,7 @@ How to add a new extra template:
 
 ## Development
 
-Install Node 22 or later and run `npm ci --ignore-scripts` at the repository root. Run `just build` to assemble Neovim, VS Code, Zed, and extras under `dist/`, or `just watch neovim` to rebuild the Neovim target after source edits. Zed is currently a local build target; it has no automated publication.
+Install Node 22 or later and run `npm ci --ignore-scripts` at the repository root. Run `just build` to assemble Neovim, VS Code, Zed, and extras under `dist/`, or `just watch neovim` to rebuild the Neovim target after source edits. Zed has independent archive release preparation; submission to its extension registry is a separate step.
 
 Run `npm test` for shared logic and target contracts, `just test` for Neovim runtime tests, and `just test-targets` for release tooling tests. The complete gate is `just check`. It also needs Neovim, Python 3, and the pinned Python and Node release dependencies described in [the release README](https://github.com/thesimonho/kanagawa-paper/blob/main/scripts/ci/release/README.md).
 

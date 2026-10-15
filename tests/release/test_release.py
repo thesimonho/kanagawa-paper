@@ -1,8 +1,11 @@
 import importlib.util
+import io
 import json
 import os
+import re
 import shutil
 import subprocess
+import tarfile
 import tempfile
 import types
 import unittest
@@ -45,6 +48,23 @@ class Selection(unittest.TestCase):
                 path = self.root / name
                 path.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(ROOT / name, path)
+        # Keep fixtures stable when a release PR stamps real package versions.
+        baselines = {"neovim": "4.1.0", "vscode": "2.2.1", "zed": "0.1.0"}
+        for target, definition in release.release_targets().items():
+            path = self.root / definition.version_file
+            if path.suffix == ".json":
+                package = json.loads(path.read_text())
+                package[definition.version_key] = baselines[target]
+                path.write_text(json.dumps(package))
+            else:
+                path.write_text(
+                    re.sub(
+                        rf'^{re.escape(definition.version_key)} = "[^"\n]+"$',
+                        f'{definition.version_key} = "{baselines[target]}"',
+                        path.read_text(),
+                        flags=re.MULTILINE,
+                    )
+                )
         (self.root / "node_modules").symlink_to(
             ROOT / "node_modules", target_is_directory=True
         )
@@ -66,8 +86,8 @@ class Selection(unittest.TestCase):
             )
         )
         self.commit("chore: baseline")
-        for target, version in (("neovim", "4.1.0"), ("vscode", "2.2.1")):
-            self.git("tag", f"{target}-source-{version}")
+        for target, definition in release.release_targets().items():
+            self.git("tag", f"{target}-source-{definition.version(self.root)}")
         self.root_patch = patch.object(release, "ROOT", self.root)
         self.root_patch.start()
         # Default function parameters retain the module's import-time root.
@@ -225,21 +245,49 @@ class Selection(unittest.TestCase):
             "2.2.2",
         )
 
-    def test_shared_build_selects_both(self):
-        self.change("scripts/build/output.ts", "fix: common output lifecycle")
-        self.assertEqual(set(release.prepare()["targets"]), {"neovim", "vscode"})
+    def test_zed_only_fix_stamps_manifest(self):
+        self.change("packages/zed/adapter.ts", "fix: Zed syntax")
+        plan = release.prepare()
+        self.assertEqual(set(plan["targets"]), {"zed"})
+        self.assertEqual(plan["targets"]["zed"]["version"], "0.1.1")
+        self.assertIn(
+            'version = "0.1.1"', (self.root / "packages/zed/extension.toml").read_text()
+        )
 
-    def test_root_dependency_selects_both(self):
+    def test_zed_only_feature_advances_minor(self):
+        self.change("packages/zed/adapter.ts", "feat: Zed state coverage")
+        plan = release.prepare()
+        self.assertEqual(set(plan["targets"]), {"zed"})
+        self.assertEqual(plan["targets"]["zed"]["version"], "0.2.0")
+
+    def test_zed_breaking_change_stays_below_one(self):
+        self.change("packages/zed/adapter.ts", "feat!: Zed mapping contract")
+        plan = release.prepare()
+        self.assertEqual(set(plan["targets"]), {"zed"})
+        self.assertEqual(plan["targets"]["zed"]["version"], "0.2.0")
+
+    def test_zed_missing_baseline_rejected(self):
+        self.git("tag", "-d", "zed-source-0.1.0")
+        with self.assertRaisesRegex(
+            ValueError, "Missing migration baseline zed-source-0.1.0"
+        ):
+            release.prepare()
+
+    def test_shared_build_selects_all_release_targets(self):
+        self.change("scripts/build/output.ts", "fix: common output lifecycle")
+        self.assertEqual(set(release.prepare()["targets"]), {"neovim", "vscode", "zed"})
+
+    def test_root_dependency_selects_all_release_targets(self):
         # PSR reads this path only; keep the fixture lockfile valid for workflow tests.
         self.change("tsconfig.json", "fix: compiler contract")
-        self.assertEqual(set(release.prepare()["targets"]), {"neovim", "vscode"})
+        self.assertEqual(set(release.prepare()["targets"]), {"neovim", "vscode", "zed"})
 
     def test_shared_feature(self):
         self.change("shared/palette.ts", "feat: shared palette")
         plan = release.prepare()
         self.assertEqual(
             {t: v["version"] for t, v in plan["targets"].items()},
-            {"neovim": "4.2.0", "vscode": "2.3.0"},
+            {"neovim": "4.2.0", "vscode": "2.3.0", "zed": "0.2.0"},
         )
         for target in release.release_targets():
             self.assertIn("shared palette", plan["targets"][target]["notes"].lower())
@@ -253,7 +301,7 @@ class Selection(unittest.TestCase):
         plan = release.prepare()
         self.assertEqual(
             {t: v["version"] for t, v in plan["targets"].items()},
-            {"neovim": "4.1.1", "vscode": "2.2.2"},
+            {"neovim": "4.1.1", "vscode": "2.2.2", "zed": "0.1.1"},
         )
 
     def test_docs_and_extras_do_not_release(self):
@@ -384,9 +432,20 @@ class Selection(unittest.TestCase):
             tree = output / target
             tree.mkdir()
             (tree / "README.md").write_text("Shared readme")
-            (tree / "package.json").write_text(
-                json.dumps({"version": plan["targets"][target]["version"]})
-            )
+            if target == "zed":
+                shutil.copy2(
+                    self.root / "packages/zed/extension.toml", tree / "extension.toml"
+                )
+                (tree / "themes").mkdir()
+                (tree / "themes/kanagawa-paper.json").write_text('{"themes": []}\n')
+                (tree / "LICENSE").write_text("fixture license")
+                shutil.copy2(
+                    self.root / "packages/zed/CHANGELOG.md", tree / "CHANGELOG.md"
+                )
+            else:
+                (tree / "package.json").write_text(
+                    json.dumps({"version": plan["targets"][target]["version"]})
+                )
             return tree
 
         def fake_gh(*args, **kwargs):
@@ -466,6 +525,29 @@ class Selection(unittest.TestCase):
             release.publish(plan, source)
             self.assertFalse(releases["vscode-2.2.2"]["draft"])
             self.assertFalse(releases["fixture-1.0.1"]["draft"])
+            self.assertFalse(releases["zed-0.1.1"]["draft"])
+            self.assertEqual(
+                release.remote_branch("zed"), release.ref_sha("refs/tags/zed-0.1.1")
+            )
+            self.assertEqual(release.ref_sha("refs/tags/zed-source-0.1.1"), source)
+            with tarfile.open(
+                fileobj=io.BytesIO(uploaded["zed-0.1.1/zed-0.1.1.tar"])
+            ) as archive:
+                self.assertEqual(
+                    set(archive.getnames()),
+                    {
+                        "README.md",
+                        "LICENSE",
+                        "CHANGELOG.md",
+                        "extension.toml",
+                        "themes/kanagawa-paper.json",
+                        "source.json",
+                    },
+                )
+                self.assertEqual(
+                    archive.extractfile("extension.toml").read(),
+                    (self.root / "packages/zed/extension.toml").read_bytes(),
+                )
             self.assertEqual(
                 release.remote_branch("fixture"),
                 release.ref_sha("refs/tags/fixture-1.0.1"),

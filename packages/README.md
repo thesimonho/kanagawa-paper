@@ -10,6 +10,6 @@ Each target maps the shared theme to its application or output formats. `neovim/
 
 The root README and license are copied to editor distributions; extras use `extras/README.md`. Neovim help is generated from that README by panvimdoc in CI. Preserve application identities and independent version histories. Do not edit generated Lua or JSON. Build-time dependencies live in the root lockfile; installed themes need no Node runtime.
 
-`zed/` is a local Ink/Canvas extension and a test of adding a target without changing shared roles. It is registered for build/watch, but is not included in automated releases.
+`zed/` owns the Ink/Canvas extension, typed style/syntax mapping and schema validation. It is registered for build/watch and independent archive releases. Publication to Zed’s extension registry remains a separate submission.
 
 `extras/` owns the registry, builder, and adapters for copyable application configurations. Builds write to `dist/extras/`; generation updates the root `extras/` directory. It has no independent application version or automated release.
