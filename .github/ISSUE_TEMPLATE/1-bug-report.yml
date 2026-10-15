@@ -1,82 +1,74 @@
 name: Bug Report
-description: File a bug/issue
+description: Report a problem with Kanagawa Paper
 title: "bug: "
 labels: [bug]
 body:
   - type: markdown
     attributes:
       value: |
-        **Before** reporting an issue, make sure to read the [documentation](https://github.com/thesimonho/kanagawa-paper.nvim)
-        and search [existing issues](https://github.com/thesimonho/kanagawa-paper.nvim/issues).
-
-        Usage questions such as ***"How do I...?"*** belong in [Discussions](https://github.com/thesimonho/kanagawa-paper.nvim/discussions) and will be closed.
-  - type: checkboxes
+        Check the [documentation](https://github.com/thesimonho/kanagawa-paper) and
+        [existing issues](https://github.com/thesimonho/kanagawa-paper/issues) first.
+        Usage questions belong in [Discussions](https://github.com/thesimonho/kanagawa-paper/discussions).
+  - type: input
+    id: application
     attributes:
-      label: Did you check docs and existing issues?
-      description: Make sure you checked all of the below before submitting an issue
-      options:
-        - label: I have read all the kanagawa-paper.nvim docs
-          required: true
-        - label: I have updated the plugin to the latest version before submitting this issue
-          required: true
-        - label: I have searched the existing issues of kanagawa-paper.nvim
-          required: true
-        - label: I have searched the existing issues of plugins related to this issue
-          required: true
-  - type: checkboxes
+      label: Application
+      description: Name the application or plugin this report concerns. List more than one if needed.
+      placeholder: "Neovim, VS Code, Zed, Ghostty, or another application"
+    validations:
+      required: true
+  - type: dropdown
     id: theme
     attributes:
-      label: Does this issue affect a specific theme?
-      description: Check all that apply
+      label: Theme
+      multiple: true
       options:
-        - label: Ink
-          required: false
-        - label: Canvas
-          required: false
-  - type: input
-    attributes:
-      label: "Neovim version (nvim -v)"
-      placeholder: "0.8.0 commit db1b0ee3b30f"
-    validations:
-      required: true
-  - type: input
-    attributes:
-      label: "Operating system/version"
-      placeholder: "MacOS 11.5"
+        - Ink
+        - Canvas
+        - Not theme-specific
     validations:
       required: true
   - type: textarea
+    id: environment
     attributes:
-      label: Describe the bug
-      description: A clear and concise description of what the bug is. Please include any related errors you see in Neovim.
+      label: Versions and environment
+      description: Include the application version, theme version or source commit, operating system, and installation method. For extras, include the application and configuration file. Name any related plugins or custom color overrides.
+      placeholder: |
+        Application and version:
+        Theme version or source commit:
+        Operating system:
+        Installation method:
+        Related plugins or overrides:
     validations:
       required: true
   - type: textarea
+    id: description
     attributes:
-      label: Steps To Reproduce
-      description: Steps to reproduce the behavior.
-      placeholder: "1.\n2. \n3.\n"
+      label: What happened?
+      description: Describe the problem and include any error messages.
     validations:
-      required: false
+      required: true
   - type: textarea
+    id: reproduction
     attributes:
-      label: Expected Behavior
-      description: A concise description of what you expected to happen.
+      label: Steps to reproduce
+      description: Give the smallest example that shows the problem. Include relevant configuration and sample text as fenced code blocks. For Neovim, include a minimal init.lua and the affected plugin setup when relevant.
+      placeholder: |
+        1.
+        2.
+        3.
     validations:
-      required: false
+      required: true
   - type: textarea
+    id: expected
     attributes:
-      label: Repro
-      description: Minimal `init.lua` to reproduce this issue. Save as `repro.lua` and run with `nvim -u repro.lua`
-      value: |
-        vim.env.LAZY_STDPATH = ".repro"
-        load(vim.fn.system("curl -s https://raw.githubusercontent.com/folke/lazy.nvim/main/bootstrap.lua"))()
-
-        require("lazy.minit").repro({
-          spec = {
-            -- add any other plugins here
-          },
-        })
-      render: lua
+      label: Expected result
+    validations:
+      required: true
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: For a color or rendering problem, show the affected text and identify the selected theme.
     validations:
       required: false

@@ -1,15 +1,22 @@
 ## Description
 
-<!-- Describe the big picture of your changes to communicate to the maintainers
-  why we should accept this pull request. -->
+<!-- Explain the problem and the resulting behavior. -->
 
-## Related Issue(s)
+## Related issues
 
-<!--
-  If this PR fixes any issues, please link to the issue here.
-  - Fixes #<issue_number>
--->
+<!-- Link related issues. Use "Fixes #123" when this PR resolves one. -->
+
+## Affected applications
+
+<!-- Name the affected applications or plugins. For extras, name the application
+and format. For color changes, identify Ink, Canvas, or both. -->
+
+## Validation
+
+<!-- State what you checked and the results. Use `just check` for code changes.
+For target-specific changes, include a check in that application when possible.
+Edit maintained source; CI owns generated extras, palette documentation, and Neovim help. -->
 
 ## Screenshots
 
-<!-- Add screenshots of the changes if applicable. -->
+<!-- For visual changes, show before and after in each affected theme. -->
