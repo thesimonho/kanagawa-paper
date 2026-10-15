@@ -8,7 +8,7 @@ function M.get(colors, opts)
 		CmpCompletionSel = { link = "PmenuSel" },
 		CmpCompletionBorder = { fg = theme.ui.pmenu.fg_border, bg = theme.ui.pmenu.bg_border },
 		CmpCompletionThumb = { bg = theme.ui.pmenu.bg_thumb },
-		CmpCompletionSbar = { bg = theme.ui.fg },
+		CmpCompletionSbar = { bg = theme.ui.pmenu.bg_sbar },
 		CmpDocumentation = { link = "NormalFloat" },
 		CmpDocumentationBorder = { link = "FloatBorder" },
 		CmpItemAbbr = { fg = theme.ui.pmenu.fg },

@@ -8,7 +8,7 @@ function M.get(colors, opts)
 		BlinkCmpMenuBorder = { fg = theme.ui.pmenu.fg_border, bg = theme.ui.pmenu.bg_border },
 		BlinkCmpMenuSelection = { link = "PmenuSel" },
 		BlinkCmpScrollBarThumb = { bg = theme.ui.pmenu.bg_thumb },
-		BlinkCmpScrollBarGutter = { bg = theme.ui.fg },
+		BlinkCmpScrollBarGutter = { bg = theme.ui.pmenu.bg_sbar },
 		BlinkCmpLabel = { fg = theme.ui.pmenu.fg },
 		BlinkCmpLabelMatch = { fg = theme.syn.fun },
 		BlinkCmpLabelDetail = { link = "NonText" },
@@ -21,7 +21,7 @@ function M.get(colors, opts)
 		BlinkCmpDocSeparator = { fg = theme.ui.win_separator },
 		BlinkCmpDocCursorLine = { link = "CursorLine" },
 		BlinkCmpSignatureHelp = { link = "NormalFloat" },
-		BlinkCmpSignatureHelpBorder = { fg = theme.ui.bg_search, bg = theme.ui.pmenu.bg },
+		BlinkCmpSignatureHelpBorder = { link = "FloatBorder" },
 		BlinkCmpSignatureHelpActiveParameter = { link = "LspSignatureActiveParameter" },
 
 		BlinkCmpKind = { fg = theme.accent.accent4 },

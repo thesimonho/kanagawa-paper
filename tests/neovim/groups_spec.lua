@@ -34,7 +34,13 @@ describe("group config", function()
 							ui = {
 								line_numbers = { default = "#123456" },
 								nontext = "#abcdef",
-								pmenu = { fg_border = "#112233", bg_border = "#223344", bg_thumb = "#334455" },
+								pmenu = {
+									fg_border = "#112233",
+									bg_border = "#223344",
+									bg_thumb = "#334455",
+									bg_sbar = "#445566",
+								},
+								float = { fg_border = "#556677", bg_border = "#667788" },
 							},
 						},
 					},
@@ -46,6 +52,10 @@ describe("group config", function()
 			assert.same(groups["@comment.todo"], groups.MiniHipatternsTodo)
 			assert.same(groups.BlinkCmpMenuBorder, groups.CmpCompletionBorder)
 			assert.same(groups.BlinkCmpScrollBarThumb, groups.CmpCompletionThumb)
+			assert.same({ bg = "#445566" }, groups.BlinkCmpScrollBarGutter)
+			assert.same(groups.PmenuSbar, groups.CmpCompletionSbar)
+			assert.same({ link = "FloatBorder" }, groups.BlinkCmpSignatureHelpBorder)
+			assert.same({ fg = "#556677", bg = "#667788" }, groups.FloatBorder)
 			assert.same("#123456", groups.TreesitterContextLineNumber.fg)
 			assert.same(colors.theme.ui.bg_p2, groups.TreesitterContextLineNumber.bg)
 		end)
