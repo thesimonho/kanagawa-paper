@@ -15,7 +15,9 @@ runs:
       run: npm run generate
     - name: Prepare panvimdoc output directory
       shell: bash
-      run: mkdir -p doc
+      run: |
+        mkdir -p doc
+        rm -f doc/kanagawa-paper.nvim.txt packages/neovim/doc/kanagawa-paper.nvim.txt
     - name: Generate Neovim help from README
       uses: kdheepak/panvimdoc@v4.0.1
       with:
@@ -36,5 +38,6 @@ runs:
     - name: Place help in the Neovim package
       shell: bash
       run: |
+        test -s doc/kanagawa-paper.nvim.txt
         mv doc/kanagawa-paper.nvim.txt packages/neovim/doc/kanagawa-paper.nvim.txt
         rmdir doc

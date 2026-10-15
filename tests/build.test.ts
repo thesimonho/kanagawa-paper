@@ -1,10 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { mkdtemp, readFile, readdir, rm } from "node:fs/promises";
+import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 import { build, root } from "../scripts/build.ts";
+import { paletteMarkdown } from "../scripts/generate-palette.ts";
 import { sorted } from "../scripts/output.ts";
 import { spawnSync } from "node:child_process";
 const hash = (value: string | Buffer) =>
@@ -83,6 +84,40 @@ test("installed Neovim preserves baseline highlights and customization semantics
     );
     for (const [name, value] of Object.entries(actual))
       assert.equal(hash(JSON.stringify(sorted(value))), expected[name], name);
+  } finally {
+    await rm(output, { recursive: true, force: true });
+  }
+});
+
+test("palette documentation is current and deterministic", async () => {
+  const generated = paletteMarkdown();
+  assert.equal(paletteMarkdown(), generated);
+  assert.equal(
+    await readFile(join(root, "palette_colors.md"), "utf8"),
+    generated,
+  );
+});
+test("Neovim regeneration restores missing and stale generated modules", async () => {
+  const output = await mkdtemp(join(tmpdir(), "kanagawa generated "));
+  try {
+    const tree = await build("neovim", output);
+    const modules = join(tree, "lua/kanagawa-paper");
+    for (const name of [
+      "palette.lua",
+      "themes/ink.lua",
+      "themes/canvas.lua",
+      "generated_types.lua",
+    ])
+      assert.match(
+        await readFile(join(modules, name), "utf8"),
+        /^-- Generated from shared TypeScript/,
+      );
+    const expected = await files(tree);
+    await rm(join(modules, "palette.lua"));
+    await writeFile(join(modules, "themes/ink.lua"), "stale");
+    await writeFile(join(modules, "obsolete-generated.lua"), "stale");
+    await build("neovim", output);
+    assert.deepEqual(await files(tree), expected);
   } finally {
     await rm(output, { recursive: true, force: true });
   }
