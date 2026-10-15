@@ -32,16 +32,10 @@ class GenerationPublication(unittest.TestCase):
         (self.repo / "extras/old.txt").write_text("stale\n")
         (self.repo / "palette_colors.md").write_text("stale\n")
         shutil.copy(PUBLISHER, self.repo / "scripts/publish-generated.sh")
-        (self.repo / "scripts/build.sh").write_text(
-            "#!/bin/bash\nset -eu\nprintf 'current\\n' > extras/old.txt\n"
-            "printf 'new\\n' > extras/new.txt\n"
+        (self.repo / "packages/neovim/doc").mkdir(parents=True)
+        (self.repo / "packages/neovim/doc/kanagawa-paper.nvim.txt").write_text(
+            "old help\n"
         )
-        binaries = self.root / "bin"
-        binaries.mkdir()
-        nvim = binaries / "nvim"
-        nvim.write_text("#!/bin/bash\nprintf 'palette\\n' > palette_colors.md\n")
-        nvim.chmod(0o755)
-        self.env["PATH"] = str(binaries) + os.pathsep + self.env["PATH"]
         self.git("add", "-f", ".")
         self.git("commit", "-m", "initial reviewed source")
         self.git("remote", "add", "origin", str(self.remote))
@@ -57,6 +51,15 @@ class GenerationPublication(unittest.TestCase):
             stderr=subprocess.PIPE,
         ).strip()
 
+    def generate(self):
+        # Outputs of the separately checked shared generation action.
+        (self.repo / "extras/old.txt").write_text("current\n")
+        (self.repo / "extras/new.txt").write_text("new\n")
+        (self.repo / "palette_colors.md").write_text("palette\n")
+        (self.repo / "packages/neovim/doc/kanagawa-paper.nvim.txt").write_text(
+            "new help\n"
+        )
+
     def publish(self):
         return subprocess.run(
             ["bash", "scripts/publish-generated.sh"],
@@ -71,13 +74,19 @@ class GenerationPublication(unittest.TestCase):
         return self.git("--git-dir=" + str(self.remote), "rev-parse", "main")
 
     def test_publish_new_ignored_outputs_and_noop(self):
+        self.generate()
         result = self.publish()
         self.assertEqual(result.returncode, 0, result.stderr)
         published = self.remote_head()
         self.assertNotEqual(published, self.initial)
         self.assertEqual(
             set(self.git("diff", "--name-only", self.initial, published).splitlines()),
-            {"extras/old.txt", "extras/new.txt", "palette_colors.md"},
+            {
+                "extras/old.txt",
+                "extras/new.txt",
+                "palette_colors.md",
+                "packages/neovim/doc/kanagawa-paper.nvim.txt",
+            },
         )
         self.assertEqual(self.git("status", "--porcelain"), "")
         result = self.publish()
@@ -95,8 +104,10 @@ class GenerationPublication(unittest.TestCase):
         self.assertNotEqual(self.publish().returncode, 0)
         self.assertEqual(self.remote_head(), self.initial)
 
-    def test_generator_failure_does_not_publish(self):
-        (self.root / "bin/nvim").write_text("#!/bin/bash\nexit 1\n")
+    def test_reject_unrelated_staged_file(self):
+        self.generate()
+        (self.repo / "source.txt").write_text("unreviewed\n")
+        self.git("add", "source.txt")
         self.assertNotEqual(self.publish().returncode, 0)
         self.assertEqual(self.remote_head(), self.initial)
 
@@ -108,6 +119,7 @@ class GenerationPublication(unittest.TestCase):
         newer = self.git("rev-parse", "HEAD")
         self.git("push", "origin", "main")
         self.git("reset", "--hard", self.initial)
+        self.generate()
         result = self.publish()
         self.assertNotEqual(result.returncode, 0)
         self.assertEqual(self.remote_head(), newer)

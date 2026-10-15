@@ -33,7 +33,7 @@ local function load_colors(opts)
 		return kanagawa.load(opts)
 	end)
 	if not ok then
-		return nil, nil, nil, nil, colors
+		return nil, nil, nil, colors
 	end
 	return colors, groups, kopts, nil
 end
@@ -54,16 +54,12 @@ function M.setup(output)
 	for _, extra in ipairs(names) do
 		local info = M.mapping[extra]
 		local ok_plugin, plugin = pcall(require, "kanagawa-paper.extras." .. extra)
-		if not ok_plugin then
-			goto continue_extra
-		end
+		assert(ok_plugin, plugin)
 
 		-- colors for each theme
 		for theme, theme_name in pairs(themes) do
 			local colors, groups, kopts, err = load_colors({ _theme = theme })
-			if err then
-				goto continue_theme
-			end
+			assert(not err, err)
 
 			if colors and colors.theme then
 				local filename = extra
@@ -85,6 +81,8 @@ function M.setup(output)
 				t["_theme"] = theme
 
 				local ok_gen, out = pcall(plugin.generate, t, groups, kopts)
+				assert(ok_gen, out)
+				assert(type(out) == "string" or type(out) == "table", "Invalid extra output: " .. extra)
 				if ok_gen and out then
 					if type(out) == "table" then
 						-- Handle multiple files returned as a table: { ["suffix"] = "content" }
@@ -111,15 +109,12 @@ function M.setup(output)
 					end
 				end
 			end
-			::continue_theme::
 		end
 
 		-- palette colors, if applicable
 		if info.palette == true then
 			local colors, groups, kopts, err = load_colors({ _theme = "auto" })
-			if err then
-				goto continue_palette
-			end
+			assert(not err, err)
 
 			if colors and colors.palette then
 				local filename = extra
@@ -141,6 +136,8 @@ function M.setup(output)
 				print("[write] " .. filename)
 
 				local ok_genp, outp = pcall(plugin.generate_palette, p, groups, kopts)
+				assert(ok_genp, outp)
+				assert(type(outp) == "string" or type(outp) == "table", "Invalid palette output: " .. extra)
 				if ok_genp and outp then
 					if type(outp) == "table" then
 						for suffix, content in pairs(outp) do
@@ -165,11 +162,8 @@ function M.setup(output)
 					end
 				end
 			end
-			::continue_palette::
 		end
 	end
-
-	::continue_extra::
 end
 
 return M

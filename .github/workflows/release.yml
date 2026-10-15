@@ -13,25 +13,27 @@ permissions:
 jobs:
   generate:
     runs-on: ubuntu-latest
+    outputs:
+      source: ${{ steps.source.outputs.sha }}
     steps:
       - uses: actions/checkout@v6
         with:
           # Use the latest reviewed source, including any earlier bot update.
           ref: main
           ssh-key: ${{ secrets.DEPLOY_KEY }}
-      - uses: rhysd/action-setup-vim@v1
-        with:
-          neovim: true
-          version: v0.11.5
-      - name: Publish generated extras and palette
+      - uses: ./.github/actions/generate
+      - name: Publish generated files
         run: bash scripts/publish-generated.sh
+      - name: Record generated source
+        id: source
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
   release:
     needs: generate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: main
+          ref: ${{ needs.generate.outputs.source }}
           fetch-depth: 0
           # Pushes made with this key trigger validation on automation/release.
           ssh-key: ${{ secrets.DEPLOY_KEY }}
@@ -51,6 +53,7 @@ jobs:
       - run: npm ci --prefix scripts/release --ignore-scripts
       - name: Reconcile publication and prepare combined release PR
         env:
+          KANAGAWA_GENERATED_SOURCE: ${{ needs.generate.outputs.source }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: python scripts/release/coordinator.py run

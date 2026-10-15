@@ -293,22 +293,29 @@ def open_pr(plan: dict) -> None:
 
 
 def release(tag: str) -> dict | None:
-    # Inspect status explicitly: auth/network failures must never mean "not released".
-    result = subprocess.run(
-        ["gh", "api", "--include", f"repos/{repo_name()}/releases/tags/{tag}"],
-        cwd=ROOT,
-        text=True,
-        capture_output=True,
-        check=False,
+    # The REST tag endpoint omits drafts. Resolve either state through GraphQL,
+    # then fetch its assets by release ID, as GitHub CLI's draft lookup does.
+    owner, name = repo_name().split("/", 1)
+    result = json.loads(
+        gh(
+            "api",
+            "graphql",
+            "-f",
+            "query=query($owner:String!,$name:String!,$tag:String!) { repository(owner:$owner,name:$name) { release(tagName:$tag) { databaseId } } }",
+            "-f",
+            f"owner={owner}",
+            "-f",
+            f"name={name}",
+            "-f",
+            f"tag={tag}",
+        )
     )
-    headers, separator, body = result.stdout.partition("\n\n")
-    status = headers.splitlines()[0].split()[1] if headers.startswith("HTTP/") else None
-    if status == "404":
+    if result.get("errors") or result["data"]["repository"] is None:
+        raise ValueError("Could not look up GitHub release")
+    found = result["data"]["repository"]["release"]
+    if found is None:
         return None
-    result.check_returncode()
-    if status != "200" or not separator:
-        raise ValueError("Unexpected GitHub release response")
-    return json.loads(body)
+    return json.loads(gh("api", f"repos/{repo_name()}/releases/{found['databaseId']}"))
 
 
 def download_asset(asset: dict, destination: Path) -> None:
@@ -598,6 +605,12 @@ def pending_source() -> str | None:
 
 def workflow() -> None:
     git("fetch", "origin", "main", "--tags")
+    generated_source = os.environ.get("KANAGAWA_GENERATED_SOURCE")
+    if generated_source and git("rev-parse", "origin/main") != generated_source:
+        # A newer push has its own generation run queued. Do not prepare a PR
+        # from source whose generated documentation has not been refreshed yet.
+        print("Main advanced after generation; defer to its queued workflow")
+        return
     git("checkout", "-B", "main", "origin/main")
     source = pending_source()
     if source:

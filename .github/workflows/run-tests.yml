@@ -21,10 +21,7 @@ jobs:
           node-version: '22'
           cache: npm
           cache-dependency-path: scripts/release/package-lock.json
-      - uses: rhysd/action-setup-vim@v1
-        with:
-          neovim: true
-          version: v0.11.5
+      - uses: ./.github/actions/generate
       - run: pip install -r scripts/release/requirements.txt
       - run: npm ci --prefix scripts/release --ignore-scripts
       - run: bash scripts/test.sh
@@ -38,7 +35,11 @@ jobs:
         run: |
           git fetch origin main
           RELEASE_BASE_SHA=$(git rev-parse origin/main) python scripts/release/coordinator.py check-plan
-      - name: Build extras and palette
-        run: |
-          bash scripts/build.sh
-          nvim --headless --clean -l scripts/generate_palette.lua
+      - name: Upload generated files for inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-theme-files
+          path: |
+            extras/
+            palette_colors.md
+            packages/neovim/doc/kanagawa-paper.nvim.txt

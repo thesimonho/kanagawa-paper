@@ -4,252 +4,255 @@
   "type": "dark",
   "semanticHighlighting": true,
   "colors": {
-    "actionBar.toggledBackground": "@palette.sumiInk6",
-    "activityBar.activeBorder": "@palette.dragonBlue",
-    "activityBar.background": "@palette.sumiInk0",
-    "activityBar.border": "@palette.sumiInk4",
-    "activityBar.foreground": "@palette.dragonBlue",
-    "activityBar.inactiveForeground": "@palette.dragonAsh",
-    "activityBarBadge.background": "@palette.dragonBlue",
-    "activityBarBadge.foreground": "@palette.fujiWhite",
-    "badge.background": "@palette.katanaGray",
-    "badge.foreground": "@palette.fujiWhite",
-    "button.background": "@palette.dragonBlue",
+    "actionBar.toggledBackground": "@theme.ui.bg_visual",
+    "activityBar.activeBorder": "@theme.accent.accent1",
+    "activityBar.background": "@theme.ui.bg_m1",
+    "activityBar.border": "@theme.ui.bg_m2",
+    "activityBar.foreground": "@theme.accent.accent1",
+    "activityBar.inactiveForeground": "@theme.ui.fg_dim",
+    "activityBarBadge.background": "@theme.accent.accent1",
+    "activityBarBadge.foreground": "@theme.accent.invert",
+    "badge.background": "@theme.accent.accent1",
+    "badge.foreground": "@theme.accent.invert",
+    "button.background": "@theme.accent.accent1",
     "button.border": "#00000000",
-    "button.foreground": "@palette.fujiWhite",
-    "button.hoverBackground": "@palette.dragonBlue4",
-    "button.secondaryBackground": "@palette.sumiInk3",
-    "button.secondaryForeground": "@palette.dragonWhite",
-    "button.secondaryHoverBackground": "@palette.sumiInk4",
-    "chat.editedFileForeground": "@palette.boatYellow2",
-    "chat.slashCommandBackground": "@palette.dragonBlue5",
-    "chat.slashCommandForeground": "@palette.springViolet2",
-    "checkbox.background": "@palette.sumiInk2",
-    "checkbox.border": "@palette.sumiInk5",
-    "debugToolBar.background": "@palette.sumiInk0",
-    "descriptionForeground": "@palette.dragonWhite",
-    "dropdown.background": "@palette.sumiInk2",
-    "dropdown.border": "@palette.sumiInk5",
-    "dropdown.foreground": "@palette.dragonWhite",
-    "dropdown.listBackground": "@palette.sumiInk3",
-    "diffEditor.insertedTextBackground": "@palette.winterGreen:80",
-    "editor.background": "@palette.sumiInk3",
-    "editorBracketMatch.background": "@palette.sumiInk0",
-    "editorBracketMatch.border": "@palette.sumiInk6",
-    "editorCursor.background": "@palette.sumiInk3",
-    "editorCursor.foreground": "@palette.oldWhite",
-    "editor.findMatchBackground": "@palette.boatYellow1",
-    "editor.findMatchBorder": "@palette.boatYellow2",
-    "editor.findMatchHighlightBackground": "@palette.dragonBlue5:80",
-    "editor.foreground": "@palette.dragonWhite",
-    "editorHoverWidget.background": "@palette.sumiInk3",
-    "editorHoverWidget.border": "@palette.sumiInk4",
-    "editorHoverWidget.highlightForeground": "@palette.dragonBlue",
-    "editorInlayHint.background": "@palette.sumiInk3",
-    "editorInlayHint.foreground": "@palette.fujiGray",
-    "editorMarkerNavigation.background": "@palette.sumiInk5",
-    "editorRuler.foreground": "@palette.sumiInk5",
-    "editor.selectionBackground": "@palette.sumiInk5:80",
-    "editor.selectionHighlightBorder": "@palette.sumiInk6",
-    "editor.lineHighlightBackground": "@palette.sumiInk4",
-    "editorSuggestWidget.background": "@palette.waveBlue1",
-    "editorSuggestWidget.border": "@palette.waveBlue1",
-    "editorSuggestWidget.selectedBackground": "@palette.waveBlue2",
-    "editorWhitespace.foreground": "@palette.sumiInk4",
-    "editor.wordHighlightBackground": "@palette.sumiInk5:4d",
-    "editor.wordHighlightBorder": "@palette.sumiInk6",
-    "editor.wordHighlightStrongBackground": "@palette.sumiInk5:4d",
-    "editor.wordHighlightStrongBorder": "@palette.sumiInk6",
+    "button.foreground": "@theme.accent.invert",
+    "button.hoverBackground": "@theme.accent.accent3",
+    "button.secondaryBackground": "@theme.ui.bg_p1",
+    "button.secondaryForeground": "@theme.ui.fg",
+    "button.secondaryHoverBackground": "@theme.ui.bg_m2",
+    "chat.editedFileForeground": "@theme.vcs.changed",
+    "chat.slashCommandBackground": "@theme.ui.bg_p2",
+    "chat.slashCommandForeground": "@theme.ui.special",
+    "checkbox.background": "@theme.ui.bg_p2",
+    "checkbox.border": "@theme.ui.border",
+    "debugToolBar.background": "@theme.ui.bg_m1",
+    "descriptionForeground": "@theme.ui.fg_dim",
+    "dropdown.background": "@theme.ui.bg_p2",
+    "dropdown.border": "@theme.ui.border",
+    "dropdown.foreground": "@theme.ui.fg",
+    "dropdown.listBackground": "@theme.ui.bg",
+    "diffEditor.insertedTextBackground": "@theme.diff.add:33",
+    "editor.background": "@theme.ui.bg",
+    "editorBracketMatch.background": "@theme.ui.float.bg",
+    "editorBracketMatch.border": "@theme.ui.border",
+    "editorCursor.background": "@theme.ui.bg",
+    "editorCursor.foreground": "@theme.ui.fg",
+    "editor.findMatchBackground": "@theme.ui.bg_search",
+    "editor.findMatchBorder": "@theme.ui.special",
+    "editor.findMatchHighlightBackground": "@theme.ui.bg_search:80",
+    "editor.foreground": "@theme.ui.fg",
+    "editorHoverWidget.background": "@theme.ui.bg",
+    "editorHoverWidget.border": "@theme.ui.bg_m2",
+    "editorHoverWidget.highlightForeground": "@theme.accent.accent1",
+    "editorInlayHint.background": "@theme.ui.bg_cursorline",
+    "editorInlayHint.foreground": "@theme.ui.fg_dim",
+    "editorMarkerNavigation.background": "@theme.ui.bg_cursorline",
+    "editorRuler.foreground": "@theme.ui.indent",
+    "editor.selectionBackground": "@theme.ui.bg_visual:80",
+    "editor.selectionHighlightBorder": "@theme.ui.border",
+    "editor.lineHighlightBackground": "@theme.ui.bg_cursorline",
+    "editorSuggestWidget.background": "@theme.ui.pmenu.bg",
+    "editorSuggestWidget.border": "@theme.ui.pmenu.fg_border",
+    "editorSuggestWidget.selectedBackground": "@theme.ui.pmenu.bg_sel",
+    "editorWhitespace.foreground": "@theme.ui.whitespace",
+    "editor.wordHighlightBackground": "@theme.ui.bg_visual:4d",
+    "editor.wordHighlightBorder": "@theme.ui.border",
+    "editor.wordHighlightStrongBackground": "@theme.ui.bg_visual:4d",
+    "editor.wordHighlightStrongBorder": "@theme.ui.border",
     "editor.inactiveSelectionBackground": "@theme.ui.bg_visual:80",
     "editor.selectionHighlightBackground": "@theme.ui.bg_visual:80",
-    "editorGroup.border": "@palette.dragonBlack6",
-    "editorGroupHeader.tabsBackground": "@palette.sumiInk0",
-    "editorGroupHeader.tabsBorder": "@palette.sumiInk4",
-    "editorGutter.addedBackground": "@palette.dragonGreen",
-    "editorGutter.deletedBackground": "@palette.waveRed",
-    "editorGutter.modifiedBackground": "@palette.dragonYellow",
-    "editorIndentGuide.activeBackground1": "@palette.dragonViolet",
-    "editorIndentGuide.background1": "@palette.sumiInk5",
-    "editorBracketHighlight.foreground1": "@palette.dragonRed",
-    "editorBracketHighlight.foreground2": "@palette.dragonPink",
-    "editorBracketHighlight.foreground3": "@palette.dragonBlue",
-    "editorBracketHighlight.foreground4": "@palette.dragonOrange2",
-    "editorBracketHighlight.foreground5": "@palette.dragonGreen",
-    "editorBracketHighlight.foreground6": "@palette.dragonAsh",
-    "editorBracketHighlight.unexpectedBracket.foreground": "@palette.dragonRed",
-    "editorBracketPairGuide.activeBackground1": "@palette.dragonRed",
-    "editorBracketPairGuide.activeBackground2": "@palette.dragonPink",
-    "editorBracketPairGuide.activeBackground3": "@palette.dragonBlue",
-    "editorBracketPairGuide.activeBackground4": "@palette.dragonOrange2",
-    "editorBracketPairGuide.activeBackground5": "@palette.dragonGreen",
-    "editorBracketPairGuide.activeBackground6": "@palette.dragonAsh",
-    "editorBracketPairGuide.background1": "@palette.dragonRed:66",
-    "editorBracketPairGuide.background2": "@palette.dragonPink:66",
-    "editorBracketPairGuide.background3": "@palette.dragonBlue:66",
-    "editorBracketPairGuide.background4": "@palette.dragonOrange2:66",
-    "editorBracketPairGuide.background5": "@palette.dragonGreen:66",
-    "editorBracketPairGuide.background6": "@palette.dragonAsh:66",
-    "editorLineNumber.activeForeground": "@palette.dragonWhite",
-    "editorLineNumber.foreground": "@palette.dragonGray3",
-    "editorOverviewRuler.border": "@palette.dragonBlack1",
-    "editorWidget.background": "@palette.sumiInk4",
-    "editorError.foreground": "@palette.waveRed",
-    "editorWarning.foreground": "@palette.dragonYellow",
-    "errorForeground": "@palette.waveRed",
-    "focusBorder": "@palette.dragonBlue",
-    "foreground": "@palette.dragonWhite",
-    "gitDecoration.addedResourceForeground": "@palette.dragonGreen",
-    "gitDecoration.conflictingResourceForeground": "@palette.boatYellow2",
-    "gitDecoration.deletedResourceForeground": "@palette.waveRed",
-    "gitDecoration.ignoredResourceForeground": "@palette.fujiGray",
-    "gitDecoration.modifiedResourceForeground": "@palette.dragonYellow",
-    "gitDecoration.untrackedResourceForeground": "@palette.dragonGreen",
-    "icon.foreground": "@palette.dragonWhite",
-    "input.background": "@palette.sumiInk2",
-    "input.border": "@palette.sumiInk5",
-    "input.foreground": "@palette.dragonWhite",
-    "input.placeholderForeground": "@palette.dragonGray3",
-    "inputOption.activeBackground": "@palette.dragonBlue3",
-    "inputOption.activeBorder": "@palette.dragonBlue2",
-    "keybindingLabel.foreground": "@palette.dragonWhite",
-    "list.activeSelectionBackground": "@palette.sumiInk5",
-    "list.activeSelectionForeground": "@palette.dragonWhite",
-    "list.activeSelectionIconForeground": "@palette.fujiWhite",
-    "list.dropBackground": "@palette.sumiInk5",
-    "list.warningForeground": "@palette.dragonYellow",
-    "list.errorForeground": "@palette.waveRed",
-    "list.focusBackground": "@palette.sumiInk4",
-    "list.focusForeground": "@palette.dragonWhite",
-    "list.highlightForeground": "@palette.dragonBlue2",
-    "list.hoverBackground": "@palette.sumiInk5",
-    "list.hoverForeground": "@palette.dragonWhite",
-    "list.inactiveSelectionBackground": "@palette.sumiInk4",
-    "list.inactiveSelectionForeground": "@palette.dragonWhite",
-    "menu.background": "@palette.sumiInk3",
-    "menu.border": "@palette.dragonBlack6",
-    "menu.foreground": "@palette.dragonWhite",
-    "menu.selectionBackground": "@palette.dragonBlue",
-    "menu.selectionForeground": "@palette.fujiWhite",
-    "menu.separatorBackground": "@palette.dragonBlack6",
-    "minimapGutter.addedBackground": "@palette.dragonGreen",
-    "minimapGutter.deletedBackground": "@palette.waveRed",
-    "minimapGutter.modifiedBackground": "@palette.dragonYellow",
-    "notificationCenterHeader.background": "@palette.sumiInk3",
-    "notificationCenterHeader.foreground": "@palette.dragonWhite",
-    "notifications.background": "@palette.sumiInk3",
-    "notifications.border": "@palette.sumiInk4",
-    "notifications.foreground": "@palette.dragonWhite",
-    "panel.background": "@palette.sumiInk0",
-    "panel.border": "@palette.sumiInk4",
-    "panelSectionHeader.background": "@palette.sumiInk0",
-    "panelInput.border": "@palette.sumiInk4",
-    "panelTitle.activeBorder": "@palette.dragonBlue",
-    "panelTitle.activeForeground": "@palette.dragonWhite",
-    "panelTitle.inactiveForeground": "@palette.dragonWhite",
-    "peekViewEditor.background": "@palette.sumiInk3",
-    "peekViewEditor.matchHighlightBackground": "@palette.dragonOrange2",
-    "peekViewResult.background": "@palette.sumiInk3",
-    "peekViewResult.matchHighlightBackground": "@palette.dragonOrange2",
-    "peekView.border": "@palette.sumiInk6",
-    "pickerGroup.border": "@palette.sumiInk5",
-    "ports.iconRunningProcessForeground": "@palette.autumnGreen",
-    "progressBar.background": "@palette.dragonBlue",
-    "quickInput.background": "@palette.dragonBlack4",
-    "quickInput.foreground": "@palette.dragonWhite",
-    "quickInputList.focusBackground": "@palette.sumiInk4",
-    "quickInputList.focusForeground": "@palette.dragonWhite",
-    "quickInputList.focusIconForeground": "@palette.dragonWhite",
-    "scrollbar.shadow": "@palette.sumiInk5",
-    "scrollbarSlider.activeBackground": "@palette.sumiInk6:80",
-    "scrollbarSlider.background": "@palette.sumiInk6:66",
-    "scrollbarSlider.hoverBackground": "@palette.sumiInk6:80",
-    "settings.dropdownBackground": "@palette.sumiInk2",
-    "settings.dropdownBorder": "@palette.sumiInk5",
-    "settings.focusedRowBackground": "@palette.sumiInk5",
-    "settings.headerForeground": "@palette.fujiWhite",
-    "settings.modifiedItemIndicator": "@palette.dragonOrange2",
-    "sideBar.background": "@palette.sumiInk2",
-    "sideBar.border": "@palette.sumiInk4",
-    "sideBar.foreground": "@palette.dragonWhite",
-    "sideBarSectionHeader.background": "@palette.sumiInk2",
-    "sideBarSectionHeader.border": "@palette.sumiInk4",
-    "sideBarSectionHeader.foreground": "@palette.dragonWhite",
-    "sideBarTitle.foreground": "@palette.dragonWhite",
-    "statusBar.background": "@palette.sumiInk0",
-    "statusBar.border": "@palette.sumiInk4",
-    "statusBar.debuggingBackground": "@palette.dragonBlue",
-    "statusBar.debuggingBorder": "@palette.dragonViolet",
-    "statusBar.debuggingForeground": "@palette.fujiWhite",
-    "statusBar.focusBorder": "@palette.dragonBlue",
-    "statusBar.foreground": "@palette.dragonYellow",
-    "statusBar.noFolderBackground": "@palette.sumiInk3",
-    "statusBarItem.focusBorder": "@palette.dragonBlue",
-    "statusBarItem.hoverBackground": "@palette.sumiInk5",
-    "statusBarItem.hoverForeground": "@palette.dragonWhite",
-    "statusBarItem.prominentBackground": "@palette.dragonBlue",
-    "statusBarItem.prominentForeground": "@palette.fujiWhite",
-    "statusBarItem.remoteBackground": "@palette.dragonBlue",
-    "statusBarItem.remoteForeground": "@palette.fujiWhite",
-    "statusBarItem.warningBackground": "@palette.dragonYellow",
-    "statusBarItem.errorBackground": "@palette.waveRed",
-    "tab.activeBackground": "@palette.sumiInk3",
-    "tab.activeBorder": "@palette.sumiInk3",
-    "tab.activeBorderTop": "@palette.dragonBlue",
-    "tab.activeModifiedBorder": "@palette.dragonYellow",
-    "tab.activeForeground": "@palette.dragonWhite",
-    "tab.border": "@palette.sumiInk4",
-    "tab.hoverBackground": "@palette.sumiInk3",
-    "tab.inactiveBackground": "@palette.sumiInk0",
-    "tab.inactiveForeground": "@palette.dragonWhite",
-    "tab.inactiveModifiedBorder": "@palette.dragonYellow",
-    "tab.lastPinnedBorder": "@palette.dragonGray2",
-    "tab.selectedBackground": "@palette.dragonBlack4",
-    "tab.selectedBorderTop": "@palette.springViolet2",
-    "tab.selectedForeground": "@palette.dragonWhite",
-    "tab.unfocusedActiveBorder": "@palette.sumiInk3",
-    "tab.unfocusedActiveBorderTop": "@palette.sumiInk4",
-    "tab.unfocusedActiveModifiedBorder": "@palette.dragonYellow",
-    "tab.unfocusedHoverBackground": "@palette.sumiInk3",
-    "tab.unfocusedInactiveModifiedBorder": "@palette.dragonYellow",
-    "terminal.ansiBlack": "@palette.dragonBlack5",
-    "terminal.ansiBlue": "@palette.dragonBlue5",
-    "terminal.ansiBrightBlack": "@palette.dragonBlack6",
-    "terminal.ansiBrightBlue": "@palette.dragonBlue",
-    "terminal.ansiBrightCyan": "@palette.dragonAqua",
-    "terminal.ansiBrightGreen": "@palette.dragonGreen2",
-    "terminal.ansiBrightMagenta": "@palette.dragonPink",
-    "terminal.ansiBrightRed": "@palette.dragonRed",
-    "terminal.ansiBrightWhite": "@palette.oldWhite",
-    "terminal.ansiBrightYellow": "@palette.dragonYellow",
-    "terminal.ansiCyan": "@palette.dragonAqua",
-    "terminal.ansiGreen": "@palette.dragonGreen",
-    "terminal.ansiMagenta": "@palette.dragonPink",
-    "terminal.ansiRed": "@palette.dragonRed",
-    "terminal.ansiWhite": "@palette.dragonWhite",
-    "terminal.ansiYellow": "@palette.dragonYellow",
-    "terminal.background": "@palette.sumiInk3",
-    "terminal.border": "@palette.sumiInk4",
-    "terminal.foreground": "@palette.dragonWhite",
-    "terminal.inactiveSelectionBackground": "@palette.dragonBlack4",
-    "terminal.selectionBackground": "@palette.sumiInk5:80",
-    "terminal.tab.activeBorder": "@palette.dragonBlue",
-    "textBlockQuote.background": "@palette.sumiInk4",
-    "textBlockQuote.border": "@palette.katanaGray",
-    "textCodeBlock.background": "@palette.sumiInk4",
-    "textLink.activeForeground": "@palette.springBlue",
-    "textLink.foreground": "@palette.springBlue",
-    "textPreformat.background": "@palette.sumiInk5",
-    "textPreformat.foreground": "@palette.oldWhite",
-    "textSeparator.foreground": "@palette.sumiInk5",
-    "titleBar.activeBackground": "@palette.sumiInk0",
-    "titleBar.activeForeground": "@palette.dragonWhite",
-    "titleBar.border": "@palette.sumiInk4",
-    "titleBar.inactiveBackground": "@palette.sumiInk0",
-    "titleBar.inactiveForeground": "@palette.dragonWhite",
-    "welcomePage.progress.foreground": "@palette.dragonBlue",
-    "welcomePage.tileBackground": "@palette.sumiInk4",
-    "walkThrough.embeddedEditorBackground": "@palette.sumiInk3",
-    "widget.border": "@palette.dragonBlack5"
+    "editorGroup.border": "@theme.ui.border",
+    "editorGroupHeader.tabsBackground": "@theme.ui.bg_m1",
+    "editorGroupHeader.tabsBorder": "@theme.ui.bg_m2",
+    "editorGutter.addedBackground": "@theme.vcs.added",
+    "editorGutter.deletedBackground": "@theme.vcs.removed",
+    "editorGutter.modifiedBackground": "@theme.vcs.changed",
+    "editorIndentGuide.activeBackground1": "@theme.ui.indent_scope",
+    "editorIndentGuide.background1": "@theme.ui.indent",
+    "editorBracketHighlight.foreground1": "@theme.rainbow.rainbow1",
+    "editorBracketHighlight.foreground2": "@theme.rainbow.rainbow2",
+    "editorBracketHighlight.foreground3": "@theme.rainbow.rainbow3",
+    "editorBracketHighlight.foreground4": "@theme.rainbow.rainbow4",
+    "editorBracketHighlight.foreground5": "@theme.rainbow.rainbow5",
+    "editorBracketHighlight.foreground6": "@theme.rainbow.rainbow6",
+    "editorBracketHighlight.unexpectedBracket.foreground": "@theme.diag.error",
+    "editorBracketPairGuide.activeBackground1": "@theme.rainbow.rainbow1",
+    "editorBracketPairGuide.activeBackground2": "@theme.rainbow.rainbow2",
+    "editorBracketPairGuide.activeBackground3": "@theme.rainbow.rainbow3",
+    "editorBracketPairGuide.activeBackground4": "@theme.rainbow.rainbow4",
+    "editorBracketPairGuide.activeBackground5": "@theme.rainbow.rainbow5",
+    "editorBracketPairGuide.activeBackground6": "@theme.rainbow.rainbow6",
+    "editorBracketPairGuide.background1": "@theme.rainbow.rainbow1:66",
+    "editorBracketPairGuide.background2": "@theme.rainbow.rainbow2:66",
+    "editorBracketPairGuide.background3": "@theme.rainbow.rainbow3:66",
+    "editorBracketPairGuide.background4": "@theme.rainbow.rainbow4:66",
+    "editorBracketPairGuide.background5": "@theme.rainbow.rainbow5:66",
+    "editorBracketPairGuide.background6": "@theme.rainbow.rainbow6:66",
+    "editorLineNumber.activeForeground": "@theme.ui.fg",
+    "editorLineNumber.foreground": "@theme.ui.fg_dim",
+    "editorOverviewRuler.border": "@theme.ui.indent",
+    "editorWidget.background": "@theme.ui.bg_p1",
+    "editorError.foreground": "@theme.diag.error",
+    "editorWarning.foreground": "@theme.diag.warning",
+    "errorForeground": "@theme.diag.error",
+    "focusBorder": "@theme.accent.accent1",
+    "foreground": "@theme.ui.fg",
+    "gitDecoration.addedResourceForeground": "@theme.vcs.added",
+    "gitDecoration.conflictingResourceForeground": "@theme.diag.warning",
+    "gitDecoration.deletedResourceForeground": "@theme.vcs.removed",
+    "gitDecoration.ignoredResourceForeground": "@theme.syn.comment",
+    "gitDecoration.modifiedResourceForeground": "@theme.vcs.changed",
+    "gitDecoration.untrackedResourceForeground": "@theme.vcs.added",
+    "icon.foreground": "@theme.ui.fg",
+    "input.background": "@theme.ui.float.bg",
+    "input.border": "@theme.ui.border",
+    "input.foreground": "@theme.ui.fg",
+    "input.placeholderForeground": "@theme.ui.fg_dim",
+    "inputOption.activeBackground": "@theme.accent.accent1",
+    "inputOption.activeBorder": "@theme.accent.accent1",
+    "keybindingLabel.foreground": "@theme.ui.fg",
+    "list.activeSelectionBackground": "@theme.ui.bg_cursorline",
+    "list.activeSelectionForeground": "@theme.ui.fg",
+    "list.activeSelectionIconForeground": "@theme.ui.fg",
+    "list.dropBackground": "@theme.ui.bg_cursorline",
+    "list.warningForeground": "@theme.diag.warning",
+    "list.errorForeground": "@theme.diag.error",
+    "list.focusBackground": "@theme.ui.bg_m2",
+    "list.focusForeground": "@theme.ui.fg",
+    "list.highlightForeground": "@theme.ui.special",
+    "list.hoverBackground": "@theme.ui.bg_cursorline",
+    "list.hoverForeground": "@theme.ui.fg",
+    "list.inactiveSelectionBackground": "@theme.ui.bg_m2",
+    "list.inactiveSelectionForeground": "@theme.ui.fg",
+    "menu.background": "@theme.ui.bg",
+    "menu.border": "@theme.ui.border",
+    "menu.foreground": "@theme.ui.fg",
+    "menu.selectionBackground": "@theme.accent.accent1",
+    "menu.selectionForeground": "@theme.accent.invert",
+    "menu.separatorBackground": "@theme.ui.border",
+    "minimapGutter.addedBackground": "@theme.vcs.added",
+    "minimapGutter.deletedBackground": "@theme.vcs.removed",
+    "minimapGutter.modifiedBackground": "@theme.vcs.changed",
+    "notificationCenterHeader.background": "@theme.ui.bg",
+    "notificationCenterHeader.foreground": "@theme.ui.fg",
+    "notifications.background": "@theme.ui.bg",
+    "notifications.border": "@theme.ui.bg_m2",
+    "notifications.foreground": "@theme.ui.fg",
+    "panel.background": "@theme.ui.bg_m1",
+    "panel.border": "@theme.ui.bg_m2",
+    "panelSectionHeader.background": "@theme.ui.bg_m1",
+    "panelInput.border": "@theme.ui.bg_m2",
+    "panelTitle.activeBorder": "@theme.accent.accent1",
+    "panelTitle.activeForeground": "@theme.ui.fg",
+    "panelTitle.inactiveForeground": "@theme.ui.fg_dim",
+    "peekViewEditor.background": "@theme.ui.bg",
+    "peekViewEditor.matchHighlightBackground": "@theme.ui.bg_search",
+    "peekViewResult.background": "@theme.ui.bg",
+    "peekViewResult.matchHighlightBackground": "@theme.ui.bg_search",
+    "peekView.border": "@theme.ui.border",
+    "pickerGroup.border": "@theme.ui.border",
+    "ports.iconRunningProcessForeground": "@theme.diag.ok",
+    "progressBar.background": "@theme.accent.accent1",
+    "quickInput.background": "@theme.ui.bg_p1",
+    "quickInput.foreground": "@theme.ui.fg",
+    "quickInputList.focusBackground": "@theme.ui.bg_m2",
+    "quickInputList.focusForeground": "@theme.ui.fg",
+    "quickInputList.focusIconForeground": "@theme.ui.fg",
+    "scrollbar.shadow": "@theme.ui.bg_m2",
+    "scrollbarSlider.activeBackground": "@theme.ui.scrollbar:80",
+    "scrollbarSlider.background": "@theme.ui.scrollbar:66",
+    "scrollbarSlider.hoverBackground": "@theme.ui.scrollbar:80",
+    "settings.dropdownBackground": "@theme.ui.float.bg",
+    "settings.dropdownBorder": "@theme.ui.border",
+    "settings.focusedRowBackground": "@theme.ui.bg_cursorline",
+    "settings.headerForeground": "@theme.accent.accent1",
+    "settings.modifiedItemIndicator": "@theme.vcs.changed",
+    "sideBar.background": "@theme.ui.bg_cursorline",
+    "sideBar.border": "@theme.ui.bg_m2",
+    "sideBar.foreground": "@theme.ui.fg",
+    "sideBarSectionHeader.background": "@theme.ui.bg_cursorline",
+    "sideBarSectionHeader.border": "@theme.ui.bg_m2",
+    "sideBarSectionHeader.foreground": "@theme.ui.fg",
+    "sideBarTitle.foreground": "@theme.ui.fg",
+    "statusBar.background": "@theme.ui.bg_statusline",
+    "statusBar.border": "@theme.ui.bg_m2",
+    "statusBar.debuggingBackground": "@theme.accent.accent1",
+    "statusBar.debuggingBorder": "@theme.accent.accent1",
+    "statusBar.debuggingForeground": "@theme.accent.invert",
+    "statusBar.focusBorder": "@theme.accent.accent1",
+    "statusBar.foreground": "@theme.ui.fg",
+    "statusBar.noFolderBackground": "@theme.ui.bg",
+    "statusBarItem.focusBorder": "@theme.accent.accent1",
+    "statusBarItem.hoverBackground": "@theme.ui.bg_m2",
+    "statusBarItem.hoverForeground": "@theme.ui.fg",
+    "statusBarItem.prominentBackground": "@theme.accent.accent1",
+    "statusBarItem.prominentForeground": "@theme.accent.invert",
+    "statusBarItem.remoteBackground": "@theme.accent.accent1",
+    "statusBarItem.remoteForeground": "@theme.accent.invert",
+    "statusBarItem.warningBackground": "@theme.diag.warning",
+    "statusBarItem.errorBackground": "@theme.diag.error",
+    "tab.activeBackground": "@theme.ui.tabline.bg_selected",
+    "tab.activeBorder": "@theme.ui.tabline.bg_selected",
+    "tab.activeBorderTop": "@theme.ui.tabline.indicator",
+    "tab.activeModifiedBorder": "@theme.vcs.changed",
+    "tab.activeForeground": "@theme.ui.tabline.fg_selected",
+    "tab.border": "@theme.ui.tabline.bg",
+    "tab.hoverBackground": "@theme.ui.tabline.bg_selected",
+    "tab.inactiveBackground": "@theme.ui.tabline.bg_inactive",
+    "tab.inactiveForeground": "@theme.ui.tabline.fg_inactive",
+    "tab.inactiveModifiedBorder": "@theme.vcs.changed",
+    "tab.lastPinnedBorder": "@theme.ui.tabline.fg_selected",
+    "tab.selectedBackground": "@theme.ui.tabline.bg_selected",
+    "tab.selectedBorderTop": "@theme.ui.tabline.indicator",
+    "tab.selectedForeground": "@theme.ui.tabline.fg_selected",
+    "tab.unfocusedActiveBorder": "@theme.ui.tabline.bg_selected",
+    "tab.unfocusedActiveBorderTop": "@theme.ui.tabline.bg_inactive",
+    "tab.unfocusedActiveModifiedBorder": "@theme.vcs.changed",
+    "tab.unfocusedHoverBackground": "@theme.ui.tabline.bg_selected",
+    "tab.unfocusedInactiveModifiedBorder": "@theme.vcs.changed",
+    "terminal.ansiBlack": "@theme.term.black",
+    "terminal.ansiBlue": "@theme.term.blue",
+    "terminal.ansiBrightBlack": "@theme.term.black_bright",
+    "terminal.ansiBrightBlue": "@theme.term.blue_bright",
+    "terminal.ansiBrightCyan": "@theme.term.cyan_bright",
+    "terminal.ansiBrightGreen": "@theme.term.green_bright",
+    "terminal.ansiBrightMagenta": "@theme.term.magenta_bright",
+    "terminal.ansiBrightRed": "@theme.term.red_bright",
+    "terminal.ansiBrightWhite": "@theme.term.white_bright",
+    "terminal.ansiBrightYellow": "@theme.term.yellow_bright",
+    "terminal.ansiCyan": "@theme.term.cyan",
+    "terminal.ansiGreen": "@theme.term.green",
+    "terminal.ansiMagenta": "@theme.term.magenta",
+    "terminal.ansiRed": "@theme.term.red",
+    "terminal.ansiWhite": "@theme.term.white",
+    "terminal.ansiYellow": "@theme.term.yellow",
+    "terminal.background": "@theme.ui.bg",
+    "terminal.border": "@theme.ui.bg_m2",
+    "terminal.foreground": "@theme.ui.fg",
+    "terminal.inactiveSelectionBackground": "@theme.ui.bg_visual",
+    "terminal.selectionBackground": "@theme.ui.bg_visual:80",
+    "terminal.tab.activeBorder": "@theme.accent.accent1",
+    "textBlockQuote.background": "@theme.ui.bg_m2",
+    "textBlockQuote.border": "@theme.ui.fg_dim",
+    "textCodeBlock.background": "@theme.ui.bg_m2",
+    "textLink.activeForeground": "@theme.ui.special",
+    "textLink.foreground": "@theme.ui.special",
+    "textPreformat.background": "@theme.ui.bg_m1",
+    "textPreformat.foreground": "@theme.ui.fg_dim",
+    "textSeparator.foreground": "@theme.ui.border",
+    "titleBar.activeBackground": "@theme.ui.bg_m1",
+    "titleBar.activeForeground": "@theme.ui.fg",
+    "titleBar.border": "@theme.ui.bg_m2",
+    "titleBar.inactiveBackground": "@theme.ui.bg_m1",
+    "titleBar.inactiveForeground": "@theme.ui.fg_dim",
+    "welcomePage.progress.foreground": "@theme.accent.accent1",
+    "welcomePage.tileBackground": "@theme.ui.bg_m2",
+    "walkThrough.embeddedEditorBackground": "@theme.ui.bg",
+    "widget.border": "@theme.ui.border",
+    "editor.findMatchForeground": "@theme.ui.fg_dark",
+    "statusBarItem.errorForeground": "@theme.ui.bg",
+    "statusBarItem.warningForeground": "@theme.ui.bg"
   },
   "tokenColors": [
     {
@@ -260,7 +263,7 @@
       ],
       "settings": {
         "fontStyle": "italic",
-        "foreground": "@palette.fujiGray"
+        "foreground": "@theme.syn.comment"
       }
     },
     {
@@ -270,21 +273,21 @@
         "comment.block.documentation"
       ],
       "settings": {
-        "foreground": "@palette.dragonGreen3"
+        "foreground": "@theme.syn.docstring"
       }
     },
     {
       "name": "Invalid - Illegal",
       "scope": "invalid.illegal",
       "settings": {
-        "foreground": "@palette.autumnRed"
+        "foreground": "@theme.diag.error"
       }
     },
     {
       "name": "Operators",
       "scope": "keyword.operator",
       "settings": {
-        "foreground": "@palette.dragonRed"
+        "foreground": "@theme.syn.operator"
       }
     },
     {
@@ -294,7 +297,7 @@
         "storage"
       ],
       "settings": {
-        "foreground": "@palette.dragonPink"
+        "foreground": "@theme.syn.keyword"
       }
     },
     {
@@ -304,7 +307,7 @@
         "support.type"
       ],
       "settings": {
-        "foreground": "@palette.oniViolet"
+        "foreground": "@theme.syn.type"
       }
     },
     {
@@ -315,7 +318,7 @@
         "variable.language"
       ],
       "settings": {
-        "foreground": "@palette.dragonOrange"
+        "foreground": "@theme.syn.constant"
       }
     },
     {
@@ -325,7 +328,7 @@
         "support.variable"
       ],
       "settings": {
-        "foreground": "@palette.oniViolet"
+        "foreground": "@theme.ui.fg"
       }
     },
     {
@@ -336,7 +339,7 @@
       ],
       "settings": {
         "fontStyle": "bold",
-        "foreground": "@palette.waveRed"
+        "foreground": "@theme.syn.fun"
       }
     },
     {
@@ -348,14 +351,14 @@
       ],
       "settings": {
         "fontStyle": "bold",
-        "foreground": "@palette.oniViolet"
+        "foreground": "@theme.syn.type"
       }
     },
     {
       "name": "Exceptions",
       "scope": "entity.name.exception",
       "settings": {
-        "foreground": "@palette.autumnRed"
+        "foreground": "@theme.diag.error"
       }
     },
     {
@@ -366,28 +369,38 @@
       }
     },
     {
-      "name": "Numbers, Characters",
-      "scope": [
-        "constant.numeric",
-        "constant.character",
-        "constant"
-      ],
+      "name": "Constants",
+      "scope": "constant",
       "settings": {
-        "foreground": "@palette.dragonPink"
+        "foreground": "@theme.syn.constant"
+      }
+    },
+    {
+      "name": "Numbers",
+      "scope": "constant.numeric",
+      "settings": {
+        "foreground": "@theme.syn.number"
+      }
+    },
+    {
+      "name": "Characters",
+      "scope": "constant.character",
+      "settings": {
+        "foreground": "@theme.syn.string"
       }
     },
     {
       "name": "Strings",
       "scope": "string",
       "settings": {
-        "foreground": "@palette.dragonGreen2"
+        "foreground": "@theme.syn.string"
       }
     },
     {
       "name": "Strings: Escape Sequences",
       "scope": "constant.character.escape",
       "settings": {
-        "foreground": "@palette.dragonGray2"
+        "foreground": "@theme.syn.regex"
       }
     },
     {
@@ -397,21 +410,21 @@
         "constant.regexp"
       ],
       "settings": {
-        "foreground": "@palette.dragonRed"
+        "foreground": "@theme.syn.regex"
       }
     },
     {
       "name": "Strings: Symbols",
       "scope": "constant.other.symbol",
       "settings": {
-        "foreground": "@palette.dragonRed"
+        "foreground": "@theme.syn.symbol"
       }
     },
     {
       "name": "Punctuation",
       "scope": "punctuation",
       "settings": {
-        "foreground": "@palette.dragonGray2"
+        "foreground": "@theme.syn.punct"
       }
     },
     {
@@ -423,7 +436,7 @@
         "meta.tag.sgml punctuation.definition.tag.html"
       ],
       "settings": {
-        "foreground": "@palette.dragonWhite"
+        "foreground": "@theme.syn.preproc"
       }
     },
     {
@@ -435,14 +448,14 @@
         "punctuation.definition.tag.end.html"
       ],
       "settings": {
-        "foreground": "@palette.dragonBlue3"
+        "foreground": "@theme.syn.punct"
       }
     },
     {
       "name": "HTML: Tag Names",
       "scope": "entity.name.tag",
       "settings": {
-        "foreground": "@palette.crystalBlue"
+        "foreground": "@theme.syn.statement"
       }
     },
     {
@@ -453,7 +466,7 @@
       ],
       "settings": {
         "fontStyle": "italic",
-        "foreground": "@palette.dragonBlue3"
+        "foreground": "@theme.syn.attribute"
       }
     },
     {
@@ -463,7 +476,7 @@
         "punctuation.definition.entity"
       ],
       "settings": {
-        "foreground": "@palette.dragonOrange"
+        "foreground": "@theme.syn.constant"
       }
     },
     {
@@ -475,7 +488,7 @@
         "entity.name.tag.css"
       ],
       "settings": {
-        "foreground": "@palette.oniViolet"
+        "foreground": "@theme.syn.type"
       }
     },
     {
@@ -485,7 +498,7 @@
         "support.type.property-name"
       ],
       "settings": {
-        "foreground": "@palette.dragonOrange"
+        "foreground": "@theme.syn.member"
       }
     },
     {
@@ -496,7 +509,7 @@
         "support.constant.property-value"
       ],
       "settings": {
-        "foreground": "@palette.dragonGreen2"
+        "foreground": "@theme.syn.string"
       }
     },
     {
@@ -510,35 +523,35 @@
       "name": "Markup: Changed",
       "scope": "markup.changed",
       "settings": {
-        "foreground": "@palette.dragonYellow"
+        "foreground": "@theme.vcs.changed"
       }
     },
     {
       "name": "Markup: Deletion",
       "scope": "markup.deleted",
       "settings": {
-        "foreground": "@palette.dragonRed"
+        "foreground": "@theme.vcs.removed"
       }
     },
     {
       "name": "Markup: Error",
       "scope": "markup.error",
       "settings": {
-        "foreground": "@palette.autumnRed"
+        "foreground": "@theme.diag.error"
       }
     },
     {
       "name": "Markup: Insertion",
       "scope": "markup.inserted",
       "settings": {
-        "foreground": "@palette.dragonGreen"
+        "foreground": "@theme.vcs.added"
       }
     },
     {
       "name": "Markup: Link",
       "scope": "meta.link",
       "settings": {
-        "foreground": "@palette.crystalBlue"
+        "foreground": "@theme.syn.special3"
       }
     },
     {
@@ -548,28 +561,84 @@
         "markup.raw"
       ],
       "settings": {
-        "foreground": "@palette.dragonGray2"
+        "foreground": "@theme.syn.string"
       }
     },
     {
       "name": "Markup: Prompt",
       "scope": "markup.prompt",
       "settings": {
-        "foreground": "@palette.dragonGray2"
+        "foreground": "@theme.ui.special"
       }
     },
     {
       "name": "Markup: Heading",
       "scope": "markup.heading",
       "settings": {
-        "foreground": "@palette.dragonRed"
+        "foreground": "@theme.rainbow.rainbow1"
+      }
+    },
+    {
+      "name": "Markup: Heading 1",
+      "scope": [
+        "heading.1.markdown",
+        "markup.heading.setext.1.markdown"
+      ],
+      "settings": {
+        "foreground": "@theme.rainbow.rainbow1"
+      }
+    },
+    {
+      "name": "Markup: Heading 2",
+      "scope": [
+        "heading.2.markdown",
+        "markup.heading.setext.2.markdown"
+      ],
+      "settings": {
+        "foreground": "@theme.rainbow.rainbow2"
+      }
+    },
+    {
+      "name": "Markup: Heading 3",
+      "scope": [
+        "heading.3.markdown"
+      ],
+      "settings": {
+        "foreground": "@theme.rainbow.rainbow3"
+      }
+    },
+    {
+      "name": "Markup: Heading 4",
+      "scope": [
+        "heading.4.markdown"
+      ],
+      "settings": {
+        "foreground": "@theme.rainbow.rainbow4"
+      }
+    },
+    {
+      "name": "Markup: Heading 5",
+      "scope": [
+        "heading.5.markdown"
+      ],
+      "settings": {
+        "foreground": "@theme.rainbow.rainbow5"
+      }
+    },
+    {
+      "name": "Markup: Heading 6",
+      "scope": [
+        "heading.6.markdown"
+      ],
+      "settings": {
+        "foreground": "@theme.rainbow.rainbow6"
       }
     },
     {
       "name": "Markup: Traceback",
       "scope": "markup.traceback",
       "settings": {
-        "foreground": "@palette.autumnRed"
+        "foreground": "@theme.diag.error"
       }
     },
     {
@@ -583,24 +652,28 @@
       "name": "Markup Quote",
       "scope": "markup.quote",
       "settings": {
-        "foreground": "@palette.dragonPink"
+        "foreground": "@theme.syn.punct"
       }
     },
     {
       "name": "Markup Lists",
       "scope": "markup.list",
       "settings": {
-        "foreground": "@palette.dragonBlue"
+        "foreground": "@theme.syn.punct"
       }
     },
     {
-      "name": "Markup Styling",
-      "scope": [
-        "markup.bold",
-        "markup.italic"
-      ],
+      "name": "Markup: Bold",
+      "scope": "markup.bold",
       "settings": {
-        "foreground": "@palette.dragonOrange2"
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "Markup: Italic",
+      "scope": "markup.italic",
+      "settings": {
+        "fontStyle": "italic"
       }
     },
     {
@@ -608,7 +681,7 @@
       "scope": "markup.inline.raw",
       "settings": {
         "fontStyle": "",
-        "foreground": "@palette.dragonGreen"
+        "foreground": "@theme.syn.string"
       }
     },
     {
@@ -619,56 +692,58 @@
         "meta.separator"
       ],
       "settings": {
-        "foreground": "@palette.dragonBlack6"
+        "foreground": "@theme.diff.text"
       }
     },
     {
       "name": "Extra: Diff From",
       "scope": "meta.diff.header.from-file",
       "settings": {
-        "foreground": "@palette.dragonBlack6"
+        "foreground": "@theme.diff.delete"
       }
     },
     {
       "name": "Extra: Diff To",
       "scope": "meta.diff.header.to-file",
       "settings": {
-        "foreground": "@palette.dragonBlack6"
+        "foreground": "@theme.diff.add"
       }
     }
   ],
   "semanticTokenColors": {
-    "arithmetic": "@palette.sakuraPink",
-    "class": "@palette.dragonBlue2",
-    "class.defaultLibrary": "@palette.dragonBlue2",
-    "enum": "@palette.dragonBlue2",
-    "enumMember": "@palette.lightBlue",
-    "event": "@palette.oldWhite",
-    "function": "@palette.dragonBlue2",
-    "function.defaultLibrary": "@palette.dragonBlue2",
-    "interface": "@palette.dragonBlue2",
+    "arithmetic": "@theme.syn.operator",
+    "class": "@theme.syn.type",
+    "class.defaultLibrary": "@theme.syn.keyword",
+    "enum": "@theme.syn.type",
+    "enumMember": "@theme.syn.constant",
+    "event": "@theme.syn.type",
+    "function": "@theme.syn.fun",
+    "function.defaultLibrary": "@theme.syn.fun",
+    "interface": "@theme.syn.type",
     "keyword.controlFlow": {
-      "foreground": "@palette.dragonViolet",
+      "foreground": "@theme.syn.statement",
       "fontStyle": "bold"
     },
-    "macro": "@palette.dragonRed",
-    "method": "@palette.dragonBlue2",
-    "namespace": "@palette.oldWhite",
-    "newOperator": "@palette.dragonWhite",
-    "numberLiteral": "@palette.dragonPink",
-    "operator": "@palette.dragonRed",
-    "parameter": "@palette.dragonGray",
-    "parameter.declaration": "@palette.boatYellow2",
-    "parameter.definition": "@palette.boatYellow2",
-    "property": "@palette.dragonRed",
-    "property.readonly": "@palette.dragonOrange",
-    "stringLiteral": "@palette.surimiOrange",
-    "struct": "@palette.dragonBlue2",
-    "type": "@palette.dragonAqua",
-    "type.defaultLibrary": "@palette.dragonBlue2",
-    "typeParameter": "@palette.dragonWhite",
-    "variable": "@palette.dragonYellow",
-    "variable.readonly": "@palette.dragonOrange",
-    "variable.readonly.defaultLibrary": "@palette.dragonBlue2"
+    "macro": "@theme.syn.preproc",
+    "method": "@theme.syn.fun",
+    "namespace": "@theme.syn.keyword",
+    "newOperator": "@theme.syn.operator",
+    "numberLiteral": "@theme.syn.number",
+    "operator": "@theme.syn.operator",
+    "parameter": "@theme.syn.parameter",
+    "parameter.declaration": "@theme.syn.parameter",
+    "parameter.definition": "@theme.syn.parameter",
+    "property": "@theme.syn.member",
+    "property.readonly": "@theme.syn.constant",
+    "stringLiteral": "@theme.syn.string",
+    "struct": "@theme.syn.type",
+    "type": "@theme.syn.type",
+    "type.defaultLibrary": "@theme.syn.keyword",
+    "typeParameter": "@theme.syn.type",
+    "variable": "@theme.ui.fg",
+    "variable.readonly": "@theme.syn.constant",
+    "variable.readonly.defaultLibrary": "@theme.syn.keyword",
+    "variable.defaultLibrary": "@theme.syn.keyword",
+    "method.defaultLibrary": "@theme.syn.keyword"
   }
 }

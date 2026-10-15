@@ -373,10 +373,10 @@ How to add a new extra template:
 
 1. Create a new template file in [generators/lua/kanagawa-paper/extras](https://github.com/thesimonho/kanagawa-paper/tree/main/generators/lua/kanagawa-paper/extras).
 2. Add the name and output file extension to the `extras` table in [generators/lua/kanagawa-paper/extras/init.lua](https://github.com/thesimonho/kanagawa-paper/blob/main/generators/lua/kanagawa-paper/extras/init.lua).
-3. Open a PR. CI checks that the extras and palette generators run successfully. For an optional local preview, run `just generate`.
+3. Open a PR. CI checks that the extras, palette, and Neovim help generators run successfully. For an optional local preview, run `just generate`.
 
 > [!IMPORTANT]
-> After merge, automation generates and commits the extras and palette preview to the default branch. You do not need to generate or commit these outputs locally, including when contributing from a fork.
+> After merge, automation generates and commits the extras, palette preview, and Neovim help to the default branch. You do not need to generate or commit these outputs locally, including when contributing from a fork.
 
 ## 👏 Acknowledgements
 

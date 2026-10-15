@@ -6,8 +6,8 @@ agent:
 
 # Application packages
 
-`neovim/` contains runtime integration, highlight mappings, and its historical changelog. Shared modules are supplied by `shared/` during development and copied into the installed runtime by `scripts/assemble.py`.
+`neovim/` contains runtime integration, highlight mappings, and its historical changelog. Its help file is generated from the root README by panvimdoc in CI and committed automatically after merge. Shared modules are supplied by `shared/` during development and copied into the installed runtime by `scripts/assemble.py`.
 
-`vscode/` preserves the `SimonHo.kanagawa-paper` extension identity and version history. Its mapping JSON uses `@palette.name` or `@theme.section.role`; append `:80` for alpha. Literal colors are explicit application-specific choices, including the existing Canvas tuning. The renderer fails on unresolved references. Do not manually edit assembled theme JSON.
+`vscode/` preserves the `SimonHo.kanagawa-paper` extension identity and version history. Its mapping JSON uses `@palette.name` or `@theme.section.role`; append `:80` for alpha. The current shared Neovim themes are the color authority for both variants; old VS Code shades are not preserved. UI, syntax, diagnostic, rainbow, diff and terminal entries reference their shared semantic roles. The only raw color is fully transparent `#00000000`. The renderer rejects unresolved references, non-transparent literal colors, and missing or non-RGBA selection backgrounds. Do not manually edit assembled theme JSON.
 
 The maintained user README and license live at the repository root and are copied into both distributions. Application source directories are not installable artifacts. Run `python3 scripts/assemble.py` to create `dist/neovim` and `dist/vscode`.

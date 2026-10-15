@@ -176,6 +176,20 @@ class Selection(unittest.TestCase):
             release.open_pr(identical)
         self.assertEqual(release.remote_branch(release.BRANCH), current)
 
+    def test_workflow_defers_source_that_advanced_after_generation(self):
+        generated = self.git("rev-parse", "HEAD")
+        (self.root / "README.md").write_text("new source requiring regenerated help\n")
+        self.commit("fix: update source")
+        self.git("push", "origin", "main")
+        with (
+            patch.dict(os.environ, {"KANAGAWA_GENERATED_SOURCE": generated}),
+            patch.object(release, "prepare") as prepare,
+            patch.object(release, "pending_source") as pending,
+        ):
+            release.workflow()
+            prepare.assert_not_called()
+            pending.assert_not_called()
+
     def test_workflow_reconciles_exact_source_before_next_preparation(self):
         # Exercise real fetch/worktree/child-process plumbing with a local publisher.
         record = Path(self.temporary.name) / "published-source"
@@ -332,26 +346,56 @@ class Selection(unittest.TestCase):
 
 
 class ArtifactValidation(unittest.TestCase):
+    def test_release_lookup_finds_drafts_and_published_by_id(self):
+        for draft in (True, False):
+            with (
+                self.subTest(draft=draft),
+                patch.object(release, "repo_name", return_value="example/theme"),
+            ):
+
+                def fake_gh(*args, draft=draft):
+                    if args[:2] == ("api", "graphql"):
+                        return json.dumps(
+                            {"data": {"repository": {"release": {"databaseId": 42}}}}
+                        )
+                    if args == ("api", "repos/example/theme/releases/42"):
+                        return json.dumps(
+                            {
+                                "draft": draft,
+                                "assets": [
+                                    {"name": "candidate.json", "url": "asset-url"}
+                                ],
+                            }
+                        )
+                    # REST /releases/tags would not find a draft.
+                    raise AssertionError(f"Unexpected release lookup: {args}")
+
+                with patch.object(release, "gh", side_effect=fake_gh):
+                    found = release.release("neovim-1.0.0")
+                    self.assertEqual(found["draft"], draft)
+                    self.assertEqual(found["assets"][0]["name"], "candidate.json")
+
     def test_release_lookup_distinguishes_missing_and_denied(self):
         with patch.object(release, "repo_name", return_value="example/theme"):
-            missing = subprocess.CompletedProcess(
-                [], 1, "HTTP/2.0 404 Not Found\n\n{}", ""
-            )
-            with patch.object(release.subprocess, "run", return_value=missing):
+            missing = json.dumps({"data": {"repository": {"release": None}}})
+            with patch.object(release, "gh", return_value=missing):
                 self.assertIsNone(release.release("neovim-1.0.0"))
-            denied = subprocess.CompletedProcess(
-                [], 1, "HTTP/2.0 403 Forbidden\n\n{}", "denied"
-            )
-            with (
-                patch.object(release.subprocess, "run", return_value=denied),
-                self.assertRaises(subprocess.CalledProcessError),
-            ):
+            with patch.object(
+                release,
+                "gh",
+                side_effect=subprocess.CalledProcessError(
+                    1, ["gh", "api"], stderr="denied"
+                ),
+            ), self.assertRaises(subprocess.CalledProcessError):
                 release.release("neovim-1.0.0")
-            found = subprocess.CompletedProcess(
-                [], 0, 'HTTP/2.0 200 OK\n\n{"draft":true}', ""
-            )
-            with patch.object(release.subprocess, "run", return_value=found):
-                self.assertTrue(release.release("neovim-1.0.0")["draft"])
+            with patch.object(
+                release,
+                "gh",
+                return_value=json.dumps(
+                    {"data": {"repository": None}, "errors": [{"message": "denied"}]}
+                ),
+            ), self.assertRaises(ValueError):
+                release.release("neovim-1.0.0")
 
     def test_deterministic_archive_and_reject_mismatch(self):
         with tempfile.TemporaryDirectory() as temporary:
