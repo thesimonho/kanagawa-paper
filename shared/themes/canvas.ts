@@ -196,6 +196,9 @@ export const canvas = {
     },
   },
   syntax: {
+    builtinFunction: palette.canvasTeal1,
+    tag: palette.canvasTeal1,
+    selector: palette.canvasAqua1,
     number: palette.canvasPink1,
     type: palette.canvasAqua1,
     operator: palette.canvasRed1,

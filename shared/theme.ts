@@ -205,6 +205,9 @@ export interface ThemeDefinition {
     constant: ColorExpression;
     deprecated: ColorExpression;
     function: ColorExpression;
+    builtinFunction: ColorExpression;
+    tag: ColorExpression;
+    selector: ColorExpression;
     identifier: ColorExpression;
     keyword: ColorExpression;
     member: ColorExpression;

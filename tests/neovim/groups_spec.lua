@@ -71,6 +71,53 @@ describe("group config", function()
 			assert.same("#123456", groups.TreesitterContextLineNumber.fg)
 			assert.same(colors.theme.ui.bg_p2, groups.TreesitterContextLineNumber.bg)
 		end)
+		it(variant .. " shares selected widget and syntax treatments", function()
+			local opts = Config.extend({
+				_theme = variant,
+				all_plugins = true,
+				auto_plugins = false,
+				colors = {
+					theme = {
+						[variant] = {
+							syn = { fun_builtin = "#123456", tag = "#234567", selector = "#345678" },
+							ui = { bg_p1 = "#456789", line_numbers = { default = "#56789a" } },
+						},
+					},
+				},
+				styles = {
+					functions = { bold = false, italic = true },
+					type = { bold = false },
+					comment = { italic = false },
+					escape = { bold = false },
+				},
+			})
+			local colors = require("kanagawa-paper.colors").setup(opts)
+			local groups = Groups.setup(colors, opts)
+			assert.same({ link = "NonText" }, groups.CmpItemMenu)
+			assert.same(groups.BlinkCmpKind, groups.CmpItemKindDefault)
+			assert.same(groups.NeoTreeFileNameOpened, groups.NvimTreeOpenedFile)
+			assert.same(groups.NvimTreeFolderName, groups.NvimTreeOpenedFolderName)
+			assert.same("#56789a", groups.DapUILineNumber.fg)
+			assert.same({ link = "@lsp.type.namespace" }, groups.AerialNamespaceIcon)
+			assert.same(groups.AerialNamespaceIcon, groups.NavicIconsNamespace)
+			assert.same("#123456", groups["@function.builtin"].fg)
+			assert.same(groups["@function.builtin"], groups["@lsp.typemod.function.defaultLibrary"])
+			assert.same("#234567", groups["@tag"].fg)
+			assert.same(false, groups.Function.bold)
+			assert.same(true, groups.Function.italic)
+			assert.same(false, groups.Type.bold)
+			assert.same(false, groups["@comment"].italic)
+			assert.same(false, groups["@string.escape"].bold)
+			assert.same(groups["@comment.todo"], groups.Todo)
+			assert.same(colors.theme.diag.error, groups.MiniIconsRed.fg)
+			assert.same(colors.theme.diag.warning, groups.MiniIconsYellow.fg)
+			assert.same(colors.theme.term.magenta, groups.MiniIconsPurple.fg)
+			for index = 1, 6 do
+				assert.same("#456789", groups["Headline" .. index].bg)
+				assert.same(groups["Headline" .. index], groups["RenderMarkdownH" .. index .. "Bg"])
+				assert.same(groups["RenderMarkdownH" .. index].fg, groups["Headline" .. index].fg)
+			end
+		end)
 		it(variant .. " shares indent scope overrides across plugins", function()
 			local opts = Config.extend({
 				_theme = variant,

@@ -6,7 +6,7 @@ function M.get(colors, opts)
 	return {
 		NavicIconsFile = { link = "Directory" },
 		NavicIconsModule = { link = "@module" },
-		NavicIconsNamespace = { link = "@module" },
+		NavicIconsNamespace = { link = "@lsp.type.namespace" },
 		NavicIconsPackage = { link = "@module" },
 		NavicIconsClass = { link = "Type" },
 		NavicIconsMethod = { link = "@function.method" },

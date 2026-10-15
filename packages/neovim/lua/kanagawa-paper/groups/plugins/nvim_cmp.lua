@@ -15,10 +15,10 @@ function M.get(colors, opts)
 		CmpItemAbbrDeprecated = { fg = theme.syn.comment, strikethrough = true },
 		CmpItemAbbrMatch = { fg = theme.syn.fun },
 		CmpItemAbbrMatchFuzzy = { link = "CmpItemAbbrMatch" },
-		CmpItemMenu = { fg = theme.ui.fg_dimmer },
+		CmpItemMenu = { link = "NonText" },
 		CmpGhostText = { fg = theme.syn.comment },
 
-		CmpItemKindDefault = { fg = theme.ui.fg_dimmer },
+		CmpItemKindDefault = { fg = theme.accent.accent4 },
 		CmpItemKindText = { fg = theme.ui.fg },
 		CmpItemKindMethod = { link = "@function.method" },
 		CmpItemKindFunction = { link = "Function" },

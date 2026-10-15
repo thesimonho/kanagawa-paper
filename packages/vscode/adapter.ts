@@ -1,5 +1,6 @@
 import type { Theme, Variant } from "../../shared/theme.ts";
 import { alpha } from "../../shared/color/expression.ts";
+import { syntaxStyles, textMateStyle } from "../../shared/styles.ts";
 
 export const vscodeTheme = (theme: Theme, variant: Variant) => ({
   $schema: "vscode://schemas/color-theme",
@@ -50,6 +51,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
     ),
     "editor.foreground": theme.ui.text.primary,
     "editorHoverWidget.background": theme.ui.surface.floating.background,
+    "editorHoverWidget.foreground": theme.ui.surface.floating.foreground,
     "editorHoverWidget.border": theme.ui.surface.floating.border.foreground,
     "editorHoverWidget.highlightForeground": theme.accents.primary,
     "editorInlayHint.background": theme.accents.inverse,
@@ -118,7 +120,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
     focusBorder: theme.accents.primary,
     foreground: theme.ui.text.primary,
     "gitDecoration.addedResourceForeground": theme.changes.added.base,
-    "gitDecoration.conflictingResourceForeground": theme.status.warning.base,
+    "gitDecoration.conflictingResourceForeground": theme.status.error.base,
     "gitDecoration.deletedResourceForeground": theme.changes.removed.base,
     "gitDecoration.ignoredResourceForeground": theme.syntax.comment,
     "gitDecoration.modifiedResourceForeground": theme.changes.modified.base,
@@ -174,9 +176,10 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
     "pickerGroup.border": theme.ui.border.default,
     "ports.iconRunningProcessForeground": theme.status.success.base,
     "progressBar.background": theme.accents.primary,
-    "quickInput.background": theme.ui.surface.tones.p1,
-    "quickInput.foreground": theme.ui.text.primary,
-    "quickInputList.focusBackground": theme.ui.surface.tones.m2,
+    "quickInput.background": theme.ui.surface.floating.background,
+    "quickInput.foreground": theme.ui.surface.floating.foreground,
+    "quickInputList.focusBackground":
+      theme.ui.editor.currentLine.alternateBackground,
     "quickInputList.focusForeground": theme.ui.text.primary,
     "quickInputList.focusIconForeground": theme.ui.text.primary,
     "scrollbar.shadow": theme.ui.surface.tones.m2,
@@ -279,7 +282,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
       name: "Comments",
       scope: ["comment", "punctuation.definition.comment"],
       settings: {
-        fontStyle: "italic",
+        fontStyle: textMateStyle(syntaxStyles.comment),
         foreground: theme.syntax.comment,
       },
     },
@@ -336,7 +339,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
       name: "Functions",
       scope: ["entity.name.function", "support.function"],
       settings: {
-        fontStyle: "bold",
+        fontStyle: textMateStyle(syntaxStyles.functions),
         foreground: theme.syntax.function,
       },
     },
@@ -348,7 +351,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
         "support.class",
       ],
       settings: {
-        fontStyle: "bold",
+        fontStyle: textMateStyle(syntaxStyles.type),
         foreground: theme.syntax.type,
       },
     },
@@ -398,6 +401,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
       name: "Strings: Escape Sequences",
       scope: "constant.character.escape",
       settings: {
+        fontStyle: textMateStyle(syntaxStyles.escape),
         foreground: theme.syntax.regex,
       },
     },
@@ -450,7 +454,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
       name: "HTML: Tag Names",
       scope: "entity.name.tag",
       settings: {
-        foreground: theme.syntax.statement,
+        foreground: theme.syntax.tag,
       },
     },
     {
@@ -480,7 +484,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
         "entity.name.tag.css",
       ],
       settings: {
-        foreground: theme.syntax.type,
+        foreground: theme.syntax.selector,
       },
     },
     {
@@ -680,20 +684,38 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
   ],
   semanticTokenColors: {
     arithmetic: theme.syntax.operator,
-    class: theme.syntax.type,
+    class: {
+      foreground: theme.syntax.type,
+      fontStyle: textMateStyle(syntaxStyles.type),
+    },
     "class.defaultLibrary": theme.syntax.keyword,
-    enum: theme.syntax.type,
+    enum: {
+      foreground: theme.syntax.type,
+      fontStyle: textMateStyle(syntaxStyles.type),
+    },
     enumMember: theme.syntax.constant,
     event: theme.syntax.type,
-    function: theme.syntax.function,
-    "function.defaultLibrary": theme.syntax.function,
-    interface: theme.syntax.type,
+    function: {
+      foreground: theme.syntax.function,
+      fontStyle: textMateStyle(syntaxStyles.functions),
+    },
+    "function.defaultLibrary": {
+      foreground: theme.syntax.builtinFunction,
+      fontStyle: textMateStyle(syntaxStyles.functions),
+    },
+    interface: {
+      foreground: theme.syntax.type,
+      fontStyle: textMateStyle(syntaxStyles.type),
+    },
     "keyword.controlFlow": {
       foreground: theme.syntax.statement,
       fontStyle: "bold",
     },
     macro: theme.syntax.preprocessor,
-    method: theme.syntax.function,
+    method: {
+      foreground: theme.syntax.function,
+      fontStyle: textMateStyle(syntaxStyles.functions),
+    },
     namespace: theme.syntax.keyword,
     newOperator: theme.syntax.operator,
     numberLiteral: theme.syntax.number,
@@ -704,10 +726,19 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
     property: theme.syntax.member,
     "property.readonly": theme.syntax.constant,
     stringLiteral: theme.syntax.string,
-    struct: theme.syntax.type,
-    type: theme.syntax.type,
+    struct: {
+      foreground: theme.syntax.type,
+      fontStyle: textMateStyle(syntaxStyles.type),
+    },
+    type: {
+      foreground: theme.syntax.type,
+      fontStyle: textMateStyle(syntaxStyles.type),
+    },
     "type.defaultLibrary": theme.syntax.keyword,
-    typeParameter: theme.syntax.type,
+    typeParameter: {
+      foreground: theme.syntax.type,
+      fontStyle: textMateStyle(syntaxStyles.type),
+    },
     variable: theme.ui.text.primary,
     "variable.readonly": theme.syntax.constant,
     "variable.readonly.defaultLibrary": theme.syntax.keyword,

@@ -5,6 +5,7 @@ import { ink } from "../../shared/themes/ink.ts";
 import { canvas } from "../../shared/themes/canvas.ts";
 import type { ColorExpression } from "../../shared/color/expression.ts";
 import { neovimRoles } from "./adapter.ts";
+import { syntaxStyles } from "../../shared/styles.ts";
 
 const warning =
   "-- Generated from shared TypeScript definitions. Do not edit.\n";
@@ -79,6 +80,10 @@ export async function buildNeovim(root: string, destination: string) {
         "\nend\nreturn M\n",
     );
   }
+  await writeFile(
+    join(modules, "style_defaults.lua"),
+    warning + "return " + lua(syntaxStyles) + "\n",
+  );
   const annotations =
     warning +
     annotation("PaletteColors", rawPalette) +

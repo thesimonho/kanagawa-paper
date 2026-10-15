@@ -30,7 +30,7 @@ function M.setup(colors, opts)
 		-- @string.regexp          regular expressions
 		["@string.regexp"] = { fg = theme.syn.regex },
 		-- @string.escape          escape sequences
-		["@string.escape"] = { fg = theme.syn.regex, bold = true },
+		["@string.escape"] = vim.tbl_extend("force", { fg = theme.syn.regex }, opts.styles.escape),
 		-- @string.special         other special strings (e.g. dates)
 		-- @string.special.symbol  symbols or atoms
 		["@string.special.symbol"] = { fg = theme.syn.symbol },
@@ -55,6 +55,7 @@ function M.setup(colors, opts)
 		--
 		-- @function               function definitions
 		-- @function.builtin       built-in functions
+		["@function.builtin"] = vim.tbl_extend("force", { fg = theme.syn.fun_builtin }, opts.styles.functions),
 		-- @function.call          function calls
 		-- @function.macro         preprocessor macros
 		--
@@ -95,7 +96,7 @@ function M.setup(colors, opts)
 		-- @punctuation.special    special symbols (e.g. `{}` in string interpolation)
 		["@punctuation.special"] = { fg = theme.syn.symbol },
 		-- @comment                line and block comments
-		["@comment"] = { fg = theme.syn.comment },
+		["@comment"] = vim.tbl_extend("force", { fg = theme.syn.comment }, opts.styles.comment),
 		-- @comment.documentation  comments documenting code
 		["@comment.documentation"] = { fg = theme.syn.docstring, italic = true },
 		-- @comment.error          error-type comments (e.g. `ERROR`, `FIXME`)
@@ -152,6 +153,7 @@ function M.setup(colors, opts)
 		["@diff.delta"] = { fg = theme.vcs.changed },
 		--
 		-- @tag                    XML-style tag names (e.g. in XML, HTML, etc.)
+		["@tag"] = { fg = theme.syn.tag },
 		-- @tag.builtin            XML-style tag names (e.g. HTML5 tags)
 		-- @tag.attribute          XML-style tag attributes
 		["@tag.attribute"] = { fg = theme.syn.attribute },

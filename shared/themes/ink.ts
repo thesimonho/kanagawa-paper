@@ -196,6 +196,9 @@ export const ink = {
     },
   },
   syntax: {
+    builtinFunction: palette.dragonYellow,
+    tag: palette.dragonYellow,
+    selector: palette.dragonAqua,
     number: palette.dragonPink,
     type: palette.dragonAqua,
     operator: palette.dragonRed,

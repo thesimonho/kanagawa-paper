@@ -215,7 +215,10 @@
         "string": "#6a7d66",
         "symbol": "#a36360",
         "type": "#5c8388",
-        "variable": "none"
+        "variable": "none",
+        "fun_builtin": "#6a7893",
+        "tag": "#6a7893",
+        "selector": "#5c8388"
       },
       "term": {
         "black": "#77746c",
@@ -523,7 +526,10 @@
         "string": "#8a9a7b",
         "symbol": "#c4746e",
         "type": "#8ea49e",
-        "variable": "none"
+        "variable": "none",
+        "fun_builtin": "#c4b28a",
+        "tag": "#c4b28a",
+        "selector": "#8ea49e"
       },
       "term": {
         "black": "#393836",

@@ -77,7 +77,7 @@ function M.setup(colors, opts)
 		Error = { fg = theme.diag.error },
 
 		-- *Todo		anything that needs extra attention; mostly the keywords TODO FIXME WARNING and XXX
-		Todo = { fg = theme.ui.fg_dimmer, bg = theme.diag.info, bold = true },
+		Todo = { fg = theme.ui.bg, bg = theme.diag.info, bold = true },
 
 		-- Markdown
 		markdownCode = { fg = theme.syn.string },

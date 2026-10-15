@@ -38,7 +38,7 @@ test("Zed builds both variants with valid inherited colors and extension metadat
       );
       assert.equal(
         rendered.style["conflict.background"],
-        theme.status.warning.subtle,
+        theme.status.error.subtle,
       );
       assert.equal(rendered.style["renamed.border"], theme.changes.text.base);
       assert.equal(
@@ -80,7 +80,7 @@ test("Zed builds both variants with valid inherited colors and extension metadat
       assert.equal(rendered.style.players[0].cursor, neovim.ui.fg);
       assert.equal(
         rendered.style.syntax["function.builtin"].color,
-        theme.accents.special.one,
+        theme.syntax.builtinFunction,
       );
       assert.equal(
         rendered.style.syntax["diff.plus"].color,

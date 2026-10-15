@@ -8,7 +8,7 @@ agent:
 
 | Directory   | Ownership                                                                                                                  |
 | ----------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `shared/`   | Palette/color arithmetic, deterministic builds for every target, publication, watching and generated palette documentation |
+| `shared/`   | Palette/color arithmetic, shared syntax-role and emphasis parity, deterministic builds for every target, publication, watching and generated palette documentation |
 | `targets/`  | Neovim, VS Code, Zed and extras adapter/output contracts; VS Code also compares installed Neovim roles                     |
 | `neovim/`   | Lua runtime specs and standalone runtime probes called by TypeScript                                                       |
 | `release/`  | Python release/assembly/publication checks and TypeScript VSCE OIDC and authentication-probe contracts                     |

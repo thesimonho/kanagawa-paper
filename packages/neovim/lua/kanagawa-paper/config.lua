@@ -24,18 +24,7 @@ M.defaults = {
 	-- turning this on will require rebuilding the cache whenever you change your config.
 	cache = false,
 
-	styles = {
-		-- style for comments
-		comment = { italic = true },
-		-- style for functions
-		functions = { italic = false },
-		-- style for keywords
-		keyword = { italic = false, bold = false },
-		-- style for statements
-		statement = { italic = false, bold = false },
-		-- style for types
-		type = { italic = false },
-	},
+	styles = require("kanagawa-paper.style_defaults"),
 	-- override default palette and theme colors
 	colors = {
 		palette = {},

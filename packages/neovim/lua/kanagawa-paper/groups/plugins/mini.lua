@@ -61,9 +61,9 @@ function M.get(colors, opts)
 		MiniIconsGreen = { fg = theme.syn.string },
 		MiniIconsGrey = { fg = theme.ui.fg },
 		MiniIconsOrange = { fg = theme.syn.constant },
-		MiniIconsPurple = { fg = theme.syn.statement },
-		MiniIconsRed = { fg = theme.syn.special3 },
-		MiniIconsYellow = { fg = theme.syn.identifier },
+		MiniIconsPurple = { fg = theme.term.magenta },
+		MiniIconsRed = { fg = theme.diag.error },
+		MiniIconsYellow = { fg = theme.diag.warning },
 
 		MiniIndentscopeSymbol = { fg = theme.ui.indent_scope },
 		MiniIndentscopePrefix = { nocombine = true }, -- Make it invisible

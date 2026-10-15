@@ -17,9 +17,9 @@ function M.setup(colors, opts)
 		-- ["@lsp.type.enum"] = { link = "Structure" },
 		-- ["@lsp.type.enumMember"] = { link = "Constant" },
 		-- ["@lsp.type.interface"] = { link = "Structure" },
-		["@lsp.type.function"] = { fg = theme.syn.fun },
+		["@lsp.type.function"] = vim.tbl_extend("force", { fg = theme.syn.fun }, opts.styles.functions),
 		["@lsp.type.macro"] = { fg = theme.syn.preproc },
-		["@lsp.type.method"] = { fg = theme.syn.fun }, -- Function
+		["@lsp.type.method"] = vim.tbl_extend("force", { fg = theme.syn.fun }, opts.styles.functions), -- Function
 		["@lsp.type.namespace"] = { fg = theme.syn.keyword }, -- Structure
 		["@lsp.type.parameter"] = { fg = theme.syn.parameter }, -- Identifier
 		-- ["@lsp.type.property"] = { link = "Identifier" },
@@ -50,8 +50,16 @@ function M.setup(colors, opts)
 		["@lsp.typemod.variable.static"] = { fg = theme.syn.constant },
 		["@lsp.typemod.variable.defaultLibrary"] = { fg = theme.syn.keyword },
 
-		["@lsp.typemod.function.builtin"] = { fg = theme.syn.fun },
-		["@lsp.typemod.function.defaultLibrary"] = { fg = theme.syn.fun },
+		["@lsp.typemod.function.builtin"] = vim.tbl_extend(
+			"force",
+			{ fg = theme.syn.fun_builtin },
+			opts.styles.functions
+		),
+		["@lsp.typemod.function.defaultLibrary"] = vim.tbl_extend(
+			"force",
+			{ fg = theme.syn.fun_builtin },
+			opts.styles.functions
+		),
 		["@lsp.typemod.method.defaultLibrary"] = { fg = theme.syn.keyword },
 
 		["@lsp.typemod.operator.injected"] = { fg = theme.syn.operator },

@@ -8,7 +8,7 @@ agent:
 
 These fixtures capture reference Lua behavior and generated application output:
 
-- `colors.json`: all 140 palette names/hexes and 138 default roles in each variant.
+- `colors.json`: all 140 palette names/hexes and 141 default roles in each variant.
 - `math.json`: 840 outputs from the original Lua color helper.
 - `artifacts.json`: SHA-256 of 39 extras and two VS Code theme JSON files.
 - `runtime.json`: hashes of sorted JSON snapshots from `tests/neovim/runtime_snapshot.lua`, covering both variants with defaults, palette/role/callback overrides, and color balance.
@@ -38,3 +38,5 @@ Neo-tree directory names and icons link to `Directory`, matching Nvim-tree and M
 Scrollview TODO markers link to `DiagnosticSignInfo`; XXX markers link to `DiagnosticSignHint`, matching Tree-sitter comment semantics. Runtime hashes include these link changes.
 
 Floaterm border backgrounds follow `FloatBorder`; Mini's active signature parameter follows `LspSignatureActiveParameter`. Runtime hashes include those changes. VS Code hover borders use the floating-border foreground, and active list selections use the alternate current-line background shared by Neovim pickers; VS Code artifact hashes include both changes.
+
+Built-in function, tag, and selector roles are additive shared semantics; the color fixture includes their Neovim projections. Runtime hashes include shared bold function/type defaults, italic Tree-sitter comments, parser-style built-in functions, the selected completion/tree/debugger/icon treatments, rainbow headings on the p1 surface, and the editor-background foreground for legacy TODO markers. The three Mini icon changes use the selected error, warning, and terminal-magenta colors; other icon families remain unchanged. VS Code artifact hashes include the floating Quick Open surface/text, picker focus surface, conflict error color, parser-style built-ins and markup tags, and bold string escapes. Zed uses those shared syntax colors/styles, type-colored CSS selectors, and error severity for conflicts.

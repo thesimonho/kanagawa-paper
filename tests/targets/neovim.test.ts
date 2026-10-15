@@ -11,6 +11,7 @@ import { resolveTheme } from "../../shared/color/evaluate.ts";
 import { neovimRoles } from "../../packages/neovim/adapter.ts";
 import { ink } from "../../shared/themes/ink.ts";
 import { canvas } from "../../shared/themes/canvas.ts";
+import { syntaxStyles } from "../../shared/styles.ts";
 const baseline = JSON.parse(
   await readFile(new URL("../fixtures/colors.json", import.meta.url), "utf8"),
 );
@@ -73,12 +74,31 @@ test("Neovim regeneration restores missing and stale generated modules", async (
   const output = await mkdtemp(join(tmpdir(), "kanagawa generated "));
   try {
     const tree = await build("neovim", output);
+    const styles = join(output, "styles.json");
+    const result = spawnSync(
+      "nvim",
+      [
+        "--headless",
+        "--clean",
+        "-l",
+        join(root, "tests/neovim/style_defaults.lua"),
+        tree,
+        styles,
+      ],
+      {
+        encoding: "utf8",
+        env: { ...process.env, NVIM_LOG_FILE: join(output, "nvim.log") },
+      },
+    );
+    assert.equal(result.status, 0, result.stderr);
+    assert.deepEqual(JSON.parse(await readFile(styles, "utf8")), syntaxStyles);
     const modules = join(tree, "lua/kanagawa-paper");
     for (const name of [
       "palette.lua",
       "themes/ink.lua",
       "themes/canvas.lua",
       "generated_types.lua",
+      "style_defaults.lua",
     ])
       assert.match(
         await readFile(join(modules, name), "utf8"),

@@ -6,7 +6,7 @@ function M.get(colors, opts)
 	return {
 		AerialFileIcon = { link = "Directory" },
 		AerialModuleIcon = { link = "@module" },
-		AerialNamespaceIcon = { link = "@module" },
+		AerialNamespaceIcon = { link = "@lsp.type.namespace" },
 		AerialPackageIcon = { link = "@module" },
 		AerialClassIcon = { link = "Type" },
 		AerialMethodIcon = { link = "@function.method" },

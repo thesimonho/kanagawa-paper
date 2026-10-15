@@ -94,6 +94,11 @@ test("VS Code tracks current installed Neovim semantics", async () => {
         "editorInlayHint.foreground": theme.ui.fg_dim,
         "editorInlayHint.background": theme.accent.invert,
         "editorHoverWidget.background": theme.ui.float.bg,
+        "editorHoverWidget.foreground": theme.ui.float.fg,
+        "quickInput.background": theme.ui.float.bg,
+        "quickInput.foreground": theme.ui.float.fg,
+        "quickInputList.focusBackground": theme.ui.bg_cursorline_alt,
+        "gitDecoration.conflictingResourceForeground": theme.diag.error,
         "editorHoverWidget.border": theme.ui.float.fg_border,
         "list.activeSelectionBackground": theme.ui.bg_cursorline_alt,
         "editor.selectionBackground": theme.ui.bg_visual,
@@ -146,6 +151,8 @@ test("VS Code tracks current installed Neovim semantics", async () => {
         Constants: theme.syn.constant,
         Numbers: theme.syn.number,
         Characters: theme.syn.string,
+        "HTML: Tag Names": theme.syn.tag,
+        "CSS: Selectors": theme.syn.selector,
         "Strings: Escape Sequences": theme.syn.regex,
         "Markup: Link": theme.syn.special3,
         "Markup Quote": theme.syn.punct,
@@ -168,10 +175,15 @@ test("VS Code tracks current installed Neovim semantics", async () => {
         namespace: "keyword",
         "variable.defaultLibrary": "keyword",
         "method.defaultLibrary": "keyword",
-        "function.defaultLibrary": "fun",
+        "function.defaultLibrary": "fun_builtin",
         stringLiteral: "string",
       } as const))
-        assert.equal(rendered.semanticTokenColors[token], theme.syn[role]);
+        assert.equal(
+          typeof rendered.semanticTokenColors[token] === "string"
+            ? rendered.semanticTokenColors[token]
+            : rendered.semanticTokenColors[token].foreground,
+          theme.syn[role],
+        );
     }
   } finally {
     await rm(output, { recursive: true, force: true });

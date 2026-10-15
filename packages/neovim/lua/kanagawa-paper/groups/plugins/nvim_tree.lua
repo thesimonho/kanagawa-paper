@@ -18,8 +18,8 @@ function M.get(colors, opts)
 		NvimTreeFolderName = { link = "Directory" },
 		NvimTreeExecFile = { fg = theme.syn.string, bold = true },
 		NvimTreeRootFolder = { fg = theme.accent.accent5, bold = true },
-		NvimTreeOpenedFile = { fg = theme.syn.special1, italic = true },
-		NvimTreeOpenedFolderName = { fg = theme.accent.accent1 },
+		NvimTreeOpenedFile = { fg = theme.ui.special, italic = true },
+		NvimTreeOpenedFolderName = { link = "Directory" },
 		NvimTreeWinSeparator = { link = "WinSeparator" },
 		NvimTreeWindowPicker = { bg = theme.ui.bg_m1, fg = theme.ui.picker, bold = true },
 	}

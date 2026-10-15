@@ -6,6 +6,6 @@ agent:
 
 # Shared theme data
 
-`palette.ts` owns the immutable named colors. `theme.ts` defines the shared semantic contract; `themes/ink.ts` and `themes/canvas.ts` assign expressions to it. `color/` evaluates those expressions without editor dependencies. Application settings and exceptions belong to adapters.
+`palette.ts` owns the immutable named colors. `theme.ts` defines the shared semantic contract; `themes/ink.ts` and `themes/canvas.ts` assign expressions to it. `color/` evaluates those expressions without editor dependencies. `styles.ts` owns default syntax emphasis and translates it to editor formats. Neovim receives these defaults as generated Lua; runtime `styles` overrides remain supported. Application settings and exceptions belong to adapters.
 
 Neovim receives generated Lua definitions at build time. Its runtime preserves palette and theme overrides, including recalculation of dependent expressions. Do not maintain a second palette or hand-edit generated Lua.

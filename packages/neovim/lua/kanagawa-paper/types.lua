@@ -9,7 +9,7 @@
 ---@field dim_inactive? boolean
 ---@field terminal_colors? boolean
 ---@field cache? boolean
----@field styles? {comment: vim.api.keyset.highlight, functions: vim.api.keyset.highlight, keyword: vim.api.keyset.highlight, statement: vim.api.keyset.highlight, type: vim.api.keyset.highlight,}
+---@field styles? {comment: vim.api.keyset.highlight, functions: vim.api.keyset.highlight, keyword: vim.api.keyset.highlight, statement: vim.api.keyset.highlight, type: vim.api.keyset.highlight, escape: vim.api.keyset.highlight,}
 ---@field colors? {palette: PaletteColors, theme: {ink: ThemeColors, canvas: ThemeColors}}
 ---@field color_balance? table<string, ColorOffset>
 ---@field overrides? fun(colors: KanagawaColors): table<string, vim.api.keyset.highlight>

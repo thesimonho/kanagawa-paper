@@ -1,4 +1,4 @@
-local cache_version = 9.0 -- Bump when cached colors or highlights change.
+local cache_version = 10.0 -- Bump when cached colors or highlights change.
 local util = require("kanagawa-paper.lib.util")
 
 local M = {}

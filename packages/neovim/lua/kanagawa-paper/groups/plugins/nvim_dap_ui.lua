@@ -11,7 +11,7 @@ function M.get(colors, opts)
 		DapUIThread = { fg = theme.syn.identifier },
 		DapUIStoppedThread = { fg = theme.syn.special1 },
 		DapUISource = { fg = theme.syn.special2 },
-		DapUILineNumber = { fg = theme.syn.special1 },
+		DapUILineNumber = { fg = theme.ui.line_numbers.default },
 		DapUIFloatBorder = { fg = theme.ui.float.fg_border },
 		DapUIWatchesEmpty = { fg = theme.diag.warning },
 		DapUIWatchesValue = { fg = theme.syn.identifier },
