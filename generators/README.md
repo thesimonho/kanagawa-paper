@@ -6,6 +6,6 @@ agent:
 
 # Extras generators
 
-The Lua modules produce the existing copyable files in `extras/`. They currently consume the Neovim adapter's default colors and highlights through `scripts/bootstrap.lua`. This preserves existing output behavior while shared palette and role ownership moves to `shared/`.
+The Lua modules produce the copyable files in `extras/`. They use `shared/` color preparation directly and never load the Neovim theme package, configuration, or highlight groups. `generator_util.lua` owns template formatting and output-file helpers; each extra maps shared roles to its application format.
 
-For an optional local preview, run `bash scripts/build.sh` from the repository root. CI runs generation automatically. Full application packages use their own mappings and assembly path; adding an application package does not require migrating every extra generator.
+Run `just build extras` for an isolated preview under `dist/extras`, or `just build extras /tmp/theme-preview` to choose an output root. `just build` builds Neovim, VS Code, and extras through the same dispatcher. The existing `bash scripts/build.sh` command uses that dispatcher to refresh checked-in extras, as part of automatic post-merge generation. A template error fails the build before existing output is replaced.

@@ -33,15 +33,15 @@ end)
 
 describe("extra generation failures", function()
 	local extras = require("kanagawa-paper.extras")
-	local kanagawa = require("kanagawa-paper")
+	local source = require("kanagawa-paper.theme")
 
 	it("reports theme loading errors", function()
-		local original = kanagawa.load
-		kanagawa.load = function()
+		local original = source.prepare
+		source.prepare = function()
 			error("theme load failed")
 		end
 		local ok, err = pcall(extras.setup, vim.fn.tempname())
-		kanagawa.load = original
+		source.prepare = original
 		assert.is_false(ok)
 		assert.is_true(tostring(err):find("theme load failed", 1, true) ~= nil)
 	end)

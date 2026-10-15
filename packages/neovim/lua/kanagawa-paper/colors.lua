@@ -11,22 +11,12 @@ local M = {}
 function M.setup(opts)
 	opts = require("kanagawa-paper.config").extend(opts)
 
-	-- Add to and/or override palette_colors
-	local updated_palette_colors = vim.tbl_extend("force", M.palette, opts.colors.palette or {})
-
-	-- Generate the theme according to the updated palette colors
 	local current_theme = util.get_current_theme(opts)
-	local theme_path = "kanagawa-paper.themes." .. current_theme
-	local theme_colors = require(theme_path).get(opts, updated_palette_colors)
-
-	-- Add to and/or override theme_colors
-	local updated_theme_colors = vim.tbl_deep_extend("force", theme_colors, opts.colors.theme[current_theme] or {})
-
-	-- return palette_colors and theme_colors
-	return {
-		theme = updated_theme_colors,
-		palette = updated_palette_colors,
-	}
+	return require("kanagawa-paper.theme").prepare(current_theme, {
+		palette = vim.tbl_extend("force", M.palette, opts.colors.palette or {}),
+		theme = opts.colors.theme[current_theme],
+		gutter = opts.gutter,
+	})
 end
 
 ---@param hex ColorSpec

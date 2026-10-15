@@ -1,4 +1,5 @@
-local Util = require("kanagawa-paper.lib.util")
+local Util = require("kanagawa-paper.generator_util")
+local source = require("kanagawa-paper.theme")
 
 local M = {}
 
@@ -26,21 +27,8 @@ M.mapping = {
   zellij           = { ext = "kdl", url= "https://zellij.dev/", label = "Zellij" },
 }
 
-local function load_colors(opts)
-	local kanagawa = require("kanagawa-paper")
-	opts = vim.tbl_deep_extend("force", { all_plugins = true }, opts or {})
-	local ok, colors, groups, kopts = pcall(function()
-		return kanagawa.load(opts)
-	end)
-	if not ok then
-		return nil, nil, nil, colors
-	end
-	return colors, groups, kopts, nil
-end
-
 function M.setup(output)
 	output = output or (vim.uv.cwd() .. "/extras")
-	vim.o.background = "dark"
 
 	local themes = {
 		ink = "Ink",
@@ -58,8 +46,7 @@ function M.setup(output)
 
 		-- colors for each theme
 		for theme, theme_name in pairs(themes) do
-			local colors, groups, kopts, err = load_colors({ _theme = theme })
-			assert(not err, err)
+			local colors = source.prepare(theme)
 
 			if colors and colors.theme then
 				local filename = extra
@@ -80,7 +67,7 @@ function M.setup(output)
 				t["_name"] = "kanagawa-paper-" .. theme
 				t["_theme"] = theme
 
-				local ok_gen, out = pcall(plugin.generate, t, groups, kopts)
+				local ok_gen, out = pcall(plugin.generate, t)
 				assert(ok_gen, out)
 				assert(type(out) == "string" or type(out) == "table", "Invalid extra output: " .. extra)
 				if ok_gen and out then
@@ -113,8 +100,7 @@ function M.setup(output)
 
 		-- palette colors, if applicable
 		if info.palette == true then
-			local colors, groups, kopts, err = load_colors({ _theme = "auto" })
-			assert(not err, err)
+			local colors = { palette = require("kanagawa-paper.palette") }
 
 			if colors and colors.palette then
 				local filename = extra
@@ -135,7 +121,7 @@ function M.setup(output)
 				p["_name"] = "kanagawa-paper-palette"
 				print("[write] " .. filename)
 
-				local ok_genp, outp = pcall(plugin.generate_palette, p, groups, kopts)
+				local ok_genp, outp = pcall(plugin.generate_palette, p)
 				assert(ok_genp, outp)
 				assert(type(outp) == "string" or type(outp) == "table", "Invalid palette output: " .. extra)
 				if ok_genp and outp then

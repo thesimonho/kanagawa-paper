@@ -1,4 +1,4 @@
-local util = require("kanagawa-paper.lib.util")
+local util = require("kanagawa-paper.generator_util")
 
 local function build_palette_map(palette)
 	-- sort keys for stable output

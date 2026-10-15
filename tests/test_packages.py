@@ -37,6 +37,58 @@ class Packages(unittest.TestCase):
                 (tree / "README.md").read_bytes(), (ROOT / "README.md").read_bytes()
             )
 
+    def test_extras_build_without_neovim_package(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for directory in ("shared", "generators"):
+                shutil.copytree(ROOT / directory, root / directory)
+            (root / "scripts").mkdir()
+            for filename in ("assemble.py", "build.lua"):
+                shutil.copy2(ROOT / "scripts" / filename, root / "scripts" / filename)
+            (root / "extras").mkdir()
+            shutil.copy2(ROOT / "extras/README.md", root / "extras/README.md")
+            command = [
+                "python3",
+                str(root / "scripts/assemble.py"),
+                "extras",
+                "--output",
+                str(root / "output"),
+            ]
+            subprocess.run(command, cwd=root, check=True, capture_output=True)
+            tree = root / "output/extras"
+            first = {
+                str(path.relative_to(tree)): path.read_bytes()
+                for path in tree.rglob("*")
+                if path.is_file()
+            }
+            self.assertEqual(len(first), 40)  # 39 configurations plus their README.
+            subprocess.run(command, cwd=root, check=True, capture_output=True)
+            self.assertEqual(
+                first,
+                {
+                    str(path.relative_to(tree)): path.read_bytes()
+                    for path in tree.rglob("*")
+                    if path.is_file()
+                },
+            )
+            # A late template failure must leave the previous artifact intact.
+            (root / "generators/lua/kanagawa-paper/extras/zellij.lua").write_text(
+                'error("broken template")\n'
+            )
+            failed = subprocess.run(
+                command, cwd=root, capture_output=True, text=True, check=False
+            )
+            self.assertNotEqual(failed.returncode, 0)
+            self.assertIn("broken template", failed.stderr)
+            self.assertEqual(
+                first,
+                {
+                    str(path.relative_to(tree)): path.read_bytes()
+                    for path in tree.rglob("*")
+                    if path.is_file()
+                },
+            )
+
     def test_vscode_rejects_invalid_mappings(self):
         cases = (
             ("button.border", "#12345", "Invalid color literal"),

@@ -1,11 +1,10 @@
 -- Resolve application mappings against shared data without loading Neovim's theme.
 local root = vim.uv.cwd()
 package.path = root .. "/shared/lua/?.lua;" .. root .. "/shared/lua/?/init.lua;" .. package.path
-local palette = require("kanagawa-paper.palette")
+local source = require("kanagawa-paper.theme")
 local output = assert(arg[1], "output directory required")
 for _, variant in ipairs({ "ink", "canvas" }) do
-	local theme = require("kanagawa-paper.themes." .. variant).get({ gutter = false }, palette)
-	local inputs = { palette = palette, theme = theme }
+	local inputs = source.prepare(variant)
 	local function resolve(value)
 		if type(value) == "table" then
 			for key, item in pairs(value) do

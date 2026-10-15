@@ -1,4 +1,4 @@
-local util = require("kanagawa-paper.lib.util")
+local util = require("kanagawa-paper.generator_util")
 local hex_to_rgb = require("kanagawa-paper.lib.hsluv").hex_to_rgb_full
 
 local function format_colors(tbl)

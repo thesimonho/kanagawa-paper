@@ -1,12 +1,5 @@
 #!/bin/bash
 set -euo pipefail
 
-export XDG_CACHE_HOME="${PWD}/.tests/cache"
-export XDG_CONFIG_HOME="${PWD}/.tests/config"
-export XDG_DATA_HOME="${PWD}/.tests/data"
-export XDG_STATE_HOME="${PWD}/.tests/state"
-export NVIM_LOG_FILE="${PWD}/.tests/nvim.log"
-
-mkdir -p "$XDG_CACHE_HOME" "$XDG_CONFIG_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME"
-
-nvim --headless --clean -l scripts/build.lua
+# Keep the existing generation command on the common artifact build path.
+python3 scripts/assemble.py extras --output .

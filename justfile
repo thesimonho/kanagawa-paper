@@ -13,9 +13,9 @@ test-targets:
 syntax-specimen:
     @nvim -c 'lua dofile([[{{ justfile_directory() }}/scripts/syntax_specimen.lua]])'
 
-# Assemble installable application trees.
-build target="all":
-    @python3 scripts/assemble.py {{ target }}
+# Build application distributions and copyable extras.
+build target="all" output="dist":
+    @python3 scripts/assemble.py {{ target }} --output "{{ output }}"
 
 # Optional local preview; post-merge automation maintains these files.
 generate:
