@@ -15,6 +15,7 @@
     "packages/**/*.ts",
     "scripts/*.ts",
     "scripts/build/*.ts",
+    "scripts/ci/release/*.mts",
     "tests/shared/*.ts",
     "tests/targets/*.ts",
     "tests/support/*.ts",

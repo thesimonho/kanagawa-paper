@@ -12,7 +12,7 @@
     "generate": "tsx scripts/generate.ts",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/shared/*.test.ts tests/targets/*.test.ts",
-    "format:check": "prettier --check shared/**/*.ts packages/**/*.ts scripts/*.ts scripts/build/*.ts \"tests/{shared,targets,support,release}/*.ts\"",
+    "format:check": "prettier --check shared/**/*.ts packages/**/*.ts scripts/*.ts scripts/build/*.ts scripts/ci/release/*.mts \"tests/{shared,targets,support,release}/*.ts\"",
     "test:release": "tsx --test tests/release/*.test.ts"
   },
   "devDependencies": {

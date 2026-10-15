@@ -13,7 +13,7 @@ Python Semantic Release 10.7.0 selects commits and prepares versions and changel
 
 ## Verification
 
-`npm run test:release` runs the TypeScript VSCE credential-boundary check after both root and release Node dependencies are installed. Python tests under `tests/release/test_release.py` own coordinator behavior; `tests/release/test_assemble.py` owns its Python assembly wrapper. The target package contracts are TypeScript suites under `tests/targets/`. See `tests/README.md` for the complete ownership map.
+`npm run test:release` runs the offline TypeScript VSCE credential-boundary and authentication-probe checks after both root and release Node dependencies are installed. Python tests under `tests/release/test_release.py` own coordinator behavior; `tests/release/test_assemble.py` owns its Python assembly wrapper. The target package contracts are TypeScript suites under `tests/targets/`. See `tests/README.md` for the complete ownership map.
 
 ## Target definitions
 
@@ -52,11 +52,31 @@ The workflow serializes release work and blocks the next release PR until the pr
 Before enabling the workflow:
 
 1. Rename the repository to `kanagawa-paper` and the default branch to `main`. Preserve the old repository name's redirect and historical tags.
-2. Confirm a write-enabled `DEPLOY_KEY`, Marketplace trusted publishing for this repository and `.github/workflows/release.yml`, and permission for Actions to create pull requests. The deploy key makes automation branch pushes trigger validation; `GITHUB_TOKEN` alone does not trigger those ordinary follow-up workflows. Fork PR validation uses read-only credentials.
+2. Resolve the trusted-publishing blockers below and pass the authentication-only workflow check. Confirm a write-enabled `DEPLOY_KEY` and permission for Actions to create pull requests. The deploy key makes automation branch pushes trigger validation; `GITHUB_TOKEN` alone does not trigger those ordinary follow-up workflows. Fork PR validation uses read-only credentials.
 3. Enable required validation with an up-to-date base. Confirm the stable `neovim` and `vscode` deployment links are visible to users.
 4. Seed `neovim-source-4.1.0` and `vscode-source-2.2.1` at an explicitly reviewed source baseline. For the unchanged VS Code import, this must be a main commit containing the package. Never fabricate an ancestor before import or let PSR replay unrelated old commits from version zero. If the consolidation is squash-merged, seed both baselines at that reviewed merge, then make an intentional shared `feat` commit to produce the first consolidated releases.
 5. Run and verify the combined release PR, publication, installation from the Neovim channel/tag, Marketplace update, and deployment links. Archive the old VS Code repository only after successful publication and add a pointer to this repository.
 
 These steps require live verification. Local fixtures do not establish hosted permissions, registry access, public UI, or a successful release.
 
-VSCE uses `publish --oidc --packagePath` with no PAT fallback. Only the release job receives `id-token: write`. The publisher trust configuration must match the final repository name, workflow filename, and any environment restriction. Configure and verify this in Marketplace before enabling publication; local tests only verify invocation and inherited CI environment.
+VSCE uses `publish --oidc --packagePath` with no PAT fallback. The release and authentication-only jobs receive `id-token: write`. The publisher trust configuration must match the final repository name, workflow filename, and any environment restriction. Configure and verify this in Marketplace before enabling publication; local tests only verify invocation and inherited CI environment.
+
+## Trusted-publishing readiness
+
+As checked on 2026-10-15, direct Marketplace trusted publishing is not ready for this cutover:
+
+- **Marketplace backend and policy setup:** a [VSCE maintainer reported on October 5](https://github.com/microsoft/vscode-vsce/issues/1275#issuecomment-5990771209) that backend support was incomplete and the README was published early. The [Marketplace team described policy UI work on September 14](https://github.com/microsoft/vsmarketplace/issues/2121#issuecomment-5668459437). Recheck those upstream reports and the publisher portal before proceeding.
+- **Released client:** the pinned VSCE 4.0.0 sends `Bearer` authorization to the unversioned token endpoint. The [upstream correction](https://github.com/microsoft/vscode-vsce/commit/c960f2e97da3360899f2bfe93390fa4890c69327) uses `FederatedToken` and `?api-version=7.2-preview.1`. Wait for a released version with that change, then update the pinned dependency and its tests. Do not patch the publisher client locally or add a PAT fallback.
+- **Publisher trust:** configure the final repository identity (`thesimonho/kanagawa-paper`), `.github/workflows/release.yml`, and any required environment restriction in Marketplace. The current workflow jobs have no GitHub environment restriction; deployment records do not set a job environment.
+
+Check the installed client's protocol locally, without network or credentials:
+
+```sh
+node --import tsx scripts/ci/release/check-marketplace-auth.mts --check-client
+```
+
+This command is expected to fail with VSCE 4.0.0. Offline tests verify that it blocks the old client, accepts a fixture of the corrected protocol, and hides secrets on failure. Passing fixture tests does not establish live Marketplace access.
+
+After the backend, policy, and released client are ready, manually run **Generate files and release applications** on `main` with **authentication_only** enabled. This uses the same workflow identity as publication. It only requests a GitHub OIDC token and exchanges it through the installed VSCE helper; it discards the returned credential. It does not generate files, create releases or PRs, push branches or tags, or publish an extension. The check refuses redirects, limits request time, and omits response bodies and credentials from errors. Dispatching this mode on another branch skips all jobs.
+
+A successful live check proves token exchange at that time. It does not prove package publication, Marketplace propagation, or the rest of the release workflow. Leave publication for the separately approved cutover. Ordinary workflow dispatch with **authentication_only** disabled retains the release/retry behavior described above.

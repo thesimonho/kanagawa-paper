@@ -104,10 +104,11 @@ return {
   branch = "neovim",
   lazy = false,
   priority = 1000,
-  init = function()
+  opts = {}, -- your configuration
+  config = function(_, opts)
+    require("kanagawa-paper").setup(opts)
     vim.cmd.colorscheme("kanagawa-paper-ink")
   end,
-  opts = {...},
 }
 ```
 
@@ -271,8 +272,9 @@ In short, a `palette` defines all the available colors, while a `theme` maps the
 to specific `ThemeColors` and the same palette color may be assigned to multiple theme colors.
 
 You can change _both_ theme or palette colors using `config.colors`.
-All the palette color names can be found [here](https://github.com/thesimonho/kanagawa-paper/blob/main/shared/lua/kanagawa-paper/palette.lua),
-while their usage by each theme can be found [here](https://github.com/thesimonho/kanagawa-paper/tree/main/shared/lua/kanagawa-paper/themes).
+All the palette color names can be found [here](https://github.com/thesimonho/kanagawa-paper/blob/main/shared/palette.ts),
+while their shared semantic roles can be found [here](https://github.com/thesimonho/kanagawa-paper/tree/main/shared/themes).
+The [Neovim adapter](https://github.com/thesimonho/kanagawa-paper/blob/main/packages/neovim/adapter.ts) maps those roles to the Lua `ThemeColors` names used in overrides.
 
 You can see a visual preview of the entire color palette [here](https://github.com/thesimonho/kanagawa-paper/blob/main/palette_colors.md).
 
@@ -325,7 +327,7 @@ You can get the palette and theme colors from the colors module like this:
 
 ```lua
 -- Get the colors for the current theme
-local colors = require("kanagawa-paper.colors")
+local colors = require("kanagawa-paper.colors").setup()
 local palette_colors = colors.palette
 local theme_colors = colors.theme
 ```
@@ -405,14 +407,18 @@ How to add a new extra template:
 
 ## Development
 
-Run `just test` for Neovim tests, `just test-targets` for package tests, and `just build` to assemble both installable trees under `dist/`. Build tools are Python 3 and Neovim; release tooling is pinned separately under `scripts/ci/release/`.
+Install Node 22 or later and run `npm ci --ignore-scripts` at the repository root. Run `just build` to assemble Neovim, VS Code, Zed, and extras under `dist/`, or `just watch neovim` to rebuild the Neovim target after source edits. Zed is currently a local build target; it has no automated publication.
 
-Open Neovim from the repository root with your existing lazy.nvim setup. The local `.lazy.lua` selects `packages/neovim`, adds `shared` to the runtime, activates Canvas, and reloads theme modules on save. After this file changes, review the current file, run `:trust` from its buffer, then restart Neovim so Lazy can apply the updated plugin path.
+Run `npm test` for shared logic and target contracts, `just test` for Neovim runtime tests, and `just test-targets` for release tooling tests. The complete gate is `just check`. It also needs Neovim, Python 3, and the pinned Python and Node release dependencies described in [the release README](https://github.com/thesimonho/kanagawa-paper/blob/main/scripts/ci/release/README.md).
 
-| Directory     | Purpose                                                |
-| ------------- | ------------------------------------------------------ |
-| `shared/`     | Shared palette, semantic roles, and color calculations |
-| `packages/`   | Neovim, VS Code, Zed, and extras build targets        |
-| `extras/`     | Copyable generated application configurations          |
-| `scripts/`    | Tests, package assembly, and release coordination      |
-| `tests/`      | Runtime and package checks                             |
+Build once, then open Neovim from the repository root with your existing lazy.nvim setup. The local `.lazy.lua` selects `dist/neovim`, activates Canvas, and reloads the theme after a successful build. Keep `just watch neovim` running while editing source. The preview reads generated swatches and does not write source colors. After `.lazy.lua` changes, review the file, run `:trust` from its buffer, then restart Neovim so Lazy can apply the updated plugin path.
+
+The consolidated repository name, install branches, and release workflow described here are pending hosted cutover. Maintainers must complete [the cutover checklist](https://github.com/thesimonho/kanagawa-paper/blob/main/scripts/ci/release/README.md#hosted-cutover) before treating these channels as published.
+
+| Directory   | Purpose                                                |
+| ----------- | ------------------------------------------------------ |
+| `shared/`   | Shared palette, semantic roles, and color calculations |
+| `packages/` | Neovim, VS Code, Zed, and extras build targets         |
+| `extras/`   | Copyable generated application configurations          |
+| `scripts/`  | Tests, package assembly, and release coordination      |
+| `tests/`    | Runtime and package checks                             |

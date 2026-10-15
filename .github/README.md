@@ -15,3 +15,5 @@ Keep the existing `bug`, `enhancement`, `theme: ink`, and `theme: canvas` labels
 The PR template asks for affected applications, validation, and visual comparisons. Its HTML comments are authoring guidance and do not appear in the submitted Markdown preview.
 
 Build validation and post-merge generation use the shared action documented in `actions/generate/README.md`. Release workflow behavior and hosted cutover requirements live in `scripts/ci/release/README.md`.
+
+The release workflow has an `authentication_only` dispatch input. On `main`, it runs the Marketplace token-exchange probe with contents read and OIDC write permissions. It skips both generation and publication and does not use `DEPLOY_KEY`. Other branches skip this mode entirely. See the release README for the current client/backend blockers and the order of hosted readiness checks.
