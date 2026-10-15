@@ -13,3 +13,10 @@ nvim.log
 /.venv/
 **/__pycache__/
 node_modules/
+
+/.extras-build.json
+/.extras-build.json.tmp
+/.extras.lock/
+/.extras-stage-*/
+/.extras-previous-*/
+/.palette_colors.md.tmp

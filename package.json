@@ -15,9 +15,10 @@
   },
   "devDependencies": {
     "@types/node": "22.20.5",
+    "ajv": "8.20.0",
     "chokidar": "4.0.3",
+    "prettier": "3.6.2",
     "tsx": "4.23.15",
-    "typescript": "5.9.3",
-    "prettier": "3.6.2"
+    "typescript": "5.9.3"
   }
 }

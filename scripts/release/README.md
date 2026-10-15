@@ -13,7 +13,7 @@ Python Semantic Release 10.7.0 selects commits and prepares versions and changel
 
 ## Selection and preparation
 
-Run `python scripts/release/coordinator.py prepare` on a clean `main` checkout with complete history and source tags. This command writes prepared files locally; it does not commit, push, or publish. Each target configuration includes its package, shared Lua sources, root README/license, assembly helper, and release tooling. VS Code also includes its renderer. Conventional `fix` and `feat` commits trigger the configured bumps. Ordinary `docs` and `chore` commits do not. Shared releasable changes select both targets even if their output is unchanged.
+Run `python scripts/release/coordinator.py prepare` on a clean `main` checkout with complete history and source tags. This command writes prepared files locally; it does not commit, push, or publish. Each target configuration includes its package, shared TypeScript sources and root build dependencies, root README/license, assembly helper, and release tooling. Both targets install the root lockfile in the exact release-source worktree before assembly. Conventional `fix` and `feat` commits trigger the configured bumps. Ordinary `docs` and `chore` commits do not. Shared releasable changes select both targets even if their output is unchanged.
 
 The generated `.release-plan.json` records the prepared source, previous source tags, previous distribution commits, selected versions, and release notes. It is machine coordination state. The bot puts only this file, version files, and package changelogs into the combined PR. Historical changelog content below the PSR marker is retained.
 
@@ -38,9 +38,11 @@ The workflow serializes release work and blocks the next release PR until the pr
 Before enabling the workflow:
 
 1. Rename the repository to `kanagawa-paper` and the default branch to `main`. Preserve the old repository name's redirect and historical tags.
-2. Confirm a write-enabled `DEPLOY_KEY`, a Marketplace credential in `VSCE_PAT`, and permission for Actions to create pull requests. The deploy key makes automation branch pushes trigger validation; `GITHUB_TOKEN` alone does not trigger those ordinary follow-up workflows. Fork PR validation uses read-only credentials.
+2. Confirm a write-enabled `DEPLOY_KEY`, Marketplace trusted publishing for this repository and `.github/workflows/release.yml`, and permission for Actions to create pull requests. The deploy key makes automation branch pushes trigger validation; `GITHUB_TOKEN` alone does not trigger those ordinary follow-up workflows. Fork PR validation uses read-only credentials.
 3. Enable required validation with an up-to-date base. Confirm the stable `neovim` and `vscode` deployment links are visible to users.
 4. Seed `neovim-source-4.1.0` and `vscode-source-2.2.1` at an explicitly reviewed source baseline. For the unchanged VS Code import, this must be a main commit containing the package. Never fabricate an ancestor before import or let PSR replay unrelated old commits from version zero. If the consolidation is squash-merged, seed both baselines at that reviewed merge, then make an intentional shared `feat` commit to produce the first consolidated releases.
 5. Run and verify the combined release PR, publication, installation from the Neovim channel/tag, Marketplace update, and deployment links. Archive the old VS Code repository only after successful publication and add a pointer to this repository.
 
 These steps require live verification. Local fixtures do not establish hosted permissions, registry access, public UI, or a successful release.
+
+VSCE uses `publish --oidc --packagePath` with no PAT fallback. Only the release job receives `id-token: write`. The publisher trust configuration must match the final repository name, workflow filename, and any environment restriction. Configure and verify this in Marketplace before enabling publication; local tests only verify invocation and inherited CI environment.

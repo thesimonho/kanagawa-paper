@@ -48,8 +48,10 @@ class Selection(unittest.TestCase):
                 path.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(ROOT / name, path)
         (self.root / "shared").mkdir()
-        (self.root / "shared/palette.lua").write_text("baseline\n")
+        (self.root / "shared/palette.ts").write_text("baseline\n")
         (self.root / "README.md").write_text("baseline\n")
+        (self.root / "package.json").write_text(json.dumps({"name": "release-fixture", "private": True}))
+        (self.root / "package-lock.json").write_text(json.dumps({"name": "release-fixture", "lockfileVersion": 3, "packages": {"": {"name": "release-fixture"}}}))
         self.commit("chore: baseline")
         for target, version in (("neovim", "4.1.0"), ("vscode", "2.2.1")):
             self.git("tag", f"{target}-source-{version}")
@@ -111,8 +113,17 @@ class Selection(unittest.TestCase):
             "2.2.2",
         )
 
+    def test_shared_build_selects_both(self):
+        self.change("scripts/output.ts", "fix: common output lifecycle")
+        self.assertEqual(set(release.prepare()["targets"]), {"neovim", "vscode"})
+
+    def test_root_dependency_selects_both(self):
+        # PSR reads this path only; keep the fixture lockfile valid for workflow tests.
+        self.change("tsconfig.json", "fix: compiler contract")
+        self.assertEqual(set(release.prepare()["targets"]), {"neovim", "vscode"})
+
     def test_shared_feature(self):
-        self.change("shared/palette.lua", "feat: shared palette")
+        self.change("shared/palette.ts", "feat: shared palette")
         plan = release.prepare()
         self.assertEqual(
             {t: v["version"] for t, v in plan["targets"].items()},
@@ -144,7 +155,7 @@ class Selection(unittest.TestCase):
             release.prepare()
 
     def test_stale_merge_rejected(self):
-        self.change("shared/palette.lua", "fix: shared palette")
+        self.change("shared/palette.ts", "fix: shared palette")
         plan = release.prepare()
         self.commit("chore(release): prepare application releases")
         release.validate_plan(plan, self.git("rev-parse", "HEAD"))
@@ -153,13 +164,13 @@ class Selection(unittest.TestCase):
             release.validate_plan(plan, self.git("rev-parse", "HEAD"))
 
     def test_release_pr_refresh_is_fast_forward_and_fresh(self):
-        self.change("shared/palette.lua", "fix: shared palette")
+        self.change("shared/palette.ts", "fix: shared palette")
         plan = release.prepare()
         with patch.object(release, "gh", return_value="[]"):
             release.open_pr(plan)
         previous = release.remote_branch(release.BRANCH)
         self.git("checkout", "main")
-        self.change("shared/palette.lua", "feat: shared roles")
+        self.change("shared/palette.ts", "feat: shared roles")
         refreshed = release.prepare()
         with patch.object(release, "gh", return_value='[{"number":1}]'):
             release.open_pr(refreshed)
@@ -195,20 +206,26 @@ class Selection(unittest.TestCase):
         record = Path(self.temporary.name) / "published-source"
         child = self.root / "scripts/release/coordinator.py"
         child.write_text(
-            "import json, subprocess\nfrom pathlib import Path\n"
+            "import json, subprocess, os\nfrom pathlib import Path\n"
+            "assert os.environ['ACTIONS_ID_TOKEN_REQUEST_URL'] == 'https://example.invalid/oidc'\n"
+            "assert os.environ['ACTIONS_ID_TOKEN_REQUEST_TOKEN'] == 'fixture-token'\n"
+            "assert os.environ['KANAGAWA_VSCE']\n"
             f"Path({str(record)!r}).write_text(subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())\n"
             "plan=json.loads(Path('.release-plan.json').read_text())\n"
             "for target,item in plan['targets'].items():\n"
             " subprocess.run(['git','tag',target+'-source-'+item['version']],check=True)\n"
         )
-        self.change("shared/palette.lua", "fix: shared palette")
+        self.change("shared/palette.ts", "fix: shared palette")
         release.prepare()
         self.commit("chore(release): prepare application releases")
         source = self.git("rev-parse", "HEAD")
         self.change("packages/neovim/runtime.lua", "fix: subsequent runtime")
         latest = self.git("rev-parse", "HEAD")
         self.git("push", "origin", "main", "--tags")
-        with patch.object(release, "open_pr") as open_pr:
+        with patch.object(release, "open_pr") as open_pr, patch.dict(os.environ, {
+            "ACTIONS_ID_TOKEN_REQUEST_URL": "https://example.invalid/oidc",
+            "ACTIONS_ID_TOKEN_REQUEST_TOKEN": "fixture-token",
+        }):
             release.workflow()
         self.assertEqual(record.read_text(), source)
         next_plan = open_pr.call_args.args[0]
@@ -220,7 +237,7 @@ class Selection(unittest.TestCase):
         )
 
     def test_staggered_source_markers(self):
-        self.change("shared/palette.lua", "fix: shared palette")
+        self.change("shared/palette.ts", "fix: shared palette")
         plan = release.prepare()
         self.commit("chore(release): prepare application releases")
         for target, item in plan["targets"].items():
@@ -232,7 +249,7 @@ class Selection(unittest.TestCase):
         self.assertNotIn("shared palette", second["targets"]["neovim"]["notes"].lower())
 
     def test_publication_retry_keeps_frozen_artifact(self):
-        self.change("shared/palette.lua", "fix: shared palette")
+        self.change("shared/palette.ts", "fix: shared palette")
         plan = release.prepare()
         self.commit("chore(release): prepare application releases")
         source = self.git("rev-parse", "HEAD")
@@ -288,6 +305,7 @@ class Selection(unittest.TestCase):
                                     path.read_bytes(),
                                 )
                 else:
+                    self.assertEqual(args[1:4], ("publish", "--oidc", "--packagePath"))
                     published.append(Path(args[-1]).read_bytes())
                 return ""
             return original_run(*args, cwd=cwd, **kwargs)

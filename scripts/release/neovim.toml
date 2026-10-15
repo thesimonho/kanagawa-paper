@@ -8,7 +8,7 @@ allow_zero_version = false
 match = "main"
 
 [semantic_release.commit_parser_options]
-path_filters = ["packages/neovim/**", "shared/**", "README.md", "LICENSE", "scripts/assemble.py", "scripts/release/**"]
+path_filters = ["packages/neovim/**", "shared/**", "README.md", "LICENSE", "scripts/*.ts", "scripts/assemble.py", "package.json", "package-lock.json", "tsconfig.json", "scripts/release/**"]
 
 [semantic_release.changelog]
 mode = "update"

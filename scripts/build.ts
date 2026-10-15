@@ -1,15 +1,17 @@
 import { fileURLToPath } from "node:url";
 import { dirname, join, resolve, relative } from "node:path";
+import { realpath } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
-import { buildNeovim } from "../packages/neovim/build.ts";
-import { buildVscode } from "../packages/vscode/build.ts";
-import { buildExtras } from "../generators/build.ts";
+import { targets, renderTarget, type Target } from "./targets.ts";
+export { targets, type Target } from "./targets.ts";
 import { extras, type ExtraName } from "../generators/registry.ts";
+import { rawPalette } from "../shared/palette.ts";
+import { ink } from "../shared/themes/ink.ts";
+import { canvas } from "../shared/themes/canvas.ts";
+import { resolveTheme } from "../shared/color/evaluate.ts";
 import { publishTarget } from "./output.ts";
 
 export const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-export const targets = ["neovim", "vscode", "extras"] as const;
-export type Target = (typeof targets)[number];
 export interface BuildOptions {
   target: Target | "all";
   output: string;
@@ -54,7 +56,19 @@ export async function build(
   output = join(root, "dist"),
   only?: ExtraName,
 ) {
-  const destination = resolve(output, target);
+  let parent = resolve(output);
+  const suffix: string[] = [];
+  while (true) {
+    try {
+      parent = await realpath(parent);
+      break;
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+      suffix.unshift(parent.slice(dirname(parent).length + 1));
+      parent = dirname(parent);
+    }
+  }
+  const destination = join(parent, ...suffix, target);
   const local = relative(root, destination);
   if (
     !local ||
@@ -64,11 +78,21 @@ export async function build(
   ) {
     throw new Error(`Refusing to replace source directory: ${destination}`);
   }
-  return publishTarget(resolve(output), target, async (stage, previous) => {
-    if (target === "neovim") await buildNeovim(root, stage);
-    else if (target === "vscode") await buildVscode(root, stage);
-    else await buildExtras(root, stage, previous, only);
-  });
+  return publishTarget(
+    resolve(output),
+    target,
+    async (stage, previous) => {
+      await renderTarget(target, root, stage, previous, only);
+    },
+    target === "neovim"
+      ? {
+          preview: {
+            palette: rawPalette,
+            themes: { ink: resolveTheme(ink), canvas: resolveTheme(canvas) },
+          },
+        }
+      : {},
+  );
 }
 export async function run(opts: BuildOptions) {
   typecheck();
@@ -79,6 +103,10 @@ if (
   process.argv[1] &&
   resolve(process.argv[1]) === fileURLToPath(import.meta.url)
 ) {
+  // Terminal signals also reach this child of watch. Finish publication and
+  // cleanup before exiting; the watcher stops scheduling further builds.
+  process.on("SIGINT", () => {});
+  process.on("SIGTERM", () => {});
   run(options(process.argv.slice(2))).catch((error) => {
     console.error(error.message);
     process.exitCode = 1;

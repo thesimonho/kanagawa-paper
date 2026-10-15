@@ -4,15 +4,32 @@
     {
       "label": "Build VS Code theme",
       "type": "process",
-      "command": "python3",
+      "command": "npm",
       "args": [
-        "scripts/assemble.py",
+        "run",
+        "watch",
+        "--",
         "vscode"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
       },
-      "problemMatcher": []
+      "problemMatcher": {
+        "owner": "theme-build",
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+): (.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^\\[build\\] start$",
+          "endsPattern": "^\\[build\\] ready$"
+        }
+      },
+      "isBackground": true
     }
   ]
 }

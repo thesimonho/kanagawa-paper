@@ -1,7 +1,7 @@
 import chokidar from "chokidar";
 import { spawn, type ChildProcess } from "node:child_process";
 import { join, relative, resolve } from "node:path";
-import { options, root } from "./build.ts";
+import { options, root, targets, type Target } from "./build.ts";
 
 const args = process.argv.slice(2);
 const opts = options([...args]);
@@ -18,31 +18,41 @@ const sourceRoots = [
   "extras/README.md",
 ];
 let child: ChildProcess | undefined;
-let dirty = false;
+const selected = opts.target === "all" ? targets : [opts.target];
+const pending = new Set<Target>();
 let timer: NodeJS.Timeout | undefined;
 let stopping = false;
-function relevant(path: string) {
+function affected(path: string): Target[] {
   const name = relative(root, path).replaceAll("\\", "/");
-  if (name.startsWith("scripts/release/")) return false;
-  if (opts.target === "all") return true;
+  if (name.startsWith("scripts/release/")) return [];
   if (name.startsWith("packages/"))
-    return name.startsWith(`packages/${opts.target}/`);
-  if (name.startsWith("generators/"))
-    return (
-      opts.target === "extras" &&
-      (!opts.only ||
-        !name.startsWith("generators/extras/") ||
-        name === `generators/extras/${opts.only}.ts`)
+    return selected.filter((target) => name.startsWith(`packages/${target}/`));
+  if (name.startsWith("generators/") || name === "extras/README.md")
+    return selected.filter(
+      (target) =>
+        target === "extras" &&
+        (!opts.only ||
+          !name.startsWith("generators/extras/") ||
+          name === `generators/extras/${opts.only}.ts`),
     );
-  return true;
+  return selected;
 }
 function launch() {
-  if (stopping || child || !dirty) return;
-  dirty = false;
+  if (stopping || child || !pending.size) return;
+  const target =
+    pending.size === targets.length ? "all" : pending.values().next().value!;
+  if (target === "all") pending.clear();
+  else pending.delete(target);
+  const buildArgs = [
+    target,
+    "--output",
+    opts.output,
+    ...(opts.only ? ["--only", opts.only] : []),
+  ];
   process.stdout.write("[build] start\n");
   child = spawn(
     process.execPath,
-    ["--import", "tsx", join(root, "scripts/build.ts"), ...args],
+    ["--import", "tsx", join(root, "scripts/build.ts"), ...buildArgs],
     { cwd: root, stdio: "inherit" },
   );
   child.on("error", (error) => console.error(error.message));
@@ -54,11 +64,11 @@ function launch() {
         "[build] failed; waiting for source changes (previous output retained)",
       );
     if (stopping) process.exit(0);
-    if (dirty) schedule();
+    if (pending.size) schedule([]);
   });
 }
-function schedule() {
-  dirty = true;
+function schedule(changed: Target[]) {
+  for (const target of changed) pending.add(target);
   clearTimeout(timer);
   timer = setTimeout(launch, 120);
 }
@@ -79,9 +89,10 @@ const watcher = chokidar.watch(
     },
   },
 );
-watcher.on("ready", schedule);
+watcher.on("ready", () => schedule(selected));
 watcher.on("all", (_event, path) => {
-  if (relevant(path)) schedule();
+  const changed = affected(path);
+  if (changed.length) schedule(changed);
 });
 watcher.on("error", (error) => console.error(error));
 async function stop() {

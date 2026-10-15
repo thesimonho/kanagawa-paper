@@ -18,6 +18,7 @@ export async function publishTarget(
   output: string,
   target: string,
   render: (stage: string, previous: string) => Promise<void>,
+  metadata: Record<string, unknown> = {},
 ) {
   await mkdir(output, { recursive: true });
   const lock = join(output, `.${target}.lock`);
@@ -31,9 +32,10 @@ export async function publishTarget(
   }
   let stage: string | undefined;
   let backedUp = false;
-  let installed = false;
   const destination = join(output, target),
-    backup = join(output, `.${target}-previous-${randomUUID()}`);
+    backup = join(output, `.${target}-previous-${randomUUID()}`),
+    marker = join(output, `.${target}-build.json`),
+    tempMarker = marker + ".tmp";
   try {
     await writeFile(
       join(lock, "owner.json"),
@@ -41,6 +43,10 @@ export async function publishTarget(
     );
     stage = await mkdtemp(join(output, `.${target}-stage-`));
     await render(stage, destination);
+    await writeFile(
+      tempMarker,
+      json({ ...metadata, generation: randomUUID() }),
+    );
     try {
       await rename(destination, backup);
       backedUp = true;
@@ -49,7 +55,12 @@ export async function publishTarget(
     }
     try {
       await rename(stage, destination);
-      installed = true;
+      try {
+        await rename(tempMarker, marker);
+      } catch (error) {
+        await rm(destination, { recursive: true, force: true });
+        throw error;
+      }
     } catch (error) {
       if (backedUp) {
         await rename(backup, destination);
@@ -57,18 +68,19 @@ export async function publishTarget(
       }
       throw error;
     }
-    await rm(backup, { recursive: true, force: true });
+    // Publication is complete. Cleanup failure must not report a failed build
+    // after consumers have observed its successful marker.
+    await rm(backup, { recursive: true, force: true }).catch((error) => {
+      console.warn(
+        `Published ${destination}, but could not remove ${backup}: ${error.message}`,
+      );
+    });
     backedUp = false;
-    const marker = join(output, `.${target}-build.json`);
-    const tempMarker = marker + ".tmp";
-    await writeFile(tempMarker, json({ generation: randomUUID() }));
-    await rename(tempMarker, marker);
     return destination;
   } finally {
     if (stage) await rm(stage, { recursive: true, force: true });
     // A failed rollback leaves the backup available for recovery; never delete it.
-    if (installed && !backedUp)
-      await rm(backup, { recursive: true, force: true });
+    await rm(tempMarker, { force: true });
     await rm(lock, { recursive: true, force: true });
   }
 }

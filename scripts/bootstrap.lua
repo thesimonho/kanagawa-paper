@@ -18,7 +18,7 @@ function M.setup()
 	ensure_directory(vim.env.XDG_DATA_HOME)
 	ensure_directory(vim.env.XDG_STATE_HOME)
 
-	for _, directory in ipairs({ "packages/neovim", "shared", "generators" }) do
+	for _, directory in ipairs({ "dist/neovim" }) do
 		vim.opt.runtimepath:prepend(cwd .. "/" .. directory)
 		package.path = cwd
 			.. "/"

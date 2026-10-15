@@ -15,14 +15,19 @@ syntax-specimen:
 
 # Build application distributions and copyable extras.
 build target="all" output="dist":
-    @python3 scripts/assemble.py {{ target }} --output "{{ output }}"
+    @npm run build -- {{ target }} --output "{{ output }}"
+
+watch target="all" output="dist":
+    @npm run watch -- {{ target }} --output "{{ output }}"
 
 # Optional local preview; post-merge automation maintains these files.
 generate:
-    @bash scripts/build.sh
-    @nvim --headless --clean -l scripts/generate_palette.lua
+    @npm run generate
 
 check:
+    @npm run typecheck
+    @npm run format:check
+    @npm test
     @bash scripts/test.sh
     @python3 -m unittest discover -s tests -p "test_*.py"
-    @python3 scripts/assemble.py
+    @npm run build

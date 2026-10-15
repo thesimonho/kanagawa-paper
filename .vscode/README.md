@@ -1,13 +1,11 @@
 ---
 agent:
-  instruction: Keep the theme preview launch pointed at assembled output and build it before launch.
+  instruction: Keep these build and source boundaries current when this directory changes.
   on-change: ".vscode/**"
 ---
 
-# VS Code theme preview
+# VS Code preview
 
-Open the repository root in VS Code. Press F5 and select **Preview Kanagawa Paper**. The build task runs the common assembler for VS Code, then the launch configuration opens an Extension Development Host with `dist/vscode` loaded.
+Open the repository root, install its Node dependencies, then press F5 and select **Preview Kanagawa Paper**. The background task performs an initial build before launching the assembled extension from `dist/vscode`. It rebuilds after shared or VS Code adapter changes.
 
-In the development window, run **Preferences: Color Theme** and select **Kanagawa Paper Ink** or **Kanagawa Paper Canvas**. After source changes, stop and restart debugging to rebuild. Python 3 and Neovim must be available on VS Code's PATH.
-
-Edit `shared/` or `packages/vscode/mappings/`; do not edit `dist/vscode`. These launch and task configurations are maintained by hand.
+Edit `shared/` or `packages/vscode/adapter.ts`; do not edit build output. A failed build keeps the previous output and leaves the watch task running. Reload the Extension Development Host after a successful rebuild to refresh the theme.

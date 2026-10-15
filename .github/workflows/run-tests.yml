@@ -20,10 +20,19 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: scripts/release/package-lock.json
+          cache-dependency-path: |
+            scripts/release/package-lock.json
+            package-lock.json
       - uses: ./.github/actions/generate
       - run: pip install -r scripts/release/requirements.txt
       - run: npm ci --prefix scripts/release --ignore-scripts
+      - run: npm run typecheck
+      - run: npm run format:check
+      - uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: v0.11.5
+      - run: npm test
       - run: bash scripts/test.sh
       - run: python -m unittest discover -s tests -p 'test_*.py'
       - run: python scripts/assemble.py

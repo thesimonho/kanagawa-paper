@@ -1,15 +1,11 @@
 ---
 agent:
-  instruction: Preserve existing extras output contracts; generator modules are not part of the installed Neovim runtime.
+  instruction: Keep these build and source boundaries current when this directory changes.
   on-change: "generators/**"
 ---
 
 # Extras generators
 
-The Lua modules produce the copyable files in `extras/`. They use `shared/` color preparation directly and never load the Neovim theme package, configuration, or highlight groups. `generator_util.lua` owns template formatting and output-file helpers; each extra maps shared roles to its application format.
+`registry.ts` registers the 18 copyable formats; `extras/*.ts` map shared roles to each format. `build.ts` renders a complete target in staging before publication. These modules are never installed with Neovim.
 
-Run `just build extras` for an isolated preview under `dist/extras`, or `just build extras /tmp/theme-preview` to choose an output root. `just build` builds Neovim, VS Code, and extras through the same dispatcher. The existing `bash scripts/build.sh` command uses that dispatcher to refresh checked-in extras, as part of automatic post-merge generation. A template error fails the build before existing output is replaced.
-
-## Node adapters
-
-`registry.ts`, `build.ts` and `extras/*.ts` provide the Node build path. The old Lua modules remain temporarily until legacy commands/tests are switched. The Node path preserves all 39 generated files and supports selected-adapter watch builds.
+Run `just build extras` for `dist/extras`, or `npm run watch -- extras --only kitty` for one adapter. A filtered build retains other existing extras. `just generate` updates checked-in extras and the palette preview. All 39 existing configuration files have baseline parity coverage.

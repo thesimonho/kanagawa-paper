@@ -3,15 +3,16 @@ description: Build extras, palette preview, and Neovim help from reviewed source
 runs:
   using: composite
   steps:
-    - uses: rhysd/action-setup-vim@v1
+    - uses: actions/setup-node@v6
       with:
-        neovim: true
-        version: v0.11.5
+        node-version: '22'
+        cache: npm
+        cache-dependency-path: package-lock.json
+    - run: npm ci --ignore-scripts
+      shell: bash
     - name: Build extras and palette
       shell: bash
-      run: |
-        bash scripts/build.sh
-        nvim --headless --clean -l scripts/generate_palette.lua
+      run: npm run generate
     - name: Prepare panvimdoc output directory
       shell: bash
       run: mkdir -p doc

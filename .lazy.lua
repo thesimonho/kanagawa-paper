@@ -1,6 +1,6 @@
 local spec = assert(vim.fs.find(".lazy.lua", { upward = true, path = vim.uv.cwd() })[1])
 local root = vim.fn.fnamemodify(spec, ":p:h")
-vim.opt.runtimepath:prepend(root .. "/shared")
+vim.opt.runtimepath:prepend(root .. "/dist/neovim")
 
 local M = {
 	module = "kanagawa-paper",
@@ -23,6 +23,11 @@ function M.hl_group(name, buf)
 end
 
 local function reload()
+	local colorscheme = vim.g.colors_name or M.colorscheme
+	if colorscheme ~= "kanagawa-paper-ink" and colorscheme ~= "kanagawa-paper-canvas" then
+		colorscheme = M.colorscheme
+	end
+	M.opts._theme = colorscheme:match("kanagawa%-paper%-(.+)")
 	print("🚀 Reloading " .. M.module)
 	for k in pairs(package.loaded) do
 		if k:sub(1, #M.module) == M.module then
@@ -32,8 +37,13 @@ local function reload()
 	M.cache = {}
 	require(M.module).setup(M.opts)
 	M.reset()
-	local colorscheme = vim.g.colors_name or M.colorscheme
-	colorscheme = colorscheme:find(M.colorscheme, 1, true) and colorscheme or M.colorscheme
+	local marker = root .. "/dist/.neovim-build.json"
+	local ok, metadata = pcall(function()
+		return vim.json.decode(table.concat(vim.fn.readfile(marker), "\n"))
+	end)
+	if ok and metadata.preview then
+		M.globals.canonical = metadata.preview.themes[M.opts._theme]
+	end
 	vim.cmd.colorscheme(colorscheme)
 	local hi = require("mini.hipatterns")
 	for _, buf in ipairs(require("mini.hipatterns").get_enabled_buffers()) do
@@ -48,24 +58,50 @@ vim.api.nvim_create_autocmd("User", {
 	group = augroup,
 	callback = reload,
 })
-vim.api.nvim_create_autocmd("BufWritePost", {
-	group = augroup,
-	pattern = "*/lua/" .. M.module .. "/**.lua",
-	callback = reload,
-})
+-- Publication replaces the output directory. Watch its parent and reload only
+-- after the successful-build marker changes, never on an in-progress save.
+local watcher = vim.uv.new_fs_event()
+local generation
+local function check_build()
+	local ok, metadata = pcall(function()
+		return vim.json.decode(table.concat(vim.fn.readfile(root .. "/dist/.neovim-build.json"), "\n"))
+	end)
+	if ok and metadata.generation ~= generation then
+		generation = metadata.generation
+		reload()
+	end
+end
+if watcher then
+	watcher:start(
+		root .. "/dist",
+		{},
+		vim.schedule_wrap(function(_, name)
+			if name == ".neovim-build.json" then
+				check_build()
+			end
+		end)
+	)
+	vim.api.nvim_create_autocmd("VimLeavePre", {
+		group = augroup,
+		callback = function()
+			watcher:stop()
+			watcher:close()
+		end,
+	})
+end
 
 return {
 	{
 		"thesimonho/kanagawa-paper",
 		optional = true,
-		dir = root .. "/packages/neovim",
+		dir = root .. "/dist/neovim",
 		dev = false,
 	},
 	{
 		"thesimonho/kanagawa-paper.nvim",
 		optional = true,
 		name = "kanagawa-paper.nvim",
-		dir = root .. "/packages/neovim",
+		dir = root .. "/dist/neovim",
 		dev = false,
 	},
 	{
@@ -107,7 +143,10 @@ return {
 						"%f[%w]()theme%.[%w_%.]+()%f[%W]",
 						"%f[%w]()vim%.g%.terminal_color_%d+()%f[%W]",
 					},
-					group = function(_, match)
+					group = function(buf, match)
+						if vim.api.nvim_buf_get_name(buf):match("%.ts$") then
+							match = match:gsub("^theme%.", "canonical.")
+						end
 						local parts = vim.split(match, ".", { plain = true })
 						local color = vim.tbl_get(M.globals, unpack(parts))
 						return type(color) == "string"

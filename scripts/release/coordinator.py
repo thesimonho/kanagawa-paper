@@ -576,7 +576,7 @@ def publish(plan: dict, source: str) -> None:
                 if target == "vscode":
                     artifact = output / target / next(iter(sealed[target]["artifacts"]))
                     if not marketplace_matches(item["version"], artifact):
-                        run(str(VSCE), "publish", "--packagePath", str(artifact))
+                        run(str(VSCE), "publish", "--oidc", "--packagePath", str(artifact))
                         if not marketplace_matches(item["version"], artifact):
                             raise ValueError(
                                 "Marketplace has not confirmed the frozen package; retry later"
@@ -620,7 +620,9 @@ def workflow() -> None:
             checkout = Path(temporary) / "source"
             git("worktree", "add", "--detach", str(checkout), source)
             try:
-                # Tool dependencies are execution tooling, not release source inputs.
+                # Install the build dependency from this exact source's lockfile.
+                run("npm", "ci", "--ignore-scripts", cwd=checkout)
+                # Publication tooling can be reused; build inputs cannot.
                 env = dict(os.environ, KANAGAWA_VSCE=str(VSCE))
                 run(
                     sys.executable,

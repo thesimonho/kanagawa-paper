@@ -28,6 +28,11 @@ jobs:
         id: source
         run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
   release:
+    permissions:
+      contents: write
+      pull-requests: write
+      deployments: write
+      id-token: write
     needs: generate
     runs-on: ubuntu-latest
     steps:
@@ -44,16 +49,18 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: scripts/release/package-lock.json
+          cache-dependency-path: |
+            scripts/release/package-lock.json
+            package-lock.json
       - uses: rhysd/action-setup-vim@v1
         with:
           neovim: true
           version: v0.11.5
       - run: pip install -r scripts/release/requirements.txt
       - run: npm ci --prefix scripts/release --ignore-scripts
+      - run: npm ci --ignore-scripts
       - name: Reconcile publication and prepare combined release PR
         env:
           KANAGAWA_GENERATED_SOURCE: ${{ needs.generate.outputs.source }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
         run: python scripts/release/coordinator.py run
