@@ -8,6 +8,59 @@ describe("shared color preparation", function()
 	end)
 
 	for _, variant in ipairs({ "ink", "canvas" }) do
+		it(variant .. " rebuilds caches without dedicated line-number roles", function()
+			local cache = require("kanagawa-paper.lib.cache")
+			local opts = Config.extend({ _theme = variant, cache = true, all_plugins = false, auto_plugins = false })
+			local expected = source.prepare(variant).theme.ui.line_numbers
+			local legacy = source.prepare(variant)
+			legacy.theme.ui.line_numbers = nil
+			local entry = cache.create_container(legacy, {}, {}, cache.get_opts(opts))
+			entry.version = 1.0
+			cache.write(variant, entry)
+			local ok, result = pcall(require("kanagawa-paper.themes").setup, opts)
+			cache.delete(variant)
+			assert.is_true(ok)
+			assert.same(expected, result.theme.ui.line_numbers)
+		end)
+
+		it(variant .. " keeps line numbers independent of nontext and diagnostics", function()
+			local defaults = source.prepare(variant).theme
+			assert.same(defaults.ui.nontext, defaults.ui.line_numbers.default)
+			assert.same(defaults.diag.warning, defaults.ui.line_numbers.active)
+			local result = colors.setup({
+				_theme = variant,
+				gutter = true,
+				colors = {
+					theme = {
+						[variant] = {
+							ui = { nontext = "#123456" },
+							diag = { warning = "#abcdef" },
+						},
+					},
+				},
+			})
+			local groups = require("kanagawa-paper.groups.editor").setup(result, {})
+			assert.same(defaults.ui.line_numbers.default, groups.LineNr.fg)
+			assert.same(defaults.ui.line_numbers.active, groups.CursorLineNr.fg)
+			assert.same(true, groups.CursorLineNr.bold)
+			assert.same(result.theme.ui.bg_gutter, groups.LineNr.bg)
+			assert.same(result.theme.ui.bg_gutter, groups.CursorLineNr.bg)
+		end)
+
+		it(variant .. " uses dedicated line-number and palette overrides", function()
+			local name = variant == "ink" and "sumiInk6" or "canvasGray1"
+			local result = colors.setup({
+				_theme = variant,
+				colors = {
+					palette = { [name] = "#123456" },
+					theme = { [variant] = { ui = { line_numbers = { active = "#abcdef" } } } },
+				},
+			})
+			local groups = require("kanagawa-paper.groups.editor").setup(result, {})
+			assert.same("#123456", groups.LineNr.fg)
+			assert.same("#abcdef", groups.CursorLineNr.fg)
+		end)
+
 		it(variant .. " keeps emphasis and primary overrides independent", function()
 			local defaults = source.prepare(variant).theme
 			assert.same(defaults.accent.accent1, defaults.ui.special)

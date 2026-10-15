@@ -1,4 +1,4 @@
-local cache_version = 1.0 -- Bump when the cache format changes to automatically invalidate the cache.
+local cache_version = 2.0 -- Bump when the cache format changes to automatically invalidate the cache.
 local util = require("kanagawa-paper.lib.util")
 
 local M = {}

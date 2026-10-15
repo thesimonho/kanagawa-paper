@@ -11,3 +11,5 @@ Ink and Canvas implement `ThemeDefinition` through named palette references and 
 The Neovim adapter projects these roles into the existing public configuration fields. Sharing a default expression does not couple user overrides of those fields. No role is removed solely because its current hex matches another role.
 
 UI emphasis uses `accents.primary`. Neovim still exposes independent `ui.special` and `accent.accent1` overrides. Syntax special colors remain separate.
+
+`ui.editor.lineNumbers.default` and `.active` set line-number colors across Neovim, VS Code, and Zed. Neovim exposes them as `ui.line_numbers.default` and `.active`; they are independent of `ui.nontext` and `diag.warning`. The active Neovim line number remains bold. Gutter backgrounds remain separate adapter settings.

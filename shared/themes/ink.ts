@@ -34,6 +34,10 @@ export const ink = {
       },
     },
     editor: {
+      lineNumbers: {
+        default: palette.sumiInk6,
+        active: palette.dragonYellow,
+      },
       gutter: {
         background: palette.sumiInk4,
       },

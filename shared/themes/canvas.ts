@@ -34,6 +34,10 @@ export const canvas = {
       },
     },
     editor: {
+      lineNumbers: {
+        default: palette.canvasGray1,
+        active: palette.canvasOrange1,
+      },
       gutter: {
         background: palette.canvasWhite2,
       },

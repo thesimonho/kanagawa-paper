@@ -5,6 +5,10 @@ import type { Resolved } from "../../shared/color/expression.ts";
 export function neovimRoles(theme: ThemeDefinition) {
   return {
     ui: {
+      line_numbers: {
+        default: theme.ui.editor.lineNumbers.default,
+        active: theme.ui.editor.lineNumbers.active,
+      },
       fg: theme.ui.text.primary,
       fg_dim: theme.ui.text.secondary,
       fg_dimmer: theme.ui.text.muted,

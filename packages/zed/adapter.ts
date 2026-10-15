@@ -47,8 +47,8 @@ export function zedTheme(theme: Theme, variant: Variant) {
     "editor.foreground": ui.text.primary,
     "editor.gutter.background": ui.editor.gutter.background,
     "editor.subheader.background": ui.surface.tones.m1,
-    "editor.line_number": ui.editor.nontext,
-    "editor.active_line_number": theme.accents.primary,
+    "editor.line_number": ui.editor.lineNumbers.default,
+    "editor.active_line_number": ui.editor.lineNumbers.active,
     "editor.active_line.background": ui.editor.currentLine.background,
     "editor.highlighted_line.background":
       ui.editor.currentLine.alternateBackground,

@@ -6,6 +6,7 @@ import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { build, root } from "../../scripts/build/build.ts";
 import { artifactParity } from "../support/files.ts";
+import type { NeovimColors } from "../../packages/neovim/adapter.ts";
 
 test("VS Code preserves baseline output and extension packaging contracts", async () => {
   const output = await mkdtemp(join(tmpdir(), "kanagawa vscode "));
@@ -59,10 +60,9 @@ test("VS Code tracks current installed Neovim semantics", async () => {
       },
     );
     assert.equal(result.status, 0, result.stderr);
-    const roles: Record<
-      string,
-      Record<string, Record<string, string>>
-    > = JSON.parse(await readFile(snapshot, "utf8"));
+    const roles: Record<string, NeovimColors> = JSON.parse(
+      await readFile(snapshot, "utf8"),
+    );
     for (const [variant, theme] of Object.entries(roles)) {
       const rendered = JSON.parse(
         await readFile(
@@ -73,6 +73,8 @@ test("VS Code tracks current installed Neovim semantics", async () => {
       const colors = rendered.colors;
       for (const [key, role] of Object.entries({
         "editor.foreground": theme.ui.fg,
+        "editorLineNumber.foreground": theme.ui.line_numbers.default,
+        "editorLineNumber.activeForeground": theme.ui.line_numbers.active,
         "editor.background": theme.ui.bg,
         "editorError.foreground": theme.diag.error,
         "editorWarning.foreground": theme.diag.warning,
@@ -87,7 +89,7 @@ test("VS Code tracks current installed Neovim semantics", async () => {
           role.toLowerCase(),
           `${variant}: ${key}`,
         );
-      for (let index = 1; index <= 6; index++)
+      for (const index of [1, 2, 3, 4, 5, 6] as const)
         assert.equal(
           colors[`editorBracketHighlight.foreground${index}`],
           theme.rainbow[`rainbow${index}`],
@@ -101,12 +103,12 @@ test("VS Code tracks current installed Neovim semantics", async () => {
         "magenta",
         "cyan",
         "white",
-      ]) {
+      ] as const) {
         const title = color[0].toUpperCase() + color.slice(1);
         assert.equal(colors[`terminal.ansi${title}`], theme.term[color]);
         assert.equal(
           colors[`terminal.ansiBright${title}`],
-          theme.term[color + "_bright"],
+          theme.term[`${color}_bright`],
         );
       }
       const tokens: Record<string, Record<string, string>> = Object.fromEntries(
@@ -117,17 +119,17 @@ test("VS Code tracks current installed Neovim semantics", async () => {
           ],
         ),
       );
-      for (const [name, group, role] of [
-        ["Constants", "syn", "constant"],
-        ["Numbers", "syn", "number"],
-        ["Characters", "syn", "string"],
-        ["Strings: Escape Sequences", "syn", "regex"],
-        ["Markup: Link", "syn", "special3"],
-        ["Markup Quote", "syn", "punct"],
-        ["Markup: Heading", "rainbow", "rainbow1"],
-      ])
-        assert.equal(tokens[name].foreground, theme[group][role]);
-      for (let index = 1; index <= 6; index++)
+      for (const [name, role] of Object.entries({
+        Constants: theme.syn.constant,
+        Numbers: theme.syn.number,
+        Characters: theme.syn.string,
+        "Strings: Escape Sequences": theme.syn.regex,
+        "Markup: Link": theme.syn.special3,
+        "Markup Quote": theme.syn.punct,
+        "Markup: Heading": theme.rainbow.rainbow1,
+      }))
+        assert.equal(tokens[name].foreground, role);
+      for (const index of [1, 2, 3, 4, 5, 6] as const)
         assert.equal(
           tokens[`Markup: Heading ${index}`].foreground,
           theme.rainbow[`rainbow${index}`],
@@ -145,7 +147,7 @@ test("VS Code tracks current installed Neovim semantics", async () => {
         "method.defaultLibrary": "keyword",
         "function.defaultLibrary": "fun",
         stringLiteral: "string",
-      }))
+      } as const))
         assert.equal(rendered.semanticTokenColors[token], theme.syn[role]);
     }
   } finally {

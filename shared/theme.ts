@@ -33,6 +33,10 @@ export interface ThemeDefinition {
       };
     };
     editor: {
+      lineNumbers: {
+        default: ColorExpression;
+        active: ColorExpression;
+      };
       gutter: {
         background: ColorExpression;
       };

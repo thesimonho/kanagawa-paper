@@ -8,6 +8,7 @@ import { zedTheme } from "../../packages/zed/adapter.ts";
 import { validateZedTheme } from "../../packages/zed/build.ts";
 import schema from "../../packages/zed/theme.schema.json" with { type: "json" };
 import { resolveTheme } from "../../shared/color/evaluate.ts";
+import { neovimRoles } from "../../packages/neovim/adapter.ts";
 import { ink } from "../../shared/themes/ink.ts";
 import { canvas } from "../../shared/themes/canvas.ts";
 
@@ -45,6 +46,15 @@ test("Zed builds both variants with valid inherited colors and extension metadat
         theme.terminal.normal.red + "AA",
       );
       assert.equal(rendered.style["editor.foreground"], theme.ui.text.primary);
+      const neovim = resolveTheme(neovimRoles(definition));
+      assert.equal(
+        rendered.style["editor.line_number"],
+        neovim.ui.line_numbers.default,
+      );
+      assert.equal(
+        rendered.style["editor.active_line_number"],
+        neovim.ui.line_numbers.active,
+      );
       assert.equal(
         rendered.style["terminal.ansi.bright_red"],
         theme.terminal.bright.red,

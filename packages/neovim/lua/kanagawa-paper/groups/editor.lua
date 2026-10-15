@@ -55,11 +55,11 @@ function M.setup(colors, opts)
 		-- Substitute	|:substitute| replacement text highlighting.
 		Substitute = { fg = theme.ui.fg, bg = theme.vcs.removed },
 		-- LineNr		Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
-		LineNr = { fg = theme.ui.nontext, bg = theme.ui.bg_gutter },
+		LineNr = { fg = theme.ui.line_numbers.default, bg = theme.ui.bg_gutter },
 		-- LineNrAbove	Line number for when the 'relativenumber' option is set, above the cursor line.
 		-- LineNrBelow	Line number for when the 'relativenumber' option is set, below the cursor line.
 		-- CursorLineNr	Like LineNr when 'cursorline' is set and 'cursorlineopt' contains "number" or is "both", for the cursor line.
-		CursorLineNr = { fg = theme.diag.warning, bg = theme.ui.bg_gutter, bold = true },
+		CursorLineNr = { fg = theme.ui.line_numbers.active, bg = theme.ui.bg_gutter, bold = true },
 		-- CursorLineFold	Like FoldColumn when 'cursorline' is set for the cursor line.
 		-- CursorLineSign	Like SignColumn when 'cursorline' is set for the cursor line.
 		Mark = { fg = theme.ui.mark },

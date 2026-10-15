@@ -17,8 +17,15 @@ const baseline = JSON.parse(
 for (const [name, definition] of Object.entries({ ink, canvas })) {
   test(`${name}: all existing default roles retain their colors`, () => {
     const resolved = resolveTheme(neovimRoles(definition));
-    resolved.ui.bg_gutter = "none";
-    assert.deepEqual(resolved, baseline[name].theme);
+    assert.deepEqual(resolved.ui.line_numbers, {
+      default: baseline[name].theme.ui.nontext,
+      active: baseline[name].theme.diag.warning,
+    });
+    const { line_numbers, ...ui } = resolved.ui;
+    assert.deepEqual(
+      { ...resolved, ui: { ...ui, bg_gutter: "none" } },
+      baseline[name].theme,
+    );
   });
 }
 test("installed Neovim preserves baseline highlights and customization semantics", async () => {
@@ -42,15 +49,21 @@ test("installed Neovim preserves baseline highlights and customization semantics
       },
     );
     assert.equal(result.status, 0, result.stderr);
-    const actual = JSON.parse(await readFile(snapshot, "utf8"));
+    const actual: Record<
+      string,
+      { colors: { theme: { ui: Record<string, unknown> } } }
+    > = JSON.parse(await readFile(snapshot, "utf8"));
     const expected = JSON.parse(
       await readFile(
         new URL("../fixtures/runtime.json", import.meta.url),
         "utf8",
       ),
     );
-    for (const [name, value] of Object.entries(actual))
+    for (const [name, value] of Object.entries(actual)) {
+      // Compare the original role surface; dedicated tests cover added roles.
+      delete value.colors.theme.ui.line_numbers;
       assert.equal(hash(JSON.stringify(sorted(value))), expected[name], name);
+    }
   } finally {
     await rm(output, { recursive: true, force: true });
   }
