@@ -114,7 +114,7 @@ class Selection(unittest.TestCase):
         )
 
     def test_shared_build_selects_both(self):
-        self.change("scripts/output.ts", "fix: common output lifecycle")
+        self.change("scripts/build/output.ts", "fix: common output lifecycle")
         self.assertEqual(set(release.prepare()["targets"]), {"neovim", "vscode"})
 
     def test_root_dependency_selects_both(self):

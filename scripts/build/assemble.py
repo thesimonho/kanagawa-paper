@@ -3,13 +3,13 @@ import argparse
 import subprocess
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 TARGETS = ("neovim", "vscode", "extras", "zed")
 
 def assemble(target: str, output: Path) -> Path:
     if target not in TARGETS:
         raise ValueError(f"Unknown build target: {target}")
-    subprocess.run(["node", "--import", "tsx", str(ROOT / "scripts/build.ts"), target,
+    subprocess.run(["node", "--import", "tsx", str(ROOT / "scripts/build/build.ts"), target,
                     "--output", str(output.resolve())], cwd=ROOT, check=True)
     return output / target
 

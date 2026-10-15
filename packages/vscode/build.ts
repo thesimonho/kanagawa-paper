@@ -4,7 +4,7 @@ import { vscodeTheme } from "./adapter.ts";
 import { resolveTheme } from "../../shared/color/evaluate.ts";
 import { ink } from "../../shared/themes/ink.ts";
 import { canvas } from "../../shared/themes/canvas.ts";
-import { json } from "../../scripts/output.ts";
+import { json } from "../../scripts/build/output.ts";
 
 export function validateTheme(value: ReturnType<typeof vscodeTheme>) {
   function check(item: unknown): void {

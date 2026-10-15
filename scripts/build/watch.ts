@@ -52,7 +52,7 @@ function launch() {
   process.stdout.write("[build] start\n");
   child = spawn(
     process.execPath,
-    ["--import", "tsx", join(root, "scripts/build.ts"), ...buildArgs],
+    ["--import", "tsx", join(root, "scripts/build/build.ts"), ...buildArgs],
     { cwd: root, stdio: "inherit" },
   );
   child.on("error", (error) => console.error(error.message));

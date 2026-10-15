@@ -6,7 +6,7 @@ import { zedTheme } from "./adapter.ts";
 import { ink } from "../../shared/themes/ink.ts";
 import { canvas } from "../../shared/themes/canvas.ts";
 import { resolveTheme } from "../../shared/color/evaluate.ts";
-import { json } from "../../scripts/output.ts";
+import { json } from "../../scripts/build/output.ts";
 const validate = new Ajv({ strict: false, allErrors: true }).compile(schema);
 export async function buildZed(root: string, destination: string) {
   const family = {

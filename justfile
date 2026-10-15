@@ -4,7 +4,7 @@ default:
     @just --list
 
 test *args:
-    @bash scripts/test.sh {{ args }}
+    @bash scripts/test/test.sh {{ args }}
 
 test-targets:
     @npm run test:release
@@ -30,6 +30,6 @@ check:
     @npm run format:check
     @npm test
     @npm run test:release
-    @bash scripts/test.sh
+    @bash scripts/test/test.sh
     @python3 -m unittest discover -s tests/release -p "test_*.py"
     @npm run build

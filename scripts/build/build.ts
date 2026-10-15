@@ -4,14 +4,14 @@ import { realpath } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import { targets, renderTarget, type Target } from "./targets.ts";
 export { targets, type Target } from "./targets.ts";
-import { extras, type ExtraName } from "../generators/registry.ts";
-import { rawPalette } from "../shared/palette.ts";
-import { ink } from "../shared/themes/ink.ts";
-import { canvas } from "../shared/themes/canvas.ts";
-import { resolveTheme } from "../shared/color/evaluate.ts";
+import { extras, type ExtraName } from "../../generators/registry.ts";
+import { rawPalette } from "../../shared/palette.ts";
+import { ink } from "../../shared/themes/ink.ts";
+import { canvas } from "../../shared/themes/canvas.ts";
+import { resolveTheme } from "../../shared/color/evaluate.ts";
 import { publishTarget } from "./output.ts";
 
-export const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+export const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 export interface BuildOptions {
   target: Target | "all";
   output: string;

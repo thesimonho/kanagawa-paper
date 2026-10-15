@@ -1,4 +1,4 @@
-dofile("scripts/bootstrap.lua").setup()
+dofile("scripts/test/bootstrap.lua").setup()
 
 local native_assert = assert
 

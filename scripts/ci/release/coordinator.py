@@ -405,7 +405,7 @@ def candidate(target: str, item: dict, source: str, output: Path) -> dict:
     if current and not current["draft"]:
         raise ValueError(f"Published release has no sealed candidate: {tag}")
     # Before sealing there is no registry side effect. An existing artifact wins on retry.
-    sys.path.insert(0, str(ROOT / "scripts"))
+    sys.path.insert(0, str(ROOT / "scripts/build"))
     from assemble import assemble
 
     tree = assemble(target, output)

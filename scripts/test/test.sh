@@ -11,4 +11,4 @@ mkdir -p "$XDG_CACHE_HOME" "$XDG_CONFIG_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME"
 
 npm run build -- neovim
 
-nvim --headless --clean -l scripts/test.lua "$@"
+nvim --headless --clean -l scripts/test/test.lua "$@"

@@ -6,12 +6,12 @@
     "node": ">=22"
   },
   "scripts": {
-    "build": "tsx scripts/build.ts",
-    "watch": "tsx scripts/watch.ts",
+    "build": "tsx scripts/build/build.ts",
+    "watch": "tsx scripts/build/watch.ts",
     "generate": "tsx scripts/generate.ts",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/shared/*.test.ts tests/targets/*.test.ts",
-    "format:check": "prettier --check shared/**/*.ts packages/*/*.ts generators/**/*.ts scripts/*.ts \"tests/{shared,targets,support,release}/*.ts\"",
+    "format:check": "prettier --check shared/**/*.ts packages/*/*.ts generators/**/*.ts scripts/*.ts scripts/build/*.ts \"tests/{shared,targets,support,release}/*.ts\"",
     "test:release": "tsx --test tests/release/*.test.ts"
   },
   "devDependencies": {

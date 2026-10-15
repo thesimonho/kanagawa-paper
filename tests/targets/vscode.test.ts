@@ -4,7 +4,7 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
-import { build, root } from "../../scripts/build.ts";
+import { build, root } from "../../scripts/build/build.ts";
 import { artifactParity } from "../support/files.ts";
 
 test("VS Code preserves baseline output and extension packaging contracts", async () => {

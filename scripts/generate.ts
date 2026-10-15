@@ -1,6 +1,6 @@
 import { writeFile, rename } from "node:fs/promises";
 import { join } from "node:path";
-import { build, root, typecheck } from "./build.ts";
+import { build, root, typecheck } from "./build/build.ts";
 import { paletteMarkdown } from "./generate-palette.ts";
 try {
   typecheck();
