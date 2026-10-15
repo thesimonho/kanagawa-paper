@@ -52,8 +52,8 @@ function M.get(colors, opts)
 
 		MiniHipatternsFixme = { fg = theme.ui.bg, bg = theme.diag.error, bold = true },
 		MiniHipatternsHack = { fg = theme.ui.bg, bg = theme.diag.warning, bold = true },
-		MiniHipatternsNote = { fg = theme.ui.bg, bg = theme.diag.info, bold = true },
-		MiniHipatternsTodo = { fg = theme.ui.bg, bg = theme.diag.hint, bold = true },
+		MiniHipatternsNote = { fg = theme.ui.bg, bg = theme.diag.hint, bold = true },
+		MiniHipatternsTodo = { fg = theme.ui.bg, bg = theme.diag.info, bold = true },
 
 		MiniIconsAzure = { fg = theme.syn.special1 },
 		MiniIconsBlue = { fg = theme.syn.fun },

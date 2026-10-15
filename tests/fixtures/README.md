@@ -26,3 +26,5 @@ VS Code diagnostic info/hint colors, matched-bracket foreground, inlay backgroun
 VS Code editor and terminal selections use the opaque shared selection color. Hover backgrounds use the floating-window surface. Both VS Code artifact hashes include these values; occurrence and other-search highlights retain their separate transparency.
 
 Neovim runtime snapshots use the dedicated indent-scope color for `IblScope`, `IndentBlanklineContextChar`, and `IndentBlanklineContextStart`, matching Snacks. Ordinary guide colors and the legacy context underline style remain unchanged.
+
+Mini.hipatterns NOTE/TODO backgrounds match the corresponding Tree-sitter comment captures. nvim-cmp completion borders and thumbs use the same menu roles as Blink. Tree-sitter context line numbers consume the dedicated default line-number role while retaining the context background. Runtime hashes include the comment and completion color changes; default context line-number colors remain unchanged.

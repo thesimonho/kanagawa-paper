@@ -23,6 +23,32 @@ end)
 
 describe("group config", function()
 	for _, variant in ipairs({ "ink", "canvas" }) do
+		it(variant .. " shares comment, completion and line-number roles", function()
+			local opts = Config.extend({
+				_theme = variant,
+				all_plugins = true,
+				auto_plugins = false,
+				colors = {
+					theme = {
+						[variant] = {
+							ui = {
+								line_numbers = { default = "#123456" },
+								nontext = "#abcdef",
+								pmenu = { fg_border = "#112233", bg_border = "#223344", bg_thumb = "#334455" },
+							},
+						},
+					},
+				},
+			})
+			local colors = require("kanagawa-paper.colors").setup(opts)
+			local groups = Groups.setup(colors, opts)
+			assert.same(groups["@comment.note"], groups.MiniHipatternsNote)
+			assert.same(groups["@comment.todo"], groups.MiniHipatternsTodo)
+			assert.same(groups.BlinkCmpMenuBorder, groups.CmpCompletionBorder)
+			assert.same(groups.BlinkCmpScrollBarThumb, groups.CmpCompletionThumb)
+			assert.same("#123456", groups.TreesitterContextLineNumber.fg)
+			assert.same(colors.theme.ui.bg_p2, groups.TreesitterContextLineNumber.bg)
+		end)
 		it(variant .. " shares indent scope overrides across plugins", function()
 			local opts = Config.extend({
 				_theme = variant,
