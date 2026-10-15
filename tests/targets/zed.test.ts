@@ -62,6 +62,14 @@ test("Zed builds both variants with valid inherited colors and extension metadat
       assert.equal(rendered.style.syntax.variable, undefined);
       assert.equal(rendered.style.syntax.function.color, theme.syntax.function);
       assert.equal(
+        rendered.style.syntax["punctuation.special"].color,
+        neovim.syn.symbol,
+      );
+      assert.equal(
+        rendered.style.syntax["variable.special"].color,
+        neovim.syn.constant,
+      );
+      assert.equal(
         rendered.style.syntax["function.builtin"].color,
         theme.accents.special.one,
       );
