@@ -26,16 +26,12 @@ export function validateTheme(value: ReturnType<typeof vscodeTheme>) {
       throw new Error(`Invalid color: ${item}`);
   }
   check(value);
-  for (const key of [
-    "editor.selectionHighlightBackground",
-    "editor.inactiveSelectionBackground",
-  ] as const) {
-    const color = value.colors[key];
-    if (!/^#[\da-f]{8}$/i.test(color))
-      throw new Error(`Selection color requires RGBA: ${key}`);
-    if (parseInt(color.slice(-2), 16) === 255)
-      throw new Error(`Selection color must be nonopaque: ${key}`);
-  }
+  const key = "editor.selectionHighlightBackground";
+  const color = value.colors[key];
+  if (!/^#[\da-f]{8}$/i.test(color))
+    throw new Error(`Selection color requires RGBA: ${key}`);
+  if (parseInt(color.slice(-2), 16) === 255)
+    throw new Error(`Selection color must be nonopaque: ${key}`);
 }
 export async function buildVscode(root: string, destination: string) {
   await mkdir(join(destination, "themes"));

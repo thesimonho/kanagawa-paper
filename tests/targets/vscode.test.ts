@@ -7,6 +7,7 @@ import { spawnSync } from "node:child_process";
 import { build, root } from "../../scripts/build/build.ts";
 import { artifactParity } from "../support/files.ts";
 import type { NeovimColors } from "../../packages/neovim/adapter.ts";
+import { validateTheme } from "../../packages/vscode/build.ts";
 
 test("VS Code preserves baseline output and extension packaging contracts", async () => {
   const output = await mkdtemp(join(tmpdir(), "kanagawa vscode "));
@@ -27,6 +28,14 @@ test("VS Code preserves baseline output and extension packaging contracts", asyn
       assert.ok(theme.tokenColors.length);
       assert.ok(!text.includes("@palette."));
       assert.ok(!text.includes("@theme."));
+      validateTheme(theme);
+      const opaqueOccurrence = structuredClone(theme);
+      opaqueOccurrence.colors["editor.selectionHighlightBackground"] =
+        theme.colors["editor.selectionBackground"] + "FF";
+      assert.throws(
+        () => validateTheme(opaqueOccurrence),
+        /Selection color must be nonopaque/,
+      );
     }
     assert.equal(
       await readFile(join(tree, "LICENSE"), "utf8"),
@@ -82,6 +91,10 @@ test("VS Code tracks current installed Neovim semantics", async () => {
         "editorHint.foreground": theme.diag.hint,
         "editorInlayHint.foreground": theme.ui.fg_dim,
         "editorInlayHint.background": theme.accent.invert,
+        "editorHoverWidget.background": theme.ui.float.bg,
+        "editor.selectionBackground": theme.ui.bg_visual,
+        "editor.inactiveSelectionBackground": theme.ui.bg_visual,
+        "terminal.selectionBackground": theme.ui.bg_visual,
         "editorBracketMatch.foreground": theme.diag.warning,
         "statusBar.foreground": theme.ui.fg_dim,
         "ports.iconRunningProcessForeground": theme.diag.ok,

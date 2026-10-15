@@ -22,3 +22,5 @@ Nushell `shape_garbage` resolves its foreground from `ui.text.secondary` (legacy
 VS Code line-number colors use the dedicated shared roles: Ink `#54546D`/`#c4b28a` and Canvas `#92928b`/`#a1805e` for normal/active numbers. The two VS Code artifact hashes include these values. Neovim's original role and runtime comparisons omit the additive `ui.line_numbers` fields, which have separate default, palette, and override checks; existing highlight snapshots remain unchanged.
 
 VS Code diagnostic info/hint colors, matched-bracket foreground, inlay background, and status-bar foreground use the corresponding Neovim roles. The VS Code artifact hashes include those mappings. Zed's special punctuation and built-in variables use the symbol and constant colors, respectively.
+
+VS Code editor and terminal selections use the opaque shared selection color. Hover backgrounds use the floating-window surface. Both VS Code artifact hashes include these values; occurrence and other-search highlights retain their separate transparency.

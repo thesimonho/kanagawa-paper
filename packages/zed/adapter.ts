@@ -136,7 +136,7 @@ export function zedTheme(theme: Theme, variant: Variant) {
     accents: Object.values(theme.rainbow),
     players: [
       {
-        cursor: theme.modes.normal,
+        cursor: ui.text.primary,
         background: ui.surface.editor.background,
         selection: ui.selection.background,
       },
@@ -160,7 +160,7 @@ export function zedTheme(theme: Theme, variant: Variant) {
       link_text: { color: theme.accents.special.two },
       link_uri: { color: theme.accents.special.two },
       number: { color: syntax.number },
-      namespace: { color: syntax.type },
+      namespace: { color: syntax.keyword },
       operator: { color: syntax.operator },
       predictive: { color: syntax.comment },
       preproc: { color: syntax.preprocessor },
@@ -181,7 +181,7 @@ export function zedTheme(theme: Theme, variant: Variant) {
       "string.special.symbol": { color: syntax.symbol },
       "text.literal": { color: syntax.string },
       tag: { color: syntax.statement },
-      title: { color: ui.heading.primary },
+      title: { color: theme.rainbow[1] },
       type: { color: syntax.type },
       variable: { color: syntax.variable },
       "variable.parameter": { color: syntax.parameter },
