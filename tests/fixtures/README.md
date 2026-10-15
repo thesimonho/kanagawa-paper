@@ -24,3 +24,5 @@ VS Code line-number colors use the dedicated shared roles: Ink `#54546D`/`#c4b28
 VS Code diagnostic info/hint colors, matched-bracket foreground, inlay background, and status-bar foreground use the corresponding Neovim roles. The VS Code artifact hashes include those mappings. Zed's special punctuation and built-in variables use the symbol and constant colors, respectively.
 
 VS Code editor and terminal selections use the opaque shared selection color. Hover backgrounds use the floating-window surface. Both VS Code artifact hashes include these values; occurrence and other-search highlights retain their separate transparency.
+
+Neovim runtime snapshots use the dedicated indent-scope color for `IblScope`, `IndentBlanklineContextChar`, and `IndentBlanklineContextStart`, matching Snacks. Ordinary guide colors and the legacy context underline style remain unchanged.
