@@ -50,7 +50,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
     ),
     "editor.foreground": theme.ui.text.primary,
     "editorHoverWidget.background": theme.ui.surface.floating.background,
-    "editorHoverWidget.border": theme.ui.surface.tones.m2,
+    "editorHoverWidget.border": theme.ui.surface.floating.border.foreground,
     "editorHoverWidget.highlightForeground": theme.accents.primary,
     "editorInlayHint.background": theme.accents.inverse,
     "editorInlayHint.foreground": theme.ui.text.secondary,
@@ -131,7 +131,8 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
     "inputOption.activeBackground": theme.accents.primary,
     "inputOption.activeBorder": theme.accents.primary,
     "keybindingLabel.foreground": theme.ui.text.primary,
-    "list.activeSelectionBackground": theme.ui.editor.currentLine.background,
+    "list.activeSelectionBackground":
+      theme.ui.editor.currentLine.alternateBackground,
     "list.activeSelectionForeground": theme.ui.text.primary,
     "list.activeSelectionIconForeground": theme.ui.text.primary,
     "list.dropBackground": theme.ui.editor.currentLine.background,

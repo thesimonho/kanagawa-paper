@@ -36,3 +36,5 @@ Blink and nvim-cmp scrollbar tracks use the dedicated menu track background. Bli
 Neo-tree directory names and icons link to `Directory`, matching Nvim-tree and Mini. Mini picker match ranges link to `Search`, matching Snacks. Runtime hashes include these link changes.
 
 Scrollview TODO markers link to `DiagnosticSignInfo`; XXX markers link to `DiagnosticSignHint`, matching Tree-sitter comment semantics. Runtime hashes include these link changes.
+
+Floaterm border backgrounds follow `FloatBorder`; Mini's active signature parameter follows `LspSignatureActiveParameter`. Runtime hashes include those changes. VS Code hover borders use the floating-border foreground, and active list selections use the alternate current-line background shared by Neovim pickers; VS Code artifact hashes include both changes.

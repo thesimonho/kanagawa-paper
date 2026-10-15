@@ -17,7 +17,7 @@ function M.get(colors, opts)
 		MiniClueSeparator = { link = "DiagnosticFloatingInfo" },
 		MiniClueTitle = { link = "FloatTitle" },
 
-		MiniCompletionActiveParameter = { underline = true },
+		MiniCompletionActiveParameter = { link = "LspSignatureActiveParameter" },
 
 		MiniCursorword = { underline = false },
 		MiniCursorwordCurrent = { underline = false },

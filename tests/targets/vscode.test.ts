@@ -94,6 +94,8 @@ test("VS Code tracks current installed Neovim semantics", async () => {
         "editorInlayHint.foreground": theme.ui.fg_dim,
         "editorInlayHint.background": theme.accent.invert,
         "editorHoverWidget.background": theme.ui.float.bg,
+        "editorHoverWidget.border": theme.ui.float.fg_border,
+        "list.activeSelectionBackground": theme.ui.bg_cursorline_alt,
         "editor.selectionBackground": theme.ui.bg_visual,
         "editor.inactiveSelectionBackground": theme.ui.bg_visual,
         "terminal.selectionBackground": theme.ui.bg_visual,
