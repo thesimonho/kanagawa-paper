@@ -14,4 +14,4 @@ UI emphasis uses `accents.primary`. Neovim still exposes independent `ui.special
 
 `ui.editor.lineNumbers.default` and `.active` set line-number colors across Neovim, VS Code, and Zed. Neovim exposes them as `ui.line_numbers.default` and `.active`; they are independent of `ui.nontext` and `diag.warning`. The active Neovim line number remains bold. Gutter backgrounds remain separate adapter settings.
 
-Active indent guides use `ui.editor.indent.active`, exposed as Neovim's `ui.indent_scope`. Snacks and indent-blankline consume this role independently of the primary accent. Ordinary guides use `ui.editor.indent.default`.
+Active indent guides use `ui.editor.indent.active`, exposed as Neovim's `ui.indent_scope`. Mini.indentscope, Snacks, and indent-blankline consume this role independently of the primary accent. Its defaults match ordinary guides: Ink `#363646` and Canvas `#d1cfc5`. Ordinary guides use `ui.editor.indent.default`; the active and ordinary roles can be overridden independently.

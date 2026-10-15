@@ -28,3 +28,5 @@ VS Code editor and terminal selections use the opaque shared selection color. Ho
 Neovim runtime snapshots use the dedicated indent-scope color for `IblScope`, `IndentBlanklineContextChar`, and `IndentBlanklineContextStart`, matching Snacks. Ordinary guide colors and the legacy context underline style remain unchanged.
 
 Mini.hipatterns NOTE/TODO backgrounds match the corresponding Tree-sitter comment captures. nvim-cmp completion borders and thumbs use the same menu roles as Blink. Tree-sitter context line numbers consume the dedicated default line-number role while retaining the context background. Runtime hashes include the comment and completion color changes; default context line-number colors remain unchanged.
+
+Active indent defaults match the ordinary guide colors used by Mini: Ink `#363646`, Canvas `#d1cfc5`. The color fixture, runtime hashes, and VS Code artifact hashes include these defaults. Mini.indentscope consumes the active scope role, matching Snacks and indent-blankline while preserving independent ordinary-guide overrides.

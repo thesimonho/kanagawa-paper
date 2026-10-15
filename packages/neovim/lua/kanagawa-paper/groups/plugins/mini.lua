@@ -65,7 +65,7 @@ function M.get(colors, opts)
 		MiniIconsRed = { fg = theme.syn.special3 },
 		MiniIconsYellow = { fg = theme.syn.identifier },
 
-		MiniIndentscopeSymbol = { fg = theme.ui.indent },
+		MiniIndentscopeSymbol = { fg = theme.ui.indent_scope },
 		MiniIndentscopePrefix = { nocombine = true }, -- Make it invisible
 
 		MiniJump = { link = "SpellRare" },

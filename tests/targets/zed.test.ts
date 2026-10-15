@@ -59,6 +59,12 @@ test("Zed builds both variants with valid inherited colors and extension metadat
         rendered.style["terminal.ansi.bright_red"],
         theme.terminal.bright.red,
       );
+      for (const key of [
+        "editor.indent_guide_active",
+        "panel.indent_guide_active",
+        "panel.indent_guide_hover",
+      ])
+        assert.equal(rendered.style[key], neovim.ui.indent_scope);
       assert.equal(rendered.style.syntax.variable, undefined);
       assert.equal(rendered.style.syntax.function.color, theme.syntax.function);
       assert.equal(

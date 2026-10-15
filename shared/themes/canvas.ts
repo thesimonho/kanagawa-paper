@@ -47,7 +47,7 @@ export const canvas = {
       },
       indent: {
         default: palette.canvasWhite2,
-        active: palette.canvasGray1,
+        active: palette.canvasWhite2,
       },
       nontext: palette.canvasGray1,
       whitespace: palette.canvasGray1,

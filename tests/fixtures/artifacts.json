@@ -38,6 +38,6 @@
   "extras/windows_terminal/kanagawa-paper-ink.jsonc": "e6f1bb21fa89d739fc13518dd51729297fdb049c883d52cc8476f8098c1aaca1",
   "extras/zellij/kanagawa-paper-canvas.kdl": "334c78fc9dbdc4cf436f68c26c5082db54cc0575c1c03402dbad0e2b4f1a847b",
   "extras/zellij/kanagawa-paper-ink.kdl": "c96650c044e9d6f387edb11912f875911e836f2ed05f11356a9dd72269f76b35",
-  "vscode/themes/kanagawa-paper-canvas-color-theme.json": "d4e7b76c09112e56ff7482966431ef277460b767c17ef32413e7583d0b084116",
-  "vscode/themes/kanagawa-paper-ink-color-theme.json": "b126983c1ae021a89d66b4cd8ff6eac583a5cd7e5d56869b95bc31cc2523ac41"
+  "vscode/themes/kanagawa-paper-canvas-color-theme.json": "06af29675d9c1b01eb784a03311f4d7a719719e2e9a8a7eff7d31a59e003b20c",
+  "vscode/themes/kanagawa-paper-ink-color-theme.json": "8be1e9dace4daf36a8f799148176a728439c3daa56f88e5208fe550f90956031"
 }

@@ -54,15 +54,21 @@ describe("group config", function()
 				_theme = variant,
 				all_plugins = true,
 				auto_plugins = false,
-				colors = { theme = { [variant] = { ui = { indent_scope = "#123456", special = "#abcdef" } } } },
+				colors = {
+					theme = {
+						[variant] = { ui = { indent_scope = "#123456", indent = "#654321", special = "#abcdef" } },
+					},
+				},
 			})
 			local colors = require("kanagawa-paper.colors").setup(opts)
 			local groups = Groups.setup(colors, opts)
 			assert.same("#123456", groups.SnacksIndentScope.fg)
+			assert.same(groups.SnacksIndentScope.fg, groups.MiniIndentscopeSymbol.fg)
 			assert.same(groups.SnacksIndentScope.fg, groups.IblScope.fg)
 			assert.same(groups.SnacksIndentScope.fg, groups.IndentBlanklineContextChar.fg)
 			assert.same(groups.SnacksIndentScope.fg, groups.IndentBlanklineContextStart.sp)
 			assert.same(true, groups.IndentBlanklineContextStart.underline)
+			assert.same("#654321", groups.SnacksIndent.fg)
 			assert.same(groups.SnacksIndent.fg, groups.IblIndent.fg)
 		end)
 	end

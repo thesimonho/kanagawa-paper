@@ -47,7 +47,7 @@ export const ink = {
       },
       indent: {
         default: palette.sumiInk5,
-        active: palette.dragonViolet,
+        active: palette.sumiInk5,
       },
       nontext: palette.sumiInk6,
       whitespace: palette.sumiInk6,

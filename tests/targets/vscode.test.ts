@@ -82,6 +82,8 @@ test("VS Code tracks current installed Neovim semantics", async () => {
       const colors = rendered.colors;
       for (const [key, role] of Object.entries({
         "editor.foreground": theme.ui.fg,
+        "editorIndentGuide.activeBackground1": theme.ui.indent_scope,
+        "editorIndentGuide.background1": theme.ui.indent,
         "editorLineNumber.foreground": theme.ui.line_numbers.default,
         "editorLineNumber.activeForeground": theme.ui.line_numbers.active,
         "editor.background": theme.ui.bg,
