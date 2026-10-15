@@ -4,8 +4,8 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
-import { build, root } from "../scripts/build.ts";
-import { artifactParity } from "./helpers.ts";
+import { build, root } from "../../scripts/build.ts";
+import { artifactParity } from "../support/files.ts";
 
 test("VS Code preserves baseline output and extension packaging contracts", async () => {
   const output = await mkdtemp(join(tmpdir(), "kanagawa vscode "));
@@ -48,7 +48,7 @@ test("VS Code tracks current installed Neovim semantics", async () => {
         "--headless",
         "--clean",
         "-l",
-        join(root, "tests/neovim_roles.lua"),
+        join(root, "tests/neovim/neovim_roles.lua"),
         neovim,
         snapshot,
       ],

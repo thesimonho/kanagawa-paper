@@ -181,7 +181,7 @@ local function test_files_from_args()
 		return files
 	end
 
-	files = vim.fn.glob("tests/*_spec.lua", false, true)
+	files = vim.fn.glob("tests/neovim/*_spec.lua", false, true)
 	table.sort(files)
 	return files
 end

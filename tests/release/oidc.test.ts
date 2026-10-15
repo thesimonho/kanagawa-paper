@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
 const {
   getOIDCCredential,
-} = require("./node_modules/@vscode/vsce/out/oidc.js");
+} = require("../../scripts/release/node_modules/@vscode/vsce/out/oidc.js");
 test("pinned VSCE OIDC credentials fail closed without PAT fallback", async () => {
   let calls = 0;
   const forbidden = async () => {

@@ -1,25 +1,26 @@
 ---
 agent:
-  instruction: Keep test ownership and runtime requirements current when tests move or change.
-  on-change: ["tests/**", "scripts/release/*.test.ts"]
+  instruction: Keep test ownership, discovery commands and runtime requirements current when tests move or change.
+  on-change: "tests/**"
 ---
 
-# Test ownership
+# Tests
 
-Run `npm test` for the TypeScript build suites. Install root dependencies first; Neovim must be available for distribution and cross-target runtime checks.
+| Directory | Ownership |
+| --- | --- |
+| `shared/` | Palette/color arithmetic, deterministic builds for every target, publication, watching and generated palette documentation |
+| `targets/` | Neovim, VS Code, Zed and extras adapter/output contracts; VS Code also compares installed Neovim roles |
+| `neovim/` | Lua runtime specs and standalone runtime probes called by TypeScript |
+| `release/` | Python release/assembly/publication checks and the TypeScript VSCE OIDC contract |
+| `support/` | Shared file hashing and independent artifact-fixture comparison |
+| `fixtures/` | Immutable pre-migration baselines; see its README for provenance |
 
-- `colors.test.ts`: shared palette and color arithmetic.
-- `build.test.ts`: deterministic package contents for every registered target.
-- `output.test.ts`: shared publication, rollback, locking and source protection.
-- `watch.test.ts`: watch invalidation, fresh modules and recovery after errors.
-- `generation.test.ts`: checked-in palette documentation.
-- `neovim.test.ts`, `vscode.test.ts`, `zed.test.ts`, `extras.test.ts`: each target's adapter, output and packaging contracts. VS Code also compares its output with the installed Neovim roles.
-- `helpers.ts`: file hashing and independent artifact-fixture comparison; no target behavior.
+Run `npm test` for the shared and target TypeScript suites after installing root dependencies. Neovim must be available for installed-runtime checks. `npm run test:release` separately runs the OIDC contract after installing the Node dependencies in `scripts/release`; core build tests do not require Marketplace tooling.
 
-Lua `*_spec.lua` files run inside Neovim through `just test`. The standalone `installable.lua`, `neovim_roles.lua` and `runtime_snapshot.lua` scripts are runtime probes invoked by TypeScript tests. Keep Neovim-specific operations in Lua rather than embedding Lua strings in another language.
+`just test` runs the Lua specs in `neovim/`. The other Lua files there are probes invoked by target tests, not standalone test suites. Keep Neovim operations in Lua rather than embedding Lua strings in another language.
 
-Python `test_assemble.py` checks the Python-to-Node wrapper, and `test_release.py` checks the Python release coordinator. `test_generation.py` exercises the shell publication workflow against local Git remotes; its Python harness also owns the release automation fixtures. Run them through `python3 -m unittest discover -s tests -p 'test_*.py'` with the pinned release dependencies installed.
+Run Python automation tests with `python3 -m unittest discover -s tests/release -p 'test_*.py'` after installing the pinned release dependencies. `just test-targets` runs those plus the OIDC contract. `just check` and CI include all suites.
 
-The Node-only publisher credential contract lives in `scripts/release/oidc.test.ts`. Run `npm run test:release` after installing `scripts/release` dependencies. Keeping it separate lets the core build suites run without Marketplace tooling. `just check`, `just test-targets` and CI include it.
+The ignored `languages/` directory contains local visual specimens. It is not part of automated test discovery, typechecking or formatting. Do not move or modify it during test maintenance.
 
-See `fixtures/README.md` for baseline provenance. Do not rewrite baselines as part of test reorganization. The generation action requires fresh, nonempty vimdoc output. Repeatability checks for vimdoc use the pinned panvimdoc runtime outside these test suites.
+Do not rewrite baseline fixtures as part of test reorganization. The generation action requires fresh, nonempty vimdoc output; repeatability checks use the pinned panvimdoc runtime outside these suites.

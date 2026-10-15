@@ -8,7 +8,7 @@ test *args:
 
 test-targets:
     @npm run test:release
-    @python3 -m unittest discover -s tests -p "test_*.py"
+    @python3 -m unittest discover -s tests/release -p "test_*.py"
 
 # Open the compact syntax specimen using your normal Neovim configuration.
 syntax-specimen:
@@ -31,5 +31,5 @@ check:
     @npm test
     @npm run test:release
     @bash scripts/test.sh
-    @python3 -m unittest discover -s tests -p "test_*.py"
+    @python3 -m unittest discover -s tests/release -p "test_*.py"
     @npm run build

@@ -13,7 +13,7 @@ Python Semantic Release 10.7.0 selects commits and prepares versions and changel
 
 ## Verification
 
-`npm run test:release` runs the TypeScript VSCE credential-boundary check after both root and release Node dependencies are installed. Python tests under `tests/test_release.py` own coordinator behavior; `tests/test_assemble.py` owns its Python assembly wrapper. The target package contracts are TypeScript suites under `tests/`. See `tests/README.md` for the complete ownership map.
+`npm run test:release` runs the TypeScript VSCE credential-boundary check after both root and release Node dependencies are installed. Python tests under `tests/release/test_release.py` own coordinator behavior; `tests/release/test_assemble.py` owns its Python assembly wrapper. The target package contracts are TypeScript suites under `tests/targets/`. See `tests/README.md` for the complete ownership map.
 
 ## Selection and preparation
 

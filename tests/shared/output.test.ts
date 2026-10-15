@@ -10,8 +10,8 @@ import {
 } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { root, build } from "../scripts/build.ts";
-import { publishTarget } from "../scripts/output.ts";
+import { root, build } from "../../scripts/build.ts";
+import { publishTarget } from "../../scripts/output.ts";
 test("failed rendering retains output and completion marker; source aliases are protected", async () => {
   const output = await mkdtemp(join(tmpdir(), "kanagawa failure "));
   try {

@@ -24,7 +24,7 @@ export async function files(
 export async function artifactParity(target: string, directory: string) {
   const expected = JSON.parse(
     await readFile(
-      new URL("./fixtures/artifacts.json", import.meta.url),
+      new URL("../fixtures/artifacts.json", import.meta.url),
       "utf8",
     ),
   );

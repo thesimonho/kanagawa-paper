@@ -12,7 +12,7 @@ import {
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { spawn } from "node:child_process";
-import { root } from "../scripts/build.ts";
+import { root } from "../../scripts/build.ts";
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 test(

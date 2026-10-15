@@ -3,8 +3,8 @@ import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { build, targets } from "../scripts/build.ts";
-import { files } from "./helpers.ts";
+import { build, targets } from "../../scripts/build.ts";
+import { files } from "../support/files.ts";
 for (const target of targets) {
   test(`${target}: repeated builds produce identical package contents`, async () => {
     const output = await mkdtemp(join(tmpdir(), "kanagawa deterministic "));

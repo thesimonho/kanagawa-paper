@@ -3,8 +3,8 @@ import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { build } from "../scripts/build.ts";
-import { artifactParity, files } from "./helpers.ts";
+import { build } from "../../scripts/build.ts";
+import { artifactParity, files } from "../support/files.ts";
 test("extras preserve baseline output and filtered builds preserve other extras", async () => {
   const output = await mkdtemp(join(tmpdir(), "kanagawa extras "));
   try {

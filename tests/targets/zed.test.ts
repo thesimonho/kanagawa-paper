@@ -3,11 +3,11 @@ import assert from "node:assert/strict";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { build } from "../scripts/build.ts";
-import { zedTheme } from "../packages/zed/adapter.ts";
-import { resolveTheme } from "../shared/color/evaluate.ts";
-import { ink } from "../shared/themes/ink.ts";
-import { canvas } from "../shared/themes/canvas.ts";
+import { build } from "../../scripts/build.ts";
+import { zedTheme } from "../../packages/zed/adapter.ts";
+import { resolveTheme } from "../../shared/color/evaluate.ts";
+import { ink } from "../../shared/themes/ink.ts";
+import { canvas } from "../../shared/themes/canvas.ts";
 
 test("Zed builds both variants with valid inherited colors and extension metadata", async () => {
   const output = await mkdtemp(join(tmpdir(), "kanagawa zed "));

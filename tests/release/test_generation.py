@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-PUBLISHER = Path(__file__).resolve().parents[1] / "scripts/publish-generated.sh"
+PUBLISHER = Path(__file__).resolve().parents[2] / "scripts/publish-generated.sh"
 
 
 class GenerationPublication(unittest.TestCase):

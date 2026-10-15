@@ -3,16 +3,16 @@ import assert from "node:assert/strict";
 import { mkdtemp, readFile, rm, writeFile, access } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { build, root } from "../scripts/build.ts";
-import { hash, files } from "./helpers.ts";
-import { sorted } from "../scripts/output.ts";
+import { build, root } from "../../scripts/build.ts";
+import { hash, files } from "../support/files.ts";
+import { sorted } from "../../scripts/output.ts";
 import { spawnSync } from "node:child_process";
-import { resolveTheme } from "../shared/color/evaluate.ts";
-import { neovimRoles } from "../packages/neovim/adapter.ts";
-import { ink } from "../shared/themes/ink.ts";
-import { canvas } from "../shared/themes/canvas.ts";
+import { resolveTheme } from "../../shared/color/evaluate.ts";
+import { neovimRoles } from "../../packages/neovim/adapter.ts";
+import { ink } from "../../shared/themes/ink.ts";
+import { canvas } from "../../shared/themes/canvas.ts";
 const baseline = JSON.parse(
-  await readFile(new URL("./fixtures/colors.json", import.meta.url), "utf8"),
+  await readFile(new URL("../fixtures/colors.json", import.meta.url), "utf8"),
 );
 for (const [name, definition] of Object.entries({ ink, canvas })) {
   test(`${name}: all existing default roles retain their colors`, () => {
@@ -32,7 +32,7 @@ test("installed Neovim preserves baseline highlights and customization semantics
         "--headless",
         "--clean",
         "-l",
-        join(root, "tests/runtime_snapshot.lua"),
+        join(root, "tests/neovim/runtime_snapshot.lua"),
         tree,
         snapshot,
       ],
@@ -45,7 +45,7 @@ test("installed Neovim preserves baseline highlights and customization semantics
     const actual = JSON.parse(await readFile(snapshot, "utf8"));
     const expected = JSON.parse(
       await readFile(
-        new URL("./fixtures/runtime.json", import.meta.url),
+        new URL("../fixtures/runtime.json", import.meta.url),
         "utf8",
       ),
     );
@@ -95,7 +95,7 @@ test("Neovim distribution loads both variants and includes help and README", asy
         "--headless",
         "--clean",
         "-l",
-        join(root, "tests/installable.lua"),
+        join(root, "tests/neovim/installable.lua"),
         tree,
       ],
       {

@@ -10,9 +10,9 @@
     "watch": "tsx scripts/watch.ts",
     "generate": "tsx scripts/generate.ts",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test tests/*.test.ts",
-    "format:check": "prettier --check shared/**/*.ts packages/*/*.ts generators/**/*.ts scripts/*.ts scripts/release/*.ts tests/*.ts",
-    "test:release": "tsx --test scripts/release/*.test.ts"
+    "test": "tsx --test tests/shared/*.test.ts tests/targets/*.test.ts",
+    "format:check": "prettier --check shared/**/*.ts packages/*/*.ts generators/**/*.ts scripts/*.ts \"tests/{shared,targets,support,release}/*.ts\"",
+    "test:release": "tsx --test tests/release/*.test.ts"
   },
   "devDependencies": {
     "@types/node": "22.20.5",
