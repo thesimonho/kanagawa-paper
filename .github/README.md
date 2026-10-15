@@ -17,3 +17,5 @@ The PR template asks for affected applications, validation, and visual compariso
 Build validation and post-merge generation use the shared action documented in `actions/generate/README.md`. Release commands and publication contracts are documented in `scripts/ci/release/README.md`.
 
 The release workflow has an `authentication_only` dispatch input. On `main`, it runs the Marketplace token-exchange probe with contents read and OIDC write permissions. It skips both generation and publication and does not use `DEPLOY_KEY`. Other branches skip this mode entirely.
+
+Generation and release jobs in `workflows/release.yml` require the Actions variable `KANAGAWA_RELEASES_ENABLED` to equal `true`, the `main` ref, and a non-authentication run. An unset or false variable skips both jobs, including manual release dispatches. Validation in `workflows/run-tests.yml` is independent of this switch. The authentication-only job is also independent and requires explicit dispatch on `main`. Workflow token permissions default to read-only; the release job declares its write permissions.

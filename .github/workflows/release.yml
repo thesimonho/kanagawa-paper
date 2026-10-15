@@ -12,9 +12,7 @@ concurrency:
   group: application-releases
   cancel-in-progress: false
 permissions:
-  contents: write
-  pull-requests: write
-  deployments: write
+  contents: read
 jobs:
   authentication:
     if: github.event_name == 'workflow_dispatch' && inputs.authentication_only && github.ref == 'refs/heads/main'
@@ -35,7 +33,7 @@ jobs:
       - name: Check Marketplace token exchange
         run: node --import tsx scripts/ci/release/check-marketplace-auth.mts --live
   generate:
-    if: ${{ !inputs.authentication_only }}
+    if: ${{ vars.KANAGAWA_RELEASES_ENABLED == 'true' && github.ref == 'refs/heads/main' && !inputs.authentication_only }}
     runs-on: ubuntu-latest
     outputs:
       source: ${{ steps.source.outputs.sha }}
@@ -52,7 +50,7 @@ jobs:
         id: source
         run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
   release:
-    if: ${{ !inputs.authentication_only }}
+    if: ${{ vars.KANAGAWA_RELEASES_ENABLED == 'true' && github.ref == 'refs/heads/main' && !inputs.authentication_only }}
     permissions:
       contents: write
       pull-requests: write
