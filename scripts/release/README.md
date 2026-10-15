@@ -11,6 +11,10 @@ agent:
 
 Python Semantic Release 10.7.0 selects commits and prepares versions and changelogs. `coordinator.py` combines those edits into one PR, assembles distributions, and publishes frozen artifacts. Install Python dependencies from `requirements.txt` and Node dependencies with `npm ci --prefix scripts/release --ignore-scripts`. Node 22 or later is required by the pinned VSCE 4.0.0.
 
+## Verification
+
+`npm run test:release` runs the TypeScript VSCE credential-boundary check after both root and release Node dependencies are installed. Python tests under `tests/test_release.py` own coordinator behavior; `tests/test_assemble.py` owns its Python assembly wrapper. The target package contracts are TypeScript suites under `tests/`. See `tests/README.md` for the complete ownership map.
+
 ## Selection and preparation
 
 Run `python scripts/release/coordinator.py prepare` on a clean `main` checkout with complete history and source tags. This command writes prepared files locally; it does not commit, push, or publish. Each target configuration includes its package, shared TypeScript sources and root build dependencies, root README/license, assembly helper, and release tooling. Both targets install the root lockfile in the exact release-source worktree before assembly. Conventional `fix` and `feat` commits trigger the configured bumps. Ordinary `docs` and `chore` commits do not. Shared releasable changes select both targets even if their output is unchanged.

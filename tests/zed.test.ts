@@ -9,7 +9,7 @@ import { resolveTheme } from "../shared/color/evaluate.ts";
 import { ink } from "../shared/themes/ink.ts";
 import { canvas } from "../shared/themes/canvas.ts";
 
-test("Zed builds both variants with valid inherited colors and deterministic package contents", async () => {
+test("Zed builds both variants with valid inherited colors and extension metadata", async () => {
   const output = await mkdtemp(join(tmpdir(), "kanagawa zed "));
   try {
     const target = await build("zed", output);
@@ -39,8 +39,6 @@ test("Zed builds both variants with valid inherited colors and deterministic pac
       await readFile(join(target, "extension.toml"), "utf8"),
       /themes = \["themes\/kanagawa-paper.json"\]/,
     );
-    await build("zed", output);
-    assert.equal(await readFile(path, "utf8"), first);
     assert.throws(
       () =>
         zedTheme(

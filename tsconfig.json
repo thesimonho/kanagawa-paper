@@ -14,7 +14,8 @@
     "packages/*/*.ts",
     "generators/**/*.ts",
     "scripts/*.ts",
-    "tests/*.ts"
+    "tests/*.ts",
+    "scripts/release/*.ts"
   ],
   "exclude": ["node_modules", "dist"]
 }

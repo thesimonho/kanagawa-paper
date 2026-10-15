@@ -11,7 +11,8 @@
     "generate": "tsx scripts/generate.ts",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
-    "format:check": "prettier --check shared/**/*.ts packages/*/*.ts generators/**/*.ts scripts/*.ts tests/*.ts"
+    "format:check": "prettier --check shared/**/*.ts packages/*/*.ts generators/**/*.ts scripts/*.ts scripts/release/*.ts tests/*.ts",
+    "test:release": "tsx --test scripts/release/*.test.ts"
   },
   "devDependencies": {
     "@types/node": "22.20.5",

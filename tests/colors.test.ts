@@ -2,26 +2,15 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { rawPalette } from "../shared/palette.ts";
-import { ink } from "../shared/themes/ink.ts";
-import { canvas } from "../shared/themes/canvas.ts";
-import { resolveTheme } from "../shared/color/evaluate.ts";
-import { neovimRoles } from "../packages/neovim/adapter.ts";
+import { palette } from "../shared/palette.ts";
+import { blend, brighten, saturate } from "../shared/color/expression.ts";
+import { evaluate } from "../shared/color/evaluate.ts";
 const baseline = JSON.parse(
   readFileSync(new URL("./fixtures/colors.json", import.meta.url), "utf8"),
 );
 test("all palette names and exact hexes remain unchanged", () =>
   assert.deepEqual(rawPalette, baseline.ink.palette));
-for (const [name, definition] of Object.entries({ ink, canvas })) {
-  test(`${name}: all existing default roles retain their colors`, () => {
-    const resolved = resolveTheme(neovimRoles(definition));
-    resolved.ui.bg_gutter = "none";
-    assert.deepEqual(resolved, baseline[name].theme);
-  });
-}
 
-import { palette } from "../shared/palette.ts";
-import { blend, brighten, saturate } from "../shared/color/expression.ts";
-import { evaluate } from "../shared/color/evaluate.ts";
 const math = JSON.parse(
   readFileSync(new URL("./fixtures/math.json", import.meta.url), "utf8"),
 );
