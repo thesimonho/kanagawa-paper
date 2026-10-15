@@ -94,7 +94,7 @@ function M.get(colors, opts)
 		MiniPickHeader = { link = "DiagnosticFloatingHint" },
 		MiniPickMatchCurrent = { link = "CursorLineAlt" },
 		MiniPickMatchMarked = { link = "Visual" },
-		MiniPickMatchRanges = { link = "DiagnosticFloatingHint" },
+		MiniPickMatchRanges = { link = "Search" },
 		MiniPickNormal = { link = "NormalFloat" },
 		MiniPickPreviewLine = { link = "CursorLineAlt" },
 		MiniPickPreviewRegion = { link = "IncSearch" },

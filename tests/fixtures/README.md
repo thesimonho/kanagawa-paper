@@ -32,3 +32,5 @@ Mini.hipatterns NOTE/TODO backgrounds match the corresponding Tree-sitter commen
 Active indent defaults match the ordinary guide colors used by Mini: Ink `#363646`, Canvas `#d1cfc5`. The color fixture, runtime hashes, and VS Code artifact hashes include these defaults. Mini.indentscope consumes the active scope role, matching Snacks and indent-blankline while preserving independent ordinary-guide overrides.
 
 Blink and nvim-cmp scrollbar tracks use the dedicated menu track background. Blink signature-help borders link to `FloatBorder`, matching its documentation popup. Runtime hashes include these highlight changes.
+
+Neo-tree directory names and icons link to `Directory`, matching Nvim-tree and Mini. Mini picker match ranges link to `Search`, matching Snacks. Runtime hashes include these link changes.
