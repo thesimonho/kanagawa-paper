@@ -34,3 +34,5 @@ Active indent defaults match the ordinary guide colors used by Mini: Ink `#36364
 Blink and nvim-cmp scrollbar tracks use the dedicated menu track background. Blink signature-help borders link to `FloatBorder`, matching its documentation popup. Runtime hashes include these highlight changes.
 
 Neo-tree directory names and icons link to `Directory`, matching Nvim-tree and Mini. Mini picker match ranges link to `Search`, matching Snacks. Runtime hashes include these link changes.
+
+Scrollview TODO markers link to `DiagnosticSignInfo`; XXX markers link to `DiagnosticSignHint`, matching Tree-sitter comment semantics. Runtime hashes include these link changes.

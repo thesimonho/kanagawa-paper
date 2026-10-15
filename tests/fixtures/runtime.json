@@ -1,8 +1,8 @@
 {
-  "ink-balanced": "e7fe8b4b9e7d946314ffc57081af8cac22bfa3379bb684487fe106cad2fdcb0a",
-  "ink-default": "fedc516cc7ebaedef32c549aeb637bdf7992ab9e102968b0bc16624882de6610",
-  "canvas-custom": "9788da4ffaaf0d2bb97fecdf12e92bc0d9c5913b01216137d4c490283d59bdf4",
-  "ink-custom": "a14d43a42e65e3a5a2c5a3413e89f97cf03f23b092f54c3794d451f48dc8a96e",
-  "canvas-default": "d11b15a8a576d83c1e3509d2c3c415743c3360b13ac135ace894ec6ee08964ea",
-  "canvas-balanced": "aabcb08c45b130ab2ad78db65ef3f6dc4422bcede7ad8663689ff83fe22d348a"
+  "ink-default": "bb072e472ed8c3d99a856876979d0d4e9ef3f74d51b4cc6182d9f2d4dfb24244",
+  "canvas-default": "b8d968ebb0aea710698bff0eff7cf88b31a3d60a5ffd6e2e147e8bdf9b6c7e93",
+  "ink-balanced": "dd60059edba36bd5695afcc7d9429bf946b09120f51bb4f48ff4ed214ce280d5",
+  "canvas-balanced": "f5990f4ee52c2605c3e700a760841d68af8e1640081540921182759c09687d40",
+  "canvas-custom": "d7957588eaf72959c95cb306b86470fc50d9cdcee7ece0416959c5da671b3a4a",
+  "ink-custom": "1a61597be40918c89160b2237440d59523dc68decfe670abdb31e1d585ae966c"
 }

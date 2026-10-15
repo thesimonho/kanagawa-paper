@@ -19,9 +19,9 @@ function M.get(colors, opts)
 
 		ScrollViewKeywordsFix = { link = "DiagnosticSignError" },
 		ScrollViewKeywordsHack = { link = "DiagnosticSignWarn" },
-		ScrollViewKeywordsTodo = { link = "DiagnosticSignHint" },
+		ScrollViewKeywordsTodo = { link = "DiagnosticSignInfo" },
 		ScrollViewKeywordsWarn = { link = "DiagnosticSignWarn" },
-		ScrollViewKeywordsXxx = { link = "DiagnosticSignInfo" },
+		ScrollViewKeywordsXxx = { link = "DiagnosticSignHint" },
 	}
 end
 
