@@ -15,7 +15,7 @@ agent:
 | `support/` | Shared file hashing and independent artifact-fixture comparison |
 | `fixtures/` | Immutable pre-migration baselines; see its README for provenance |
 
-Run `npm test` for the shared and target TypeScript suites after installing root dependencies. Neovim must be available for installed-runtime checks. `npm run test:release` separately runs the OIDC contract after installing the Node dependencies in `scripts/release`; core build tests do not require Marketplace tooling.
+Run `npm test` for the shared and target TypeScript suites after installing root dependencies. Neovim must be available for installed-runtime checks. `npm run test:release` separately runs the OIDC contract after installing the Node dependencies in `scripts/ci/release`; core build tests do not require Marketplace tooling.
 
 `just test` runs the Lua specs in `neovim/`. The other Lua files there are probes invoked by target tests, not standalone test suites. Keep Neovim operations in Lua rather than embedding Lua strings in another language.
 

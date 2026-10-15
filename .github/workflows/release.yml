@@ -23,7 +23,7 @@ jobs:
           ssh-key: ${{ secrets.DEPLOY_KEY }}
       - uses: ./.github/actions/generate
       - name: Publish generated files
-        run: bash scripts/publish-generated.sh
+        run: bash scripts/ci/publish-generated.sh
       - name: Record generated source
         id: source
         run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
@@ -50,17 +50,17 @@ jobs:
           node-version: '22'
           cache: npm
           cache-dependency-path: |
-            scripts/release/package-lock.json
+            scripts/ci/release/package-lock.json
             package-lock.json
       - uses: rhysd/action-setup-vim@v1
         with:
           neovim: true
           version: v0.11.5
-      - run: pip install -r scripts/release/requirements.txt
-      - run: npm ci --prefix scripts/release --ignore-scripts
+      - run: pip install -r scripts/ci/release/requirements.txt
+      - run: npm ci --prefix scripts/ci/release --ignore-scripts
       - run: npm ci --ignore-scripts
       - name: Reconcile publication and prepare combined release PR
         env:
           KANAGAWA_GENERATED_SOURCE: ${{ needs.generate.outputs.source }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python scripts/release/coordinator.py run
+        run: python scripts/ci/release/coordinator.py run

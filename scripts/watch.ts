@@ -24,7 +24,7 @@ let timer: NodeJS.Timeout | undefined;
 let stopping = false;
 function affected(path: string): Target[] {
   const name = relative(root, path).replaceAll("\\", "/");
-  if (name.startsWith("scripts/release/")) return [];
+  if (name.startsWith("scripts/ci/release/")) return [];
   if (name.startsWith("packages/"))
     return selected.filter((target) => name.startsWith(`packages/${target}/`));
   if (name.startsWith("generators/") || name === "extras/README.md")

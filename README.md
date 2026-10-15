@@ -386,7 +386,7 @@ How to add a new extra template:
 
 ## Development
 
-Run `just test` for Neovim tests, `just test-targets` for package tests, and `just build` to assemble both installable trees under `dist/`. Build tools are Python 3 and Neovim; release tooling is pinned separately under `scripts/release/`.
+Run `just test` for Neovim tests, `just test-targets` for package tests, and `just build` to assemble both installable trees under `dist/`. Build tools are Python 3 and Neovim; release tooling is pinned separately under `scripts/ci/release/`.
 
 Open Neovim from the repository root with your existing lazy.nvim setup. The local `.lazy.lua` selects `packages/neovim`, adds `shared` to the runtime, activates Canvas, and reloads theme modules on save. After this file changes, review it and run `:trust` from its buffer so Neovim can load the updated local specification. No dotfile change or build per Lua edit is required.
 

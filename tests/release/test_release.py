@@ -12,7 +12,7 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location(
-    "coordinator", ROOT / "scripts/release/coordinator.py"
+    "coordinator", ROOT / "scripts/ci/release/coordinator.py"
 )
 release = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(release)
@@ -20,7 +20,7 @@ SEMANTIC = os.environ.get("SEMANTIC_RELEASE", shutil.which("semantic-release"))
 
 
 @unittest.skipUnless(
-    SEMANTIC, "Install scripts/release/requirements.txt for release selection tests"
+    SEMANTIC, "Install scripts/ci/release/requirements.txt for release selection tests"
 )
 class Selection(unittest.TestCase):
     def setUp(self):
@@ -39,7 +39,7 @@ class Selection(unittest.TestCase):
         self.git("remote", "add", "origin", str(remote))
         for target in release.TARGETS:
             for name in (
-                f"scripts/release/{target}.toml",
+                f"scripts/ci/release/{target}.toml",
                 f"packages/{target}/CHANGELOG.md",
                 f"packages/{target}/"
                 + ("version.txt" if target == "neovim" else "package.json"),
@@ -204,7 +204,7 @@ class Selection(unittest.TestCase):
     def test_workflow_reconciles_exact_source_before_next_preparation(self):
         # Exercise real fetch/worktree/child-process plumbing with a local publisher.
         record = Path(self.temporary.name) / "published-source"
-        child = self.root / "scripts/release/coordinator.py"
+        child = self.root / "scripts/ci/release/coordinator.py"
         child.write_text(
             "import json, subprocess, os\nfrom pathlib import Path\n"
             "assert os.environ['ACTIONS_ID_TOKEN_REQUEST_URL'] == 'https://example.invalid/oidc'\n"

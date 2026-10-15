@@ -21,11 +21,11 @@ jobs:
           node-version: '22'
           cache: npm
           cache-dependency-path: |
-            scripts/release/package-lock.json
+            scripts/ci/release/package-lock.json
             package-lock.json
       - uses: ./.github/actions/generate
-      - run: pip install -r scripts/release/requirements.txt
-      - run: npm ci --prefix scripts/release --ignore-scripts
+      - run: pip install -r scripts/ci/release/requirements.txt
+      - run: npm ci --prefix scripts/ci/release --ignore-scripts
       - run: npm run typecheck
       - run: npm run format:check
       - uses: rhysd/action-setup-vim@v1
@@ -39,12 +39,12 @@ jobs:
       - run: python scripts/assemble.py
       - name: Package VS Code
         working-directory: dist/vscode
-        run: ../../scripts/release/node_modules/.bin/vsce package --out ../vscode.vsix
+        run: ../../scripts/ci/release/node_modules/.bin/vsce package --out ../vscode.vsix
       - name: Check release freshness
         if: github.head_ref == 'automation/release' || github.ref == 'refs/heads/automation/release'
         run: |
           git fetch origin main
-          RELEASE_BASE_SHA=$(git rev-parse origin/main) python scripts/release/coordinator.py check-plan
+          RELEASE_BASE_SHA=$(git rev-parse origin/main) python scripts/ci/release/coordinator.py check-plan
       - name: Upload generated files for inspection
         uses: actions/upload-artifact@v4
         with:

@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-PUBLISHER = Path(__file__).resolve().parents[2] / "scripts/publish-generated.sh"
+PUBLISHER = Path(__file__).resolve().parents[2] / "scripts/ci/publish-generated.sh"
 
 
 class GenerationPublication(unittest.TestCase):
@@ -25,13 +25,13 @@ class GenerationPublication(unittest.TestCase):
         self.git("init", "-b", "main")
         self.git("config", "user.name", "Test")
         self.git("config", "user.email", "test@example.com")
-        (self.repo / "scripts").mkdir()
+        (self.repo / "scripts/ci").mkdir(parents=True)
         (self.repo / "extras").mkdir()
         (self.repo / ".gitignore").write_text("extras/**\n")
         (self.repo / "source.txt").write_text("reviewed source\n")
         (self.repo / "extras/old.txt").write_text("stale\n")
         (self.repo / "palette_colors.md").write_text("stale\n")
-        shutil.copy(PUBLISHER, self.repo / "scripts/publish-generated.sh")
+        shutil.copy(PUBLISHER, self.repo / "scripts/ci/publish-generated.sh")
         (self.repo / "packages/neovim/doc").mkdir(parents=True)
         (self.repo / "packages/neovim/doc/kanagawa-paper.nvim.txt").write_text(
             "old help\n"
@@ -62,7 +62,7 @@ class GenerationPublication(unittest.TestCase):
 
     def publish(self):
         return subprocess.run(
-            ["bash", "scripts/publish-generated.sh"],
+            ["bash", "scripts/ci/publish-generated.sh"],
             cwd=self.repo,
             env=self.env,
             text=True,

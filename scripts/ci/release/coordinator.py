@@ -18,12 +18,12 @@ import zipfile
 from functools import cache
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 TARGETS = ("neovim", "vscode")
 PLAN = ".release-plan.json"
 BRANCH = "automation/release"
 VERSION = re.compile(r"\d+\.\d+\.\d+\Z")
-VSCE = ROOT / "scripts/release/node_modules/.bin/vsce"
+VSCE = ROOT / "scripts/ci/release/node_modules/.bin/vsce"
 
 
 def run(
@@ -90,7 +90,7 @@ def package_version(target: str) -> str:
 
 def psr(target: str, *args: str) -> str:
     executable = os.environ.get("SEMANTIC_RELEASE", "semantic-release")
-    return run(executable, "-c", f"scripts/release/{target}.toml", "version", *args)
+    return run(executable, "-c", f"scripts/ci/release/{target}.toml", "version", *args)
 
 
 def prepared_paths(target: str) -> tuple[str, str]:
@@ -626,7 +626,7 @@ def workflow() -> None:
                 env = dict(os.environ, KANAGAWA_VSCE=str(VSCE))
                 run(
                     sys.executable,
-                    "scripts/release/coordinator.py",
+                    "scripts/ci/release/coordinator.py",
                     "publish",
                     cwd=checkout,
                     env=env,
