@@ -13,6 +13,7 @@ for _, variant in ipairs({ "ink", "canvas" }) do
 		"@variable.member",
 		"@lsp.type.property",
 		"@lsp.mod.readonly",
+		"@lsp.typemod.variable.static",
 		"Boolean",
 		"Type",
 		"@keyword.function",

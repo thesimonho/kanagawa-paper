@@ -829,6 +829,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
     "variable.classMember": { foreground: theme.syntax.member },
     "variable.classMember.readonly": theme.syntax.constant,
     "variable.readonly": theme.syntax.constant,
+    "variable.static": { foreground: theme.syntax.constant },
     "variable.readonly.defaultLibrary": theme.syntax.keyword,
     "variable.defaultLibrary": theme.syntax.keyword,
     "method.defaultLibrary": theme.syntax.keyword,

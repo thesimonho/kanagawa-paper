@@ -48,3 +48,5 @@ VS Code maps generic import/declaration scopes, modules, built-in types and vari
 VS Code semantic variables marked `classMember` use the member foreground, including declarations; readonly class members retain the constant foreground. Parameter declarations and definitions inherit the base parameter role so custom subtypes retain their own foregrounds. Both VS Code artifact hashes include these general selectors.
 
 VS Code import `from` and `export` scopes and storage types inside variable-declaration expressions use keyword roles. Semantic properties use Neovim’s LSP property/Identifier color; property accesses without semantic tokens use the Tree-sitter member color. Readonly properties retain the constant role. Both VS Code artifact hashes include these mappings.
+
+VS Code semantic static variables use the shared constant foreground, matching Neovim. Both VS Code artifact hashes include this mapping.

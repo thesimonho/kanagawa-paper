@@ -219,6 +219,7 @@ test("VS Code tracks current installed Neovim semantics", async () => {
 
       for (const [token, group] of Object.entries({
         module: "@module",
+        "variable.static": "@lsp.typemod.variable.static",
         selfParameter: "@variable.builtin",
         "class.builtin": "@type.builtin",
         "type.builtin": "@type.builtin",
