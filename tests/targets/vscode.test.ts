@@ -52,6 +52,7 @@ test("VS Code tracks current installed Neovim semantics", async () => {
     const neovim = await build("neovim", output),
       vscode = await build("vscode", output);
     const snapshot = join(output, "roles.json");
+    const highlightSnapshot = join(output, "highlights.json");
     const result = spawnSync(
       "nvim",
       [
@@ -61,17 +62,28 @@ test("VS Code tracks current installed Neovim semantics", async () => {
         join(root, "tests/neovim/neovim_roles.lua"),
         neovim,
         snapshot,
+        highlightSnapshot,
       ],
       {
         cwd: output,
         encoding: "utf8",
-        env: { ...process.env, NVIM_LOG_FILE: join(output, "nvim.log") },
+        env: {
+          ...process.env,
+          NVIM_LOG_FILE: join(output, "nvim.log"),
+          XDG_CACHE_HOME: join(output, "cache"),
+          XDG_STATE_HOME: join(output, "state"),
+          XDG_DATA_HOME: join(output, "data"),
+        },
       },
     );
     assert.equal(result.status, 0, result.stderr);
     const roles: Record<string, NeovimColors> = JSON.parse(
       await readFile(snapshot, "utf8"),
     );
+    const highlights: Record<
+      string,
+      Record<string, { fg: number; bold?: boolean; italic?: boolean }>
+    > = JSON.parse(await readFile(highlightSnapshot, "utf8"));
     for (const [variant, theme] of Object.entries(roles)) {
       const rendered = JSON.parse(
         await readFile(
@@ -164,6 +176,75 @@ test("VS Code tracks current installed Neovim semantics", async () => {
           tokens[`Markup: Heading ${index}`].foreground,
           theme.rainbow[`rainbow${index}`],
         );
+      const groups = highlights[variant];
+      const hex = (name: string) =>
+        "#" + groups[name].fg.toString(16).padStart(6, "0");
+      for (const [name, group] of Object.entries({
+        "Import Keywords": "@keyword.import",
+        "Declaration Keywords": "@keyword.function",
+        "Built-in Types": "@type.builtin",
+        Modules: "@module",
+        "Built-in Variables": "@variable.builtin",
+        Booleans: "Boolean",
+      }))
+        assert.equal(tokens[name].foreground, hex(group));
+      assert.equal(
+        tokens.Modules.fontStyle.includes("bold"),
+        Boolean(groups["@module"].bold),
+      );
+      assert.equal(
+        tokens["Built-in Variables"].fontStyle.includes("italic"),
+        Boolean(groups["@variable.builtin"].italic),
+      );
+      assert.equal(
+        tokens.Booleans.fontStyle.includes("bold"),
+        Boolean(groups.Boolean.bold),
+      );
+      assert.equal(tokens["Built-in Types"].fontStyle, "");
+      const builtinVariableScopes: string[] = rendered.tokenColors.find(
+        (token: { name: string }) => token.name === "Built-in Variables",
+      ).scope;
+      // Rust assigns the same scope to self/Self, and uses variable.language.super for modules.
+      for (const scope of [
+        "variable.language.self.rust",
+        "variable.language.super.rust",
+      ])
+        assert.ok(
+          !builtinVariableScopes.some(
+            (selector) =>
+              scope === selector || scope.startsWith(selector + "."),
+          ),
+        );
+
+      for (const [token, group] of Object.entries({
+        module: "@module",
+        selfParameter: "@variable.builtin",
+        "class.builtin": "@type.builtin",
+        "type.builtin": "@type.builtin",
+        "variable.builtin.classMember": "@variable.member",
+      }))
+        assert.equal(
+          rendered.semanticTokenColors[token].foreground,
+          hex(group),
+        );
+      assert.equal(
+        rendered.semanticTokenColors.selfParameter.fontStyle,
+        "italic",
+      );
+      assert.equal(
+        rendered.semanticTokenColors["class.builtin"].fontStyle.includes(
+          "bold",
+        ),
+        Boolean(groups.Type.bold),
+      );
+      assert.equal(
+        rendered.semanticTokenColors["variable.builtin.classMember"].fontStyle,
+        "",
+      );
+      // Providers can classify booleans and null with this same token; retain TextMate fallback.
+      assert.ok(
+        !Object.hasOwn(rendered.semanticTokenColors, "builtinConstant"),
+      );
       assert.ok(!Object.hasOwn(tokens["Markup: Bold"], "foreground"));
       assert.ok(!Object.hasOwn(tokens["Markup: Italic"], "foreground"));
       assert.equal(colors["editor.findMatchForeground"], theme.ui.fg_dark);
