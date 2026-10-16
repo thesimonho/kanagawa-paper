@@ -76,6 +76,10 @@ test("Zed builds both variants with valid inherited colors and extension metadat
         neovim.syn.constant,
       );
       assert.equal(rendered.style.syntax.namespace.color, neovim.syn.keyword);
+      assert.equal(
+        rendered.style.syntax["keyword.import"].color,
+        neovim.syn.preproc,
+      );
       assert.equal(rendered.style.syntax.title.color, neovim.rainbow.rainbow1);
       assert.equal(rendered.style.players[0].cursor, neovim.ui.fg);
       assert.equal(

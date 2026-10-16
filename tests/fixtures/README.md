@@ -54,3 +54,5 @@ VS Code semantic static variables use the shared constant foreground, matching N
 Zed structural and focused borders use the shared m3 surface tone. The Zed theme artifact hash includes this mapping.
 
 Canvas active line numbers use canvasBlue1 across targets; Ink retains dragonYellow. Canvas runtime and VS Code hashes include this change.
+
+Zed keyword.import captures use the shared preprocessor foreground instead of falling back to the ordinary keyword style.

@@ -160,6 +160,7 @@ export function zedTheme(theme: Theme, variant: Variant) {
       },
       hint: { color: status.hint.base },
       keyword: { color: syntax.keyword },
+      "keyword.import": { color: syntax.preprocessor },
       label: { color: syntax.statement },
       link_text: { color: theme.accents.special.two },
       link_uri: { color: theme.accents.special.two },
