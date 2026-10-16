@@ -8,6 +8,10 @@ agent:
 
 These contributor tools collect highlighting evidence from the same source probes in different editors. Neovim is the comparison baseline. This directory is independent of the distributed theme packages and has no additional Node dependencies. Node 22 or later is required.
 
+## Visual specimen
+
+Run `just syntax-specimen` to open a compact highlight-group preview in your configured Neovim. `syntax_specimen.lua` applies named groups directly to a scratch buffer, so it does not require a parser or language server. It previews group colors; use the collectors and source fixtures to check how real code receives those groups.
+
 ## Fixtures and reports
 
 `fixtures/manifest.json` gives stable probe IDs and unique line/text anchors for Python, TypeScript, and Rust. Fixtures are ASCII so zero-based UTF-16 columns (VS Code) and byte columns (Neovim) agree. Each report includes the fixture SHA-256, editor version, theme name, raw classifications, and optional effective styles. Reports can contain local extension details; `reports/` is ignored and must not be published.

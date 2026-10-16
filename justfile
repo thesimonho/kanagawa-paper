@@ -12,7 +12,7 @@ test-targets:
 
 # Open the compact syntax specimen using your normal Neovim configuration.
 syntax-specimen:
-    @nvim -c 'lua dofile([[{{ justfile_directory() }}/scripts/syntax_specimen.lua]])'
+    @nvim -c 'lua dofile([[{{ justfile_directory() }}/scripts/theme-audit/syntax_specimen.lua]])'
 
 # Build application distributions and copyable extras.
 build target="all" output="dist":
