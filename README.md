@@ -191,6 +191,8 @@ require("kanagawa-paper").setup({
 
 </details>
 
+The `styles` option also accepts named roles for specific text and UI treatments. For example, `boolean = { bold = false }`, `openedFile = { italic = false }`, and `activeLineNumber = { bold = false }` disable those attributes without changing colors. Roles are defined in `shared/styles.ts` and generated into the Neovim distribution; existing comment, function, keyword, statement, type, and escape overrides keep their names. Diagnostic undercurls remain controlled by `undercurl`.
+
 #### Cache
 
 The color scheme comes with a cache option that can be used to speed up startup time.

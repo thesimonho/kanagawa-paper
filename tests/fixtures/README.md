@@ -58,3 +58,5 @@ Canvas active line numbers use canvasBlue1 across targets; Ink retains dragonYel
 Zed keyword.import captures use the shared preprocessor foreground instead of falling back to the ordinary keyword style.
 
 Zed gutter backgrounds match the editor surface, corresponding to Neovim default gutter=false and VS Code. The dedicated shared gutter role remains available to Neovim gutter=true.
+
+Named text-style policy supplies syntax, markup, and UI emphasis. Neovim runtime snapshots retain the same highlights. VS Code retains its existing whole-style replacement semantics. The built-in member reset uses equivalent explicit false attributes; both VS Code artifact hashes include that representation change. Zed explicitly emits normal weight/style for disabled attributes. Colors remain unchanged.

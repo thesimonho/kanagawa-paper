@@ -1,6 +1,8 @@
 local M = {}
 
 function M.get(colors, opts)
+	opts = opts or require("kanagawa-paper.config").options
+	local styles = opts.styles or require("kanagawa-paper.config").options.styles
 	local theme = colors.theme
 
 	return {
@@ -13,7 +15,7 @@ function M.get(colors, opts)
 		BlinkCmpLabelMatch = { fg = theme.syn.fun },
 		BlinkCmpLabelDetail = { link = "NonText" },
 		BlinkCmpLabelDescription = { link = "NonText" },
-		BlinkCmpLabelDeprecated = { fg = theme.syn.comment, strikethrough = true },
+		BlinkCmpLabelDeprecated = vim.tbl_extend("force", { fg = theme.syn.comment }, styles.deprecated),
 		BlinkCmpSource = { link = "String" },
 		BlinkCmpGhostText = { fg = theme.syn.comment },
 		BlinkCmpDoc = { link = "NormalFloat" },

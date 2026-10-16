@@ -1,6 +1,8 @@
 local M = {}
 
 function M.get(colors, opts)
+	opts = opts or require("kanagawa-paper.config").options
+	local styles = opts.styles or require("kanagawa-paper.config").options.styles
 	local theme = colors.theme
 
 	return {
@@ -12,7 +14,7 @@ function M.get(colors, opts)
 		CmpDocumentation = { link = "NormalFloat" },
 		CmpDocumentationBorder = { link = "FloatBorder" },
 		CmpItemAbbr = { fg = theme.ui.pmenu.fg },
-		CmpItemAbbrDeprecated = { fg = theme.syn.comment, strikethrough = true },
+		CmpItemAbbrDeprecated = vim.tbl_extend("force", { fg = theme.syn.comment }, styles.deprecated),
 		CmpItemAbbrMatch = { fg = theme.syn.fun },
 		CmpItemAbbrMatchFuzzy = { link = "CmpItemAbbrMatch" },
 		CmpItemMenu = { link = "NonText" },

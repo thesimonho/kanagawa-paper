@@ -1,8 +1,17 @@
 import type { Theme, Variant } from "../../shared/theme.ts";
 import { alpha } from "../../shared/color/expression.ts";
-import { syntaxStyles, textMateStyle } from "../../shared/styles.ts";
+import {
+  textStyles,
+  textMateStyle,
+  semanticStyle,
+  type StylePolicy,
+} from "../../shared/styles.ts";
 
-export const vscodeTheme = (theme: Theme, variant: Variant) => ({
+export const vscodeTheme = (
+  theme: Theme,
+  variant: Variant,
+  styles: StylePolicy = textStyles,
+) => ({
   $schema: "vscode://schemas/color-theme",
   name: variant === "ink" ? "Ink" : "Canvas",
   type: variant === "ink" ? "dark" : "light",
@@ -282,7 +291,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
       name: "Comments",
       scope: ["comment", "punctuation.definition.comment"],
       settings: {
-        fontStyle: textMateStyle(syntaxStyles.comment),
+        fontStyle: textMateStyle(styles.comment),
         foreground: theme.syntax.comment,
       },
     },
@@ -345,7 +354,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
       ],
       settings: {
         foreground: theme.syntax.keyword,
-        fontStyle: textMateStyle(syntaxStyles.keyword),
+        fontStyle: textMateStyle(styles.keyword),
       },
     },
     {
@@ -355,14 +364,17 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
         "support.type.primitive",
         "entity.name.type.primitive",
       ],
-      settings: { foreground: theme.accents.special.one, fontStyle: "" },
+      settings: {
+        foreground: theme.accents.special.one,
+        fontStyle: textMateStyle(styles.builtinType),
+      },
     },
     {
       name: "Modules",
       scope: ["entity.name.namespace", "support.type.object.module"],
       settings: {
         foreground: theme.syntax.type,
-        fontStyle: textMateStyle(syntaxStyles.type),
+        fontStyle: textMateStyle(styles.type),
       },
     },
     {
@@ -372,12 +384,18 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
         "variable.language.special.self",
         "variable.language.special.cls",
       ],
-      settings: { foreground: theme.syntax.constant, fontStyle: "italic" },
+      settings: {
+        foreground: theme.syntax.constant,
+        fontStyle: textMateStyle(styles.builtinVariable),
+      },
     },
     {
       name: "Booleans",
       scope: ["constant.language.boolean", "constant.language.bool"],
-      settings: { foreground: theme.syntax.constant, fontStyle: "bold" },
+      settings: {
+        foreground: theme.syntax.constant,
+        fontStyle: textMateStyle(styles.boolean),
+      },
     },
     {
       name: "Language Constants",
@@ -402,7 +420,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
       name: "Functions",
       scope: ["entity.name.function", "support.function"],
       settings: {
-        fontStyle: textMateStyle(syntaxStyles.functions),
+        fontStyle: textMateStyle(styles.functions),
         foreground: theme.syntax.function,
       },
     },
@@ -414,7 +432,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
         "support.class",
       ],
       settings: {
-        fontStyle: textMateStyle(syntaxStyles.type),
+        fontStyle: textMateStyle(styles.type),
         foreground: theme.syntax.type,
       },
     },
@@ -429,7 +447,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
       name: "Sections",
       scope: "entity.name.section",
       settings: {
-        fontStyle: "bold",
+        fontStyle: textMateStyle(styles.section),
       },
     },
     {
@@ -464,7 +482,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
       name: "Strings: Escape Sequences",
       scope: "constant.character.escape",
       settings: {
-        fontStyle: textMateStyle(syntaxStyles.escape),
+        fontStyle: textMateStyle(styles.escape),
         foreground: theme.syntax.regex,
       },
     },
@@ -527,7 +545,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
         "entity.other.attribute-name.html",
       ],
       settings: {
-        fontStyle: "italic",
+        fontStyle: textMateStyle(styles.attribute),
         foreground: theme.syntax.attribute,
       },
     },
@@ -572,7 +590,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
       name: "CSS: Important Keyword",
       scope: "keyword.other.important",
       settings: {
-        fontStyle: "bold",
+        fontStyle: textMateStyle(styles.important),
       },
     },
     {
@@ -684,7 +702,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
       name: "Markup: Underline",
       scope: "markup.underline",
       settings: {
-        fontStyle: "underline",
+        fontStyle: textMateStyle(styles.markupUnderline),
       },
     },
     {
@@ -705,21 +723,21 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
       name: "Markup: Bold",
       scope: "markup.bold",
       settings: {
-        fontStyle: "bold",
+        fontStyle: textMateStyle(styles.markupStrong),
       },
     },
     {
       name: "Markup: Italic",
       scope: "markup.italic",
       settings: {
-        fontStyle: "italic",
+        fontStyle: textMateStyle(styles.markupItalic),
       },
     },
     {
       name: "Markup Inline",
       scope: "markup.inline.raw",
       settings: {
-        fontStyle: "",
+        fontStyle: textMateStyle(styles.inlineCode),
         foreground: theme.syntax.string,
       },
     },
@@ -749,82 +767,85 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
     arithmetic: theme.syntax.operator,
     class: {
       foreground: theme.syntax.type,
-      fontStyle: textMateStyle(syntaxStyles.type),
+      fontStyle: textMateStyle(styles.type),
     },
     "class.defaultLibrary": theme.syntax.keyword,
     "class.builtin": {
       foreground: theme.accents.special.one,
-      fontStyle: textMateStyle(syntaxStyles.type),
+      fontStyle: textMateStyle(styles.type),
     },
     enum: {
       foreground: theme.syntax.type,
-      fontStyle: textMateStyle(syntaxStyles.type),
+      fontStyle: textMateStyle(styles.type),
     },
     enumMember: theme.syntax.constant,
     event: theme.syntax.type,
     function: {
       foreground: theme.syntax.function,
-      fontStyle: textMateStyle(syntaxStyles.functions),
+      fontStyle: textMateStyle(styles.functions),
     },
     "function.defaultLibrary": {
       foreground: theme.syntax.builtinFunction,
-      fontStyle: textMateStyle(syntaxStyles.functions),
+      fontStyle: textMateStyle(styles.functions),
     },
     "function.builtin": {
       foreground: theme.syntax.builtinFunction,
-      fontStyle: textMateStyle(syntaxStyles.functions),
+      fontStyle: textMateStyle(styles.functions),
     },
     interface: {
       foreground: theme.syntax.type,
-      fontStyle: textMateStyle(syntaxStyles.type),
+      fontStyle: textMateStyle(styles.type),
     },
     "keyword.controlFlow": {
       foreground: theme.syntax.statement,
-      fontStyle: "bold",
+      fontStyle: textMateStyle(styles.controlFlow),
     },
     macro: theme.syntax.preprocessor,
     method: {
       foreground: theme.syntax.function,
-      fontStyle: textMateStyle(syntaxStyles.functions),
+      fontStyle: textMateStyle(styles.functions),
     },
     module: {
       foreground: theme.syntax.type,
-      fontStyle: textMateStyle(syntaxStyles.type),
+      fontStyle: textMateStyle(styles.type),
     },
     namespace: theme.syntax.keyword,
     newOperator: theme.syntax.operator,
     numberLiteral: theme.syntax.number,
     operator: theme.syntax.operator,
     parameter: theme.syntax.parameter,
-    selfParameter: { foreground: theme.syntax.constant, fontStyle: "italic" },
+    selfParameter: {
+      foreground: theme.syntax.constant,
+      fontStyle: textMateStyle(styles.builtinVariable),
+    },
     property: theme.syntax.identifier,
     "property.readonly": theme.syntax.constant,
     stringLiteral: theme.syntax.string,
     struct: {
       foreground: theme.syntax.type,
-      fontStyle: textMateStyle(syntaxStyles.type),
+      fontStyle: textMateStyle(styles.type),
     },
     type: {
       foreground: theme.syntax.type,
-      fontStyle: textMateStyle(syntaxStyles.type),
+      fontStyle: textMateStyle(styles.type),
     },
     "type.builtin": {
       foreground: theme.accents.special.one,
-      fontStyle: textMateStyle(syntaxStyles.type),
+      fontStyle: textMateStyle(styles.type),
     },
     "type.defaultLibrary": theme.syntax.keyword,
     typeParameter: {
       foreground: theme.syntax.type,
-      fontStyle: textMateStyle(syntaxStyles.type),
+      fontStyle: textMateStyle(styles.type),
     },
     variable: theme.ui.text.primary,
     "variable.builtin": {
       foreground: theme.syntax.constant,
-      fontStyle: "italic",
+      fontStyle: textMateStyle(styles.builtinVariable),
     },
     "variable.builtin.classMember": {
       foreground: theme.syntax.member,
-      fontStyle: "",
+      ...semanticStyle(styles.builtinMember),
     },
     "variable.classMember": { foreground: theme.syntax.member },
     "variable.classMember.readonly": theme.syntax.constant,

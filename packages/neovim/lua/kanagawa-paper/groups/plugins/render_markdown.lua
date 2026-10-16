@@ -1,6 +1,8 @@
 local M = {}
 
 function M.get(colors, opts)
+	opts = opts or require("kanagawa-paper.config").options
+	local styles = opts.styles or require("kanagawa-paper.config").options.styles
 	local theme = colors.theme
 
 	return {
@@ -11,36 +13,30 @@ function M.get(colors, opts)
 		RenderMarkdownH5 = { fg = theme.rainbow.rainbow5 },
 		RenderMarkdownH6 = { fg = theme.rainbow.rainbow6 },
 
-		RenderMarkdownH1Bg = {
+		RenderMarkdownH1Bg = vim.tbl_extend("force", {
 			fg = theme.rainbow.rainbow1,
 			bg = theme.ui.bg_p1,
-			bold = true,
-		},
-		RenderMarkdownH2Bg = {
+		}, styles.renderedHeading),
+		RenderMarkdownH2Bg = vim.tbl_extend("force", {
 			fg = theme.rainbow.rainbow2,
 			bg = theme.ui.bg_p1,
-			bold = true,
-		},
-		RenderMarkdownH3Bg = {
+		}, styles.renderedHeading),
+		RenderMarkdownH3Bg = vim.tbl_extend("force", {
 			fg = theme.rainbow.rainbow3,
 			bg = theme.ui.bg_p1,
-			bold = true,
-		},
-		RenderMarkdownH4Bg = {
+		}, styles.renderedHeading),
+		RenderMarkdownH4Bg = vim.tbl_extend("force", {
 			fg = theme.rainbow.rainbow4,
 			bg = theme.ui.bg_p1,
-			bold = true,
-		},
-		RenderMarkdownH5Bg = {
+		}, styles.renderedHeading),
+		RenderMarkdownH5Bg = vim.tbl_extend("force", {
 			fg = theme.rainbow.rainbow5,
 			bg = theme.ui.bg_p1,
-			bold = true,
-		},
-		RenderMarkdownH6Bg = {
+		}, styles.renderedHeading),
+		RenderMarkdownH6Bg = vim.tbl_extend("force", {
 			fg = theme.rainbow.rainbow6,
 			bg = theme.ui.bg_p1,
-			bold = true,
-		},
+		}, styles.renderedHeading),
 	}
 end
 

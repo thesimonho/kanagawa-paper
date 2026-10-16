@@ -1,17 +1,19 @@
 local M = {}
 
 function M.get(colors, opts)
+	opts = opts or require("kanagawa-paper.config").options
+	local styles = opts.styles or require("kanagawa-paper.config").options.styles
 	local theme = colors.theme
 
 	return {
 		NeotestAdapterName = { fg = theme.syn.special3 },
 		NeotestDir = { fg = theme.syn.fun },
-		NeotestExpandMarker = { fg = theme.syn.punct, bold = true },
+		NeotestExpandMarker = vim.tbl_extend("force", { fg = theme.syn.punct }, styles.testStructure),
 		NeotestFailed = { fg = theme.diag.error },
 		NeotestFile = { fg = theme.syn.fun },
-		NeotestFocused = { bold = true, underline = false },
-		NeotestIndent = { fg = theme.ui.indent, bold = true },
-		NeotestMarked = { fg = theme.diag.warning, italic = true },
+		NeotestFocused = vim.tbl_extend("force", {}, styles.testFocused),
+		NeotestIndent = vim.tbl_extend("force", { fg = theme.ui.indent }, styles.testStructure),
+		NeotestMarked = vim.tbl_extend("force", { fg = theme.diag.warning }, styles.testMarked),
 		NeotestNamespace = { fg = theme.syn.fun },
 		NeotestPassed = { fg = theme.diag.ok },
 		NeotestRunning = { fg = theme.vcs.changed },

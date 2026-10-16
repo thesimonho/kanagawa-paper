@@ -11,7 +11,7 @@ import { resolveTheme } from "../../shared/color/evaluate.ts";
 import { neovimRoles } from "../../packages/neovim/adapter.ts";
 import { ink } from "../../shared/themes/ink.ts";
 import { canvas } from "../../shared/themes/canvas.ts";
-import { syntaxStyles } from "../../shared/styles.ts";
+import { textStyles } from "../../shared/styles.ts";
 const baseline = JSON.parse(
   await readFile(new URL("../fixtures/colors.json", import.meta.url), "utf8"),
 );
@@ -70,6 +70,37 @@ test("installed Neovim preserves baseline highlights and customization semantics
   }
 });
 
+test("installed Neovim applies central style overrides to syntax and plugins", async () => {
+  const output = await mkdtemp(join(tmpdir(), "kanagawa style policy "));
+  try {
+    const tree = await build("neovim", output);
+    const result = spawnSync(
+      "nvim",
+      [
+        "--headless",
+        "--clean",
+        "-l",
+        join(root, "tests/neovim/style_policy.lua"),
+        tree,
+      ],
+      {
+        cwd: output,
+        encoding: "utf8",
+        env: {
+          ...process.env,
+          NVIM_LOG_FILE: join(output, "nvim.log"),
+          XDG_CACHE_HOME: join(output, "cache"),
+          XDG_STATE_HOME: join(output, "state"),
+          XDG_DATA_HOME: join(output, "data"),
+        },
+      },
+    );
+    assert.equal(result.status, 0, result.stderr);
+  } finally {
+    await rm(output, { recursive: true, force: true });
+  }
+});
+
 test("Neovim regeneration restores missing and stale generated modules", async () => {
   const output = await mkdtemp(join(tmpdir(), "kanagawa generated "));
   try {
@@ -91,7 +122,7 @@ test("Neovim regeneration restores missing and stale generated modules", async (
       },
     );
     assert.equal(result.status, 0, result.stderr);
-    assert.deepEqual(JSON.parse(await readFile(styles, "utf8")), syntaxStyles);
+    assert.deepEqual(JSON.parse(await readFile(styles, "utf8")), textStyles);
     const modules = join(tree, "lua/kanagawa-paper");
     for (const name of [
       "palette.lua",

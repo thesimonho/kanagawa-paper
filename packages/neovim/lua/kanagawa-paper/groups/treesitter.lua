@@ -4,13 +4,14 @@ local M = {}
 ---@param opts? KanagawaConfig
 function M.setup(colors, opts)
 	opts = opts or require("kanagawa-paper.config").options
+	local styles = opts.styles or require("kanagawa-paper.config").options.styles
 	local theme = colors.theme
 
 	return {
 		-- @variable                       various variable names
 		["@variable"] = { fg = theme.syn.variable },
 		-- @variable.builtin (Special)     built-in variable names (e.g. `this`, `self`)
-		["@variable.builtin"] = { fg = theme.syn.constant, italic = true },
+		["@variable.builtin"] = vim.tbl_extend("force", { fg = theme.syn.constant }, styles.builtinVariable),
 		-- @variable.parameter             parameters of a function
 		["@variable.parameter"] = { fg = theme.syn.parameter },
 		-- @variable.parameter.builtin     special parameters (e.g. `_`, `it`)
@@ -30,7 +31,7 @@ function M.setup(colors, opts)
 		-- @string.regexp          regular expressions
 		["@string.regexp"] = { fg = theme.syn.regex },
 		-- @string.escape          escape sequences
-		["@string.escape"] = vim.tbl_extend("force", { fg = theme.syn.regex }, opts.styles.escape),
+		["@string.escape"] = vim.tbl_extend("force", { fg = theme.syn.regex }, styles.escape),
 		-- @string.special         other special strings (e.g. dates)
 		-- @string.special.symbol  symbols or atoms
 		["@string.special.symbol"] = { fg = theme.syn.symbol },
@@ -55,7 +56,7 @@ function M.setup(colors, opts)
 		--
 		-- @function               function definitions
 		-- @function.builtin       built-in functions
-		["@function.builtin"] = vim.tbl_extend("force", { fg = theme.syn.fun_builtin }, opts.styles.functions),
+		["@function.builtin"] = vim.tbl_extend("force", { fg = theme.syn.fun_builtin }, styles.functions),
 		-- @function.call          function calls
 		-- @function.macro         preprocessor macros
 		--
@@ -71,17 +72,17 @@ function M.setup(colors, opts)
 		-- @keyword.coroutine      keywords related to coroutines (e.g. `go` in Go, `async/await` in Python)
 		-- @keyword.function       keywords that define a function (e.g. `func` in Go, `def` in Python)
 		-- @keyword.operator       operators that are English words (e.g. `and`, `or`)
-		["@keyword.operator"] = { fg = theme.syn.operator, bold = true },
+		["@keyword.operator"] = vim.tbl_extend("force", { fg = theme.syn.operator }, styles.keywordOperator),
 		-- @keyword.import         keywords for including modules (e.g. `import`, `from` in Python)
 		["@keyword.import"] = { fg = theme.syn.preproc },
 		-- @keyword.type           keywords defining composite types (e.g. `struct`, `enum`)
 		-- @keyword.modifier       keywords defining type modifiers (e.g. `const`, `static`, `public`)
 		-- @keyword.repeat         keywords related to loops (e.g. `for`, `while`)
 		-- @keyword.return         keywords like `return` and `yield`
-		["@keyword.return"] = vim.tbl_extend("force", { fg = theme.syn.keyword }, opts.styles.keyword),
+		["@keyword.return"] = vim.tbl_extend("force", { fg = theme.syn.keyword }, styles.keyword),
 		-- @keyword.debug          keywords related to debugging
 		-- @keyword.exception      keywords related to exceptions (e.g. `throw`, `catch`)
-		["@keyword.exception"] = vim.tbl_extend("force", { fg = theme.syn.keyword }, opts.styles.statement),
+		["@keyword.exception"] = vim.tbl_extend("force", { fg = theme.syn.keyword }, styles.statement),
 
 		-- @keyword.conditional         keywords related to conditionals (e.g. `if`, `else`)
 		-- @keyword.conditional.ternary ternary operator (e.g. `?`, `:`)
@@ -96,26 +97,30 @@ function M.setup(colors, opts)
 		-- @punctuation.special    special symbols (e.g. `{}` in string interpolation)
 		["@punctuation.special"] = { fg = theme.syn.symbol },
 		-- @comment                line and block comments
-		["@comment"] = vim.tbl_extend("force", { fg = theme.syn.comment }, opts.styles.comment),
+		["@comment"] = vim.tbl_extend("force", { fg = theme.syn.comment }, styles.comment),
 		-- @comment.documentation  comments documenting code
-		["@comment.documentation"] = { fg = theme.syn.docstring, italic = true },
+		["@comment.documentation"] = vim.tbl_extend("force", { fg = theme.syn.docstring }, styles.documentation),
 		-- @comment.error          error-type comments (e.g. `ERROR`, `FIXME`)
-		["@comment.error"] = { fg = theme.ui.bg, bg = theme.diag.error, bold = true },
+		["@comment.error"] = vim.tbl_extend("force", { fg = theme.ui.bg, bg = theme.diag.error }, styles.commentMarker),
 		-- @comment.warning        warning-type comments (e.g. `WARNING`, `FIX`, `HACK`)
-		["@comment.warning"] = { fg = theme.ui.bg, bg = theme.diag.warning, bold = true },
+		["@comment.warning"] = vim.tbl_extend(
+			"force",
+			{ fg = theme.ui.bg, bg = theme.diag.warning },
+			styles.commentMarker
+		),
 		-- @comment.note           note-type comments (e.g. `NOTE`, `INFO`, `XXX`)
-		["@comment.note"] = { fg = theme.ui.bg, bg = theme.diag.hint, bold = true },
+		["@comment.note"] = vim.tbl_extend("force", { fg = theme.ui.bg, bg = theme.diag.hint }, styles.commentMarker),
 		-- @comment.todo           todo-type comments (e.g. `TODO`)
-		["@comment.todo"] = { fg = theme.ui.bg, bg = theme.diag.info, bold = true },
+		["@comment.todo"] = vim.tbl_extend("force", { fg = theme.ui.bg, bg = theme.diag.info }, styles.commentMarker),
 
 		-- @markup.strong          bold text
-		["@markup.strong"] = { bold = true },
+		["@markup.strong"] = vim.tbl_extend("force", {}, styles.markupStrong),
 		-- @markup.italic          italic text
-		["@markup.italic"] = { italic = true },
+		["@markup.italic"] = vim.tbl_extend("force", {}, styles.markupItalic),
 		-- @markup.strikethrough   struck-through text
-		["@markup.strikethrough"] = { strikethrough = true },
+		["@markup.strikethrough"] = vim.tbl_extend("force", {}, styles.markupStrike),
 		-- @markup.underline       underlined text (only for literal underline markup!)
-		["@markup.underline"] = { underline = true },
+		["@markup.underline"] = vim.tbl_extend("force", {}, styles.markupUnderline),
 		--
 		-- @markup.heading         headings, titles (including markers)
 		["@markup.heading"] = { fg = theme.rainbow.rainbow1 },
@@ -136,7 +141,7 @@ function M.setup(colors, opts)
 		["@markup.link"] = { link = "Underlined" },
 		["@markup.link.url"] = { link = "Underlined" },
 		-- @markup.link.label      links in reference descriptions
-		["@markup.link.label"] = { fg = theme.syn.special3, underline = false },
+		["@markup.link.label"] = vim.tbl_extend("force", { fg = theme.syn.special3 }, styles.linkLabel),
 		-- @markup.raw             literal or verbatim text (e.g. inline code)
 		["@markup.raw"] = { fg = theme.syn.string },
 		-- @markup.raw.block       literal or verbatim text as a stand-alone block

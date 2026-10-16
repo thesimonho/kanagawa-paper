@@ -4,6 +4,7 @@ local M = {}
 ---@param opts? KanagawaConfig
 function M.setup(colors, opts)
 	opts = opts or require("kanagawa-paper.config").options
+	local styles = opts.styles or require("kanagawa-paper.config").options.styles
 	local theme = colors.theme
 
 	return {
@@ -11,9 +12,9 @@ function M.setup(colors, opts)
 		-- ColorColumn	Used for the columns set with 'colorcolumn'.
 		ColorColumn = { bg = theme.ui.bg_p1 },
 		-- Conceal		Placeholder characters substituted for concealed text (see 'conceallevel').
-		Conceal = { fg = theme.ui.special, bold = true },
+		Conceal = vim.tbl_extend("force", { fg = theme.ui.special }, styles.concealed),
 		-- CurSearch	Used for highlighting a search pattern under the cursor (see 'hlsearch').
-		CurSearch = { fg = theme.ui.fg_dark, bg = theme.ui.bg_search, bold = true },
+		CurSearch = vim.tbl_extend("force", { fg = theme.ui.fg_dark, bg = theme.ui.bg_search }, styles.searchMatch),
 		-- Cursor		Character under the cursor.
 		Cursor = { fg = theme.ui.bg, bg = theme.ui.fg },
 		-- lCursor		Character under the cursor when |language-mapping| is used (see 'guicursor').
@@ -32,9 +33,13 @@ function M.setup(colors, opts)
 		-- DiffChange	Diff mode: Changed line. |diff.txt|
 		DiffChange = { bg = theme.diff.change_light },
 		-- DiffDelete	Diff mode: Deleted line. |diff.txt|
-		DiffDelete = { bg = theme.diff.delete_light, fg = theme.vcs.removed, strikethrough = true },
+		DiffDelete = vim.tbl_extend(
+			"force",
+			{ bg = theme.diff.delete_light, fg = theme.vcs.removed },
+			styles.deletedText
+		),
 		-- DiffText	Diff mode: Changed text within a changed line. |diff.txt|
-		DiffText = { bg = theme.diff.change_light, fg = theme.diff.change, bold = true },
+		DiffText = vim.tbl_extend("force", { bg = theme.diff.change_light, fg = theme.diff.change }, styles.diffText),
 		-- EndOfBuffer	Filler lines (~) after the end of the buffer. By default, this is highlighted like |hl-NonText|.
 		EndOfBuffer = { fg = theme.ui.bg },
 		-- TermCursor	Cursor in a focused terminal.
@@ -59,14 +64,18 @@ function M.setup(colors, opts)
 		-- LineNrAbove	Line number for when the 'relativenumber' option is set, above the cursor line.
 		-- LineNrBelow	Line number for when the 'relativenumber' option is set, below the cursor line.
 		-- CursorLineNr	Like LineNr when 'cursorline' is set and 'cursorlineopt' contains "number" or is "both", for the cursor line.
-		CursorLineNr = { fg = theme.ui.line_numbers.active, bg = theme.ui.bg_gutter, bold = true },
+		CursorLineNr = vim.tbl_extend(
+			"force",
+			{ fg = theme.ui.line_numbers.active, bg = theme.ui.bg_gutter },
+			styles.activeLineNumber
+		),
 		-- CursorLineFold	Like FoldColumn when 'cursorline' is set for the cursor line.
 		-- CursorLineSign	Like SignColumn when 'cursorline' is set for the cursor line.
 		Mark = { fg = theme.ui.mark },
 		-- MatchParen	Character under the cursor or just before it, if it is a paired bracket, and its match. |pi_paren.txt|
-		MatchParen = { fg = theme.diag.warning, bold = true },
+		MatchParen = vim.tbl_extend("force", { fg = theme.diag.warning }, styles.matchedBracket),
 		-- ModeMsg		'showmode' message (e.g., "-- INSERT --").
-		ModeMsg = { fg = theme.diag.warning, bold = true },
+		ModeMsg = vim.tbl_extend("force", { fg = theme.diag.warning }, styles.modeIndicator),
 		-- MsgArea		Area for messages and cmdline.
 		MsgArea = vim.o.cmdheight == 0 and { link = "StatusLine" }
 			or { fg = theme.ui.fg_dim, bg = not opts.transparent and theme.ui.bg or "NONE" },
@@ -86,7 +95,7 @@ function M.setup(colors, opts)
 		-- FloatBorder	Border of floating windows.
 		FloatBorder = { fg = theme.ui.float.fg_border, bg = theme.ui.float.bg_border },
 		-- FloatTitle	Title of floating windows.
-		FloatTitle = { fg = theme.ui.special, bg = theme.ui.float.bg_border, bold = true },
+		FloatTitle = vim.tbl_extend("force", { fg = theme.ui.special, bg = theme.ui.float.bg_border }, styles.title),
 		-- FloatFooter	Footer of floating windows.
 		FloatFooter = { fg = theme.ui.nontext, bg = theme.ui.float.bg_border },
 		-- Pmenu		Popup menu: Normal item.
@@ -132,7 +141,7 @@ function M.setup(colors, opts)
 		-- TabLineSel	Tab pages line, active tab page label.
 		TabLineSel = { fg = theme.ui.tabline.fg_selected, bg = theme.ui.tabline.bg_selected },
 		-- Title		Titles for output from ":set all", ":autocmd" etc.
-		Title = { fg = theme.ui.special, bold = true },
+		Title = vim.tbl_extend("force", { fg = theme.ui.special }, styles.title),
 		-- Visual		Visual mode selection.
 		Visual = { bg = theme.ui.bg_visual },
 		-- VisualNOS	Visual mode selection when vim is "Not Owning the Selection".

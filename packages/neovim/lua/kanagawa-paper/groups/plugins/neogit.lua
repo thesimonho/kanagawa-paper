@@ -1,12 +1,18 @@
 local M = {}
 
 function M.get(colors, opts)
+	opts = opts or require("kanagawa-paper.config").options
+	local styles = opts.styles or require("kanagawa-paper.config").options.styles
 	local theme = colors.theme
 
 	return {
 		NeogitHunkHeader = { fg = theme.syn.constant },
-		NeogitHunkHeaderCursor = { fg = theme.syn.fun, bg = theme.ui.bg_cursorline, bold = true },
-		NeogitHunkHeaderHighlight = { fg = theme.syn.fun, bold = true },
+		NeogitHunkHeaderCursor = vim.tbl_extend(
+			"force",
+			{ fg = theme.syn.fun, bg = theme.ui.bg_cursorline },
+			styles.diffText
+		),
+		NeogitHunkHeaderHighlight = vim.tbl_extend("force", { fg = theme.syn.fun }, styles.diffText),
 	}
 end
 

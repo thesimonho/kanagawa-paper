@@ -1,6 +1,8 @@
 local M = {}
 
 function M.get(colors, opts)
+	opts = opts or require("kanagawa-paper.config").options
+	local styles = opts.styles or require("kanagawa-paper.config").options.styles
 	local theme = colors.theme
 
 	return {
@@ -8,7 +10,7 @@ function M.get(colors, opts)
 		IndentBlanklineSpaceChar = { fg = theme.ui.indent },
 		IndentBlanklineSpaceCharBlankline = { fg = theme.ui.indent },
 		IndentBlanklineContextChar = { fg = theme.ui.indent_scope },
-		IndentBlanklineContextStart = { sp = theme.ui.indent_scope, underline = true },
+		IndentBlanklineContextStart = vim.tbl_extend("force", { sp = theme.ui.indent_scope }, styles.indentContext),
 		IblIndent = { fg = theme.ui.indent },
 		IblWhitespace = { fg = theme.ui.indent },
 		IblScope = { fg = theme.ui.indent_scope },

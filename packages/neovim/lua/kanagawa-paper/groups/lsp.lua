@@ -3,23 +3,24 @@ local M = {}
 ---@param opts? KanagawaConfig
 function M.setup(colors, opts)
 	opts = opts or require("kanagawa-paper.config").options
+	local styles = opts.styles or require("kanagawa-paper.config").options.styles
 	local theme = colors.theme
 	return {
-		LspReferenceText = { bg = "none", bold = false },
-		LspReferenceRead = { bg = theme.ui.bg_visual, bold = false },
-		LspReferenceWrite = { bg = theme.ui.bg_visual, bold = false },
-		LspInlayHint = { fg = theme.ui.fg_dim, bg = theme.accent.invert, italic = true },
-		LspSignatureActiveParameter = { fg = theme.modes.insert, bold = true, italic = true },
-		LspCodeLens = { fg = theme.syn.comment, bg = "None", italic = false },
+		LspReferenceText = vim.tbl_extend("force", { bg = "none" }, styles.reference),
+		LspReferenceRead = vim.tbl_extend("force", { bg = theme.ui.bg_visual }, styles.reference),
+		LspReferenceWrite = vim.tbl_extend("force", { bg = theme.ui.bg_visual }, styles.reference),
+		LspInlayHint = vim.tbl_extend("force", { fg = theme.ui.fg_dim, bg = theme.accent.invert }, styles.inlayHint),
+		LspSignatureActiveParameter = vim.tbl_extend("force", { fg = theme.modes.insert }, styles.signatureParameter),
+		LspCodeLens = vim.tbl_extend("force", { fg = theme.syn.comment, bg = "None" }, styles.codeLens),
 
 		-- ["@lsp.type.class"] = { link = "Structure" },
 		-- ["@lsp.type.decorator"] = { link = "Function" },
 		-- ["@lsp.type.enum"] = { link = "Structure" },
 		-- ["@lsp.type.enumMember"] = { link = "Constant" },
 		-- ["@lsp.type.interface"] = { link = "Structure" },
-		["@lsp.type.function"] = vim.tbl_extend("force", { fg = theme.syn.fun }, opts.styles.functions),
+		["@lsp.type.function"] = vim.tbl_extend("force", { fg = theme.syn.fun }, styles.functions),
 		["@lsp.type.macro"] = { fg = theme.syn.preproc },
-		["@lsp.type.method"] = vim.tbl_extend("force", { fg = theme.syn.fun }, opts.styles.functions), -- Function
+		["@lsp.type.method"] = vim.tbl_extend("force", { fg = theme.syn.fun }, styles.functions), -- Function
 		["@lsp.type.namespace"] = { fg = theme.syn.keyword }, -- Structure
 		["@lsp.type.parameter"] = { fg = theme.syn.parameter }, -- Identifier
 		-- ["@lsp.type.property"] = { link = "Identifier" },
@@ -50,15 +51,11 @@ function M.setup(colors, opts)
 		["@lsp.typemod.variable.static"] = { fg = theme.syn.constant },
 		["@lsp.typemod.variable.defaultLibrary"] = { fg = theme.syn.keyword },
 
-		["@lsp.typemod.function.builtin"] = vim.tbl_extend(
-			"force",
-			{ fg = theme.syn.fun_builtin },
-			opts.styles.functions
-		),
+		["@lsp.typemod.function.builtin"] = vim.tbl_extend("force", { fg = theme.syn.fun_builtin }, styles.functions),
 		["@lsp.typemod.function.defaultLibrary"] = vim.tbl_extend(
 			"force",
 			{ fg = theme.syn.fun_builtin },
-			opts.styles.functions
+			styles.functions
 		),
 		["@lsp.typemod.method.defaultLibrary"] = { fg = theme.syn.keyword },
 
@@ -66,7 +63,7 @@ function M.setup(colors, opts)
 		["@lsp.typemod.string.injected"] = { fg = theme.syn.string },
 		["@lsp.typemod.variable.injected"] = { fg = theme.syn.variable },
 
-		["@lsp.typemod.function.readonly"] = { fg = theme.syn.fun, bold = true },
+		["@lsp.typemod.function.readonly"] = vim.tbl_extend("force", { fg = theme.syn.fun }, styles.readonlyFunction),
 	}
 end
 

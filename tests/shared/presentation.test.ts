@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { ink } from "../../shared/themes/ink.ts";
 import { canvas } from "../../shared/themes/canvas.ts";
 import { resolveTheme } from "../../shared/color/evaluate.ts";
-import { syntaxStyles, textMateStyle, zedStyle } from "../../shared/styles.ts";
+import { textStyles, textMateStyle, zedStyle } from "../../shared/styles.ts";
 import { vscodeTheme } from "../../packages/vscode/adapter.ts";
 import { zedTheme } from "../../packages/zed/adapter.ts";
 import { neovimRoles } from "../../packages/neovim/adapter.ts";
@@ -44,17 +44,17 @@ for (const [variant, definition] of Object.entries({ ink, canvas })) {
     assert.equal(zed.style.syntax.selector.color, "#345678");
     assert.equal(
       vscode.semanticTokenColors.function.fontStyle,
-      textMateStyle(syntaxStyles.functions),
+      textMateStyle(textStyles.functions),
     );
     assert.equal(
       vscode.semanticTokenColors.class.fontStyle,
-      textMateStyle(syntaxStyles.type),
+      textMateStyle(textStyles.type),
     );
     for (const [name, styles] of [
-      ["Functions", syntaxStyles.functions],
-      ["Classes", syntaxStyles.type],
-      ["Comments", syntaxStyles.comment],
-      ["Strings: Escape Sequences", syntaxStyles.escape],
+      ["Functions", textStyles.functions],
+      ["Classes", textStyles.type],
+      ["Comments", textStyles.comment],
+      ["Strings: Escape Sequences", textStyles.escape],
     ] as const)
       assert.equal(
         vscode.tokenColors.find((token) => token.name === name)?.settings
@@ -62,10 +62,10 @@ for (const [variant, definition] of Object.entries({ ink, canvas })) {
         textMateStyle(styles),
       );
     for (const [name, styles] of [
-      ["function", syntaxStyles.functions],
-      ["type", syntaxStyles.type],
-      ["comment", syntaxStyles.comment],
-      ["string.escape", syntaxStyles.escape],
+      ["function", textStyles.functions],
+      ["type", textStyles.type],
+      ["comment", textStyles.comment],
+      ["string.escape", textStyles.escape],
     ] as const)
       assert.deepEqual(zed.style.syntax[name], {
         color: zed.style.syntax[name].color,

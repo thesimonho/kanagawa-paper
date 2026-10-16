@@ -1,10 +1,14 @@
 import type { Theme, Variant } from "../../shared/theme.ts";
 import { alpha } from "../../shared/color/expression.ts";
-import { syntaxStyles, zedStyle } from "../../shared/styles.ts";
+import { textStyles, zedStyle, type StylePolicy } from "../../shared/styles.ts";
 import type schema from "./theme.schema.json";
 
 type StyleKey = keyof typeof schema.definitions.ThemeStyleContent.properties;
-type Highlight = { color: string; font_style?: "italic"; font_weight?: 700 };
+type Highlight = {
+  color: string;
+  font_style?: "italic" | "normal";
+  font_weight?: 700 | 400;
+};
 type Style = Partial<
   Record<
     Exclude<
@@ -21,7 +25,11 @@ type Style = Partial<
 };
 
 /** Zed-specific mappings. Unsupported scopes inherit Zed's normal fallback. */
-export function zedTheme(theme: Theme, variant: Variant) {
+export function zedTheme(
+  theme: Theme,
+  variant: Variant,
+  styles: StylePolicy = textStyles,
+) {
   const { ui, syntax, status, changes, terminal } = theme;
   const style: Style = {
     background: ui.surface.editor.background,
@@ -145,18 +153,21 @@ export function zedTheme(theme: Theme, variant: Variant) {
     syntax: {
       attribute: { color: syntax.attribute },
       boolean: { color: syntax.constant },
-      comment: { color: syntax.comment, ...zedStyle(syntaxStyles.comment) },
+      comment: { color: syntax.comment, ...zedStyle(styles.comment) },
       "comment.doc": { color: syntax.documentation },
       constant: { color: syntax.constant },
-      constructor: { color: syntax.type, ...zedStyle(syntaxStyles.type) },
+      constructor: { color: syntax.type, ...zedStyle(styles.type) },
       embedded: { color: syntax.identifier },
-      emphasis: { color: ui.text.primary, font_style: "italic" },
-      "emphasis.strong": { color: ui.text.primary, font_weight: 700 },
-      enum: { color: syntax.type, ...zedStyle(syntaxStyles.type) },
-      function: { color: syntax.function, ...zedStyle(syntaxStyles.functions) },
+      emphasis: { color: ui.text.primary, ...zedStyle(styles.markupItalic) },
+      "emphasis.strong": {
+        color: ui.text.primary,
+        ...zedStyle(styles.markupStrong),
+      },
+      enum: { color: syntax.type, ...zedStyle(styles.type) },
+      function: { color: syntax.function, ...zedStyle(styles.functions) },
       "function.builtin": {
         color: syntax.builtinFunction,
-        ...zedStyle(syntaxStyles.functions),
+        ...zedStyle(styles.functions),
       },
       hint: { color: status.hint.base },
       keyword: { color: syntax.keyword },
@@ -182,7 +193,7 @@ export function zedTheme(theme: Theme, variant: Variant) {
       string: { color: syntax.string },
       "string.escape": {
         color: syntax.regex,
-        ...zedStyle(syntaxStyles.escape),
+        ...zedStyle(styles.escape),
       },
       "string.regex": { color: syntax.regex },
       "string.special": { color: theme.accents.special.one },
@@ -190,11 +201,11 @@ export function zedTheme(theme: Theme, variant: Variant) {
       "text.literal": { color: syntax.string },
       tag: { color: syntax.tag },
       title: { color: theme.rainbow[1] },
-      type: { color: syntax.type, ...zedStyle(syntaxStyles.type) },
+      type: { color: syntax.type, ...zedStyle(styles.type) },
       variable: { color: syntax.variable },
       "variable.parameter": { color: syntax.parameter },
       "variable.special": { color: syntax.constant },
-      variant: { color: syntax.type, ...zedStyle(syntaxStyles.type) },
+      variant: { color: syntax.type, ...zedStyle(styles.type) },
       "diff.plus": { color: changes.added.base },
       "diff.minus": { color: changes.removed.base },
     },

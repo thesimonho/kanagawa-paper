@@ -1,12 +1,18 @@
 local M = {}
 
 function M.get(colors, opts)
+	opts = opts or require("kanagawa-paper.config").options
+	local styles = opts.styles or require("kanagawa-paper.config").options.styles
 	local theme = colors.theme
 
 	return {
 		NeoTreeNormal = { link = "NormalFloat" },
 		NeoTreeNormalNC = { link = "NormalFloat" },
-		NeoTreeFloatTitle = { fg = theme.ui.fg_reverse, bg = theme.accent.accent1, bold = true },
+		NeoTreeFloatTitle = vim.tbl_extend(
+			"force",
+			{ fg = theme.ui.fg_reverse, bg = theme.accent.accent1 },
+			styles.title
+		),
 		NeoTreeFloatBorder = { link = "FloatBorder" },
 		NeoTreeCursorLine = { link = "CursorLineAlt" },
 		NeoTreeWinSeparator = { link = "WinSeparator" },
@@ -14,7 +20,7 @@ function M.get(colors, opts)
 		NeoTreeTabActive = { link = "TabLineSel" },
 		NeoTreeTabSeparatorInactive = { link = "NeoTreeTabInactive" },
 		NeoTreeTabSeparatorActive = { link = "NeoTreeTabActive" },
-		NeoTreeRootName = { fg = theme.accent.accent5, bold = true },
+		NeoTreeRootName = vim.tbl_extend("force", { fg = theme.accent.accent5 }, styles.treeRoot),
 		NeoTreeDirectoryName = { link = "Directory" },
 		NeoTreeDirectoryIcon = { link = "Directory" },
 		NeoTreeModified = { link = "NeoTreeGitModified" },
@@ -26,7 +32,7 @@ function M.get(colors, opts)
 		NeoTreeGitUntracked = { link = "NeoTreeGitModified", default = true },
 		NeoTreeGitUnstaged = { link = "NeoTreeGitModified", default = true },
 		NeoTreeIndentMarker = { fg = theme.ui.indent },
-		NeoTreeFileNameOpened = { fg = theme.ui.special, italic = true },
+		NeoTreeFileNameOpened = vim.tbl_extend("force", { fg = theme.ui.special }, styles.openedFile),
 		NeoTreeSymbolicLinkTarget = { link = "Type" },
 		NeoTreeDotfile = { fg = theme.syn.comment },
 	}

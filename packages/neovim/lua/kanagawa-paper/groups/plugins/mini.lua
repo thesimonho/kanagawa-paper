@@ -3,6 +3,8 @@ local M = {}
 ---@param colors KanagawaColors
 ---@param opts KanagawaConfig
 function M.get(colors, opts)
+	opts = opts or require("kanagawa-paper.config").options
+	local styles = opts.styles or require("kanagawa-paper.config").options.styles
 	local theme = colors.theme
 
 	return {
@@ -19,8 +21,8 @@ function M.get(colors, opts)
 
 		MiniCompletionActiveParameter = { link = "LspSignatureActiveParameter" },
 
-		MiniCursorword = { underline = false },
-		MiniCursorwordCurrent = { underline = false },
+		MiniCursorword = vim.tbl_extend("force", {}, styles.cursorWord),
+		MiniCursorwordCurrent = vim.tbl_extend("force", {}, styles.cursorWord),
 
 		MiniDepsChangeAdded = { link = "diffAdded" },
 		MiniDepsChangeRemoved = { link = "diffRemoved" },
@@ -47,13 +49,29 @@ function M.get(colors, opts)
 		MiniFilesDirectory = { link = "Directory" },
 		MiniFilesFile = { fg = theme.ui.fg },
 		MiniFilesNormal = { link = "NormalFloat" },
-		MiniFilesTitle = { fg = theme.ui.special, bg = theme.ui.float.bg_border, bold = true },
-		MiniFilesTitleFocused = { fg = theme.ui.fg, bg = theme.ui.float.bg_border, bold = true },
+		MiniFilesTitle = vim.tbl_extend(
+			"force",
+			{ fg = theme.ui.special, bg = theme.ui.float.bg_border },
+			styles.title
+		),
+		MiniFilesTitleFocused = vim.tbl_extend(
+			"force",
+			{ fg = theme.ui.fg, bg = theme.ui.float.bg_border },
+			styles.title
+		),
 
-		MiniHipatternsFixme = { fg = theme.ui.bg, bg = theme.diag.error, bold = true },
-		MiniHipatternsHack = { fg = theme.ui.bg, bg = theme.diag.warning, bold = true },
-		MiniHipatternsNote = { fg = theme.ui.bg, bg = theme.diag.hint, bold = true },
-		MiniHipatternsTodo = { fg = theme.ui.bg, bg = theme.diag.info, bold = true },
+		MiniHipatternsFixme = vim.tbl_extend(
+			"force",
+			{ fg = theme.ui.bg, bg = theme.diag.error },
+			styles.commentMarker
+		),
+		MiniHipatternsHack = vim.tbl_extend(
+			"force",
+			{ fg = theme.ui.bg, bg = theme.diag.warning },
+			styles.commentMarker
+		),
+		MiniHipatternsNote = vim.tbl_extend("force", { fg = theme.ui.bg, bg = theme.diag.hint }, styles.commentMarker),
+		MiniHipatternsTodo = vim.tbl_extend("force", { fg = theme.ui.bg, bg = theme.diag.info }, styles.commentMarker),
 
 		MiniIconsAzure = { fg = theme.syn.special1 },
 		MiniIconsBlue = { fg = theme.syn.fun },
@@ -71,9 +89,9 @@ function M.get(colors, opts)
 		MiniJump = { link = "SpellRare" },
 
 		MiniJump2dDim = { fg = theme.syn.comment },
-		MiniJump2dSpot = { fg = theme.ui.picker, bold = true, nocombine = true },
+		MiniJump2dSpot = vim.tbl_extend("force", { fg = theme.ui.picker, nocombine = true }, styles.jumpLabel),
 		MiniJump2dSpotUnique = { link = "MiniJump2dSpot" },
-		MiniJump2dSpotAhead = { fg = theme.ui.picker, bold = false, nocombine = true },
+		MiniJump2dSpotAhead = vim.tbl_extend("force", { fg = theme.ui.picker, nocombine = true }, styles.jumpPreview),
 
 		MiniMapNormal = { link = "NormalFloat" },
 		MiniMapSymbolCount = { link = "Special" },
@@ -110,12 +128,36 @@ function M.get(colors, opts)
 		MiniStarterSection = { fg = theme.ui.header1 },
 		MiniStarterQuery = { fg = theme.diag.info },
 
-		MiniStatuslineModeCommand = { fg = theme.ui.bg, bg = theme.modes.command, bold = true },
-		MiniStatuslineModeInsert = { fg = theme.ui.bg, bg = theme.modes.insert, bold = true },
-		MiniStatuslineModeNormal = { fg = theme.ui.bg_p2, bg = theme.modes.normal, bold = true },
-		MiniStatuslineModeOther = { fg = theme.ui.bg_p2, bg = theme.modes.normal, bold = true },
-		MiniStatuslineModeReplace = { fg = theme.ui.bg, bg = theme.modes.replace, bold = true },
-		MiniStatuslineModeVisual = { fg = theme.ui.bg, bg = theme.modes.visual, bold = true },
+		MiniStatuslineModeCommand = vim.tbl_extend(
+			"force",
+			{ fg = theme.ui.bg, bg = theme.modes.command },
+			styles.modeIndicator
+		),
+		MiniStatuslineModeInsert = vim.tbl_extend(
+			"force",
+			{ fg = theme.ui.bg, bg = theme.modes.insert },
+			styles.modeIndicator
+		),
+		MiniStatuslineModeNormal = vim.tbl_extend(
+			"force",
+			{ fg = theme.ui.bg_p2, bg = theme.modes.normal },
+			styles.modeIndicator
+		),
+		MiniStatuslineModeOther = vim.tbl_extend(
+			"force",
+			{ fg = theme.ui.bg_p2, bg = theme.modes.normal },
+			styles.modeIndicator
+		),
+		MiniStatuslineModeReplace = vim.tbl_extend(
+			"force",
+			{ fg = theme.ui.bg, bg = theme.modes.replace },
+			styles.modeIndicator
+		),
+		MiniStatuslineModeVisual = vim.tbl_extend(
+			"force",
+			{ fg = theme.ui.bg, bg = theme.modes.visual },
+			styles.modeIndicator
+		),
 		MiniStatuslineDevinfo = { fg = theme.ui.fg, bg = theme.ui.bg_p2 },
 		MiniStatuslineFileinfo = { fg = theme.ui.fg_dim, bg = theme.ui.bg_statusline },
 		MiniStatuslineFilename = { link = "MiniStatuslineFileinfo" },
@@ -123,22 +165,37 @@ function M.get(colors, opts)
 
 		MiniSurround = { link = "IncSearch" },
 
-		MiniTablineCurrent = { fg = theme.ui.tabline.fg_selected, bg = theme.ui.tabline.bg_selected, bold = true },
+		MiniTablineCurrent = vim.tbl_extend(
+			"force",
+			{ fg = theme.ui.tabline.fg_selected, bg = theme.ui.tabline.bg_selected },
+			styles.activeTab
+		),
 		MiniTablineFill = { link = "TabLineFill" },
 		MiniTablineHidden = { fg = theme.ui.special, bg = theme.ui.tabline.bg },
-		MiniTablineModifiedCurrent = {
+		MiniTablineModifiedCurrent = vim.tbl_extend("force", {
 			fg = theme.ui.tabline.bg_selected,
 			bg = theme.ui.tabline.fg_selected,
-			bold = true,
-		},
+		}, styles.activeTab),
 		MiniTablineModifiedHidden = { fg = theme.ui.tabline.bg, bg = theme.ui.special },
-		MiniTablineModifiedVisible = { fg = theme.ui.tabline.bg, bg = theme.ui.special, bold = true },
-		MiniTablineTabpagesection = { fg = theme.ui.fg, bg = theme.ui.bg_search, bold = true },
-		MiniTablineVisible = { fg = theme.ui.special, bg = theme.ui.tabline.bg, bold = true },
+		MiniTablineModifiedVisible = vim.tbl_extend(
+			"force",
+			{ fg = theme.ui.tabline.bg, bg = theme.ui.special },
+			styles.activeTab
+		),
+		MiniTablineTabpagesection = vim.tbl_extend(
+			"force",
+			{ fg = theme.ui.fg, bg = theme.ui.bg_search },
+			styles.activeTab
+		),
+		MiniTablineVisible = vim.tbl_extend(
+			"force",
+			{ fg = theme.ui.special, bg = theme.ui.tabline.bg },
+			styles.activeTab
+		),
 
-		MiniTestEmphasis = { bold = true },
-		MiniTestFail = { fg = theme.diag.error, bold = true },
-		MiniTestPass = { fg = theme.diag.ok, bold = true },
+		MiniTestEmphasis = vim.tbl_extend("force", {}, styles.testEmphasis),
+		MiniTestFail = vim.tbl_extend("force", { fg = theme.diag.error }, styles.testEmphasis),
+		MiniTestPass = vim.tbl_extend("force", { fg = theme.diag.ok }, styles.testEmphasis),
 
 		MiniTrailspace = { bg = theme.vcs.removed },
 	}

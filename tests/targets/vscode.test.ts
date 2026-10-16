@@ -248,8 +248,8 @@ test("VS Code tracks current installed Neovim semantics", async () => {
         Boolean(groups.Type.bold),
       );
       assert.equal(
-        rendered.semanticTokenColors["variable.builtin.classMember"].fontStyle,
-        "",
+        rendered.semanticTokenColors["variable.builtin.classMember"].italic,
+        false,
       );
       assert.equal(
         rendered.semanticTokenColors["variable.classMember.readonly"],

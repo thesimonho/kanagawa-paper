@@ -5,7 +5,7 @@ import { ink } from "../../shared/themes/ink.ts";
 import { canvas } from "../../shared/themes/canvas.ts";
 import type { ColorExpression } from "../../shared/color/expression.ts";
 import { neovimRoles } from "./adapter.ts";
-import { syntaxStyles } from "../../shared/styles.ts";
+import { textStyles } from "../../shared/styles.ts";
 
 const warning =
   "-- Generated from shared TypeScript definitions. Do not edit.\n";
@@ -82,13 +82,17 @@ export async function buildNeovim(root: string, destination: string) {
   }
   await writeFile(
     join(modules, "style_defaults.lua"),
-    warning + "return " + lua(syntaxStyles) + "\n",
+    warning + "return " + lua(textStyles) + "\n",
   );
   const annotations =
     warning +
     annotation("PaletteColors", rawPalette) +
     "\n" +
-    annotation("ThemeColors", neovimRoles(ink));
+    annotation("ThemeColors", neovimRoles(ink)) +
+    "\n---@class KanagawaStyles\n" +
+    Object.keys(textStyles)
+      .map((name) => `---@field ${name}? vim.api.keyset.highlight\n`)
+      .join("");
   await writeFile(join(modules, "generated_types.lua"), annotations);
   for (const name of ["README.md", "LICENSE"])
     await cp(join(root, name), join(destination, name));

@@ -2,6 +2,8 @@ local color = require("kanagawa-paper.lib.color")
 local M = {}
 
 function M.get(colors, opts)
+	opts = opts or require("kanagawa-paper.config").options
+	local styles = opts.styles or require("kanagawa-paper.config").options.styles
 	local theme = colors.theme
 
 	return {
@@ -11,11 +13,15 @@ function M.get(colors, opts)
 		ScrollViewCursor = { fg = theme.ui.fg },
 		ScrollViewMarks = { fg = theme.ui.mark },
 		ScrollViewFolds = { fg = theme.ui.nontext },
-		ScrollViewSearch = { fg = theme.ui.bg_search, bold = true },
+		ScrollViewSearch = vim.tbl_extend("force", { fg = theme.ui.bg_search }, styles.searchMatch),
 
-		ScrollViewConflictsTop = { fg = theme.diff.conflict_ours, bold = true },
-		ScrollViewConflictsMiddle = { fg = theme.diff.conflict_ancestor, bold = true },
-		ScrollViewConflictsBottom = { fg = theme.diff.conflict_theirs, bold = true },
+		ScrollViewConflictsTop = vim.tbl_extend("force", { fg = theme.diff.conflict_ours }, styles.conflictMarker),
+		ScrollViewConflictsMiddle = vim.tbl_extend(
+			"force",
+			{ fg = theme.diff.conflict_ancestor },
+			styles.conflictMarker
+		),
+		ScrollViewConflictsBottom = vim.tbl_extend("force", { fg = theme.diff.conflict_theirs }, styles.conflictMarker),
 
 		ScrollViewKeywordsFix = { link = "DiagnosticSignError" },
 		ScrollViewKeywordsHack = { link = "DiagnosticSignWarn" },

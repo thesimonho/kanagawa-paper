@@ -1,13 +1,15 @@
 local M = {}
 
 function M.get(colors, opts)
+	opts = opts or require("kanagawa-paper.config").options
+	local styles = opts.styles or require("kanagawa-paper.config").options.styles
 	local theme = colors.theme
 
 	return {
-		OctoDetailsLabel = { fg = theme.syn.statement, bold = true },
+		OctoDetailsLabel = vim.tbl_extend("force", { fg = theme.syn.statement }, styles.detailLabel),
 		OctoDetailsValue = { link = "@variable.member" },
-		OctoDirty = { fg = theme.syn.parameter, bold = true },
-		OctoIssueTitle = { fg = theme.syn.fun, bold = true },
+		OctoDirty = vim.tbl_extend("force", { fg = theme.syn.parameter }, styles.changedItem),
+		OctoIssueTitle = vim.tbl_extend("force", { fg = theme.syn.fun }, styles.title),
 		OctoStateChangesRequested = { link = "DiagnosticVirtualTextWarn" },
 		OctoStateClosed = { link = "DiagnosticVirtualTextError" },
 		OctoStateOpen = { link = "DiagnosticVirtualTextHint" },
