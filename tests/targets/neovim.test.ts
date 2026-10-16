@@ -20,7 +20,7 @@ for (const [name, definition] of Object.entries({ ink, canvas })) {
     const resolved = resolveTheme(neovimRoles(definition));
     assert.deepEqual(resolved.ui.line_numbers, {
       default: baseline[name].theme.ui.nontext,
-      active: baseline[name].theme.diag.warning,
+      active: name === "canvas" ? "#6c828c" : "#c4b28a",
     });
     const { line_numbers, ...ui } = resolved.ui;
     assert.deepEqual(

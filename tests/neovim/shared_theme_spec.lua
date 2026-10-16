@@ -26,7 +26,7 @@ describe("shared color preparation", function()
 		it(variant .. " keeps line numbers independent of nontext and diagnostics", function()
 			local defaults = source.prepare(variant).theme
 			assert.same(defaults.ui.nontext, defaults.ui.line_numbers.default)
-			assert.same(defaults.diag.warning, defaults.ui.line_numbers.active)
+			assert.same(variant == "canvas" and "#6c828c" or "#c4b28a", defaults.ui.line_numbers.active)
 			local result = colors.setup({
 				_theme = variant,
 				gutter = true,

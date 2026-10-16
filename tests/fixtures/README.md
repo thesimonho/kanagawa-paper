@@ -19,7 +19,7 @@ UI emphasis shares the primary accent. Ink's `ui.special` changes from `#8ea49e`
 
 Nushell `shape_garbage` resolves its foreground from `ui.text.secondary` (legacy `ui.fg_dim`), and Zellij resolves its three header metadata fields. The four affected Ink/Canvas artifact hashes include these resolved values.
 
-VS Code line-number colors use the dedicated shared roles: Ink `#54546D`/`#c4b28a` and Canvas `#92928b`/`#a1805e` for normal/active numbers. The two VS Code artifact hashes include these values. Neovim's original role and runtime comparisons omit the additive `ui.line_numbers` fields, which have separate default, palette, and override checks; existing highlight snapshots remain unchanged.
+VS Code line-number colors use the dedicated shared roles: Ink `#54546D`/`#c4b28a` and Canvas `#92928b`/`#6c828c` for normal/active numbers. The two VS Code artifact hashes include these values. Neovim's original role and runtime comparisons omit the additive `ui.line_numbers` fields, which have separate default, palette, and override checks; existing highlight snapshots remain unchanged.
 
 VS Code diagnostic info/hint colors, matched-bracket foreground, inlay background, and status-bar foreground use the corresponding Neovim roles. The VS Code artifact hashes include those mappings. Zed's special punctuation and built-in variables use the symbol and constant colors, respectively.
 
@@ -50,3 +50,7 @@ VS Code semantic variables marked `classMember` use the member foreground, inclu
 VS Code import `from` and `export` scopes and storage types inside variable-declaration expressions use keyword roles. Semantic properties use Neovim’s LSP property/Identifier color; property accesses without semantic tokens use the Tree-sitter member color. Readonly properties retain the constant role. Both VS Code artifact hashes include these mappings.
 
 VS Code semantic static variables use the shared constant foreground, matching Neovim. Both VS Code artifact hashes include this mapping.
+
+Zed structural and focused borders use the shared floating-border foreground. The Zed theme artifact hash includes this mapping.
+
+Canvas active line numbers use canvasBlue1 across targets; Ink retains dragonYellow. Canvas runtime and VS Code hashes include this change.

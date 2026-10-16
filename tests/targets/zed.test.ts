@@ -34,7 +34,7 @@ test("Zed builds both variants with valid inherited colors and extension metadat
       assert.equal(rendered.style["border.transparent"].slice(-2), "00");
       assert.equal(
         rendered.style["panel.focused_border"],
-        theme.accents.primary,
+        theme.ui.surface.floating.border.foreground,
       );
       assert.equal(
         rendered.style["conflict.background"],
