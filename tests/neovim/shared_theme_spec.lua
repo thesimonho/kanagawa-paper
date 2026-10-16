@@ -39,7 +39,7 @@ describe("shared color preparation", function()
 					},
 				},
 			})
-			local groups = require("kanagawa-paper.groups.editor").setup(result, {})
+			local groups = require("kanagawa-paper.highlights.editor").setup(result, {})
 			assert.same(defaults.ui.line_numbers.default, groups.LineNr.fg)
 			assert.same(defaults.ui.line_numbers.active, groups.CursorLineNr.fg)
 			assert.same(false, groups.CursorLineNr.bold)
@@ -56,7 +56,7 @@ describe("shared color preparation", function()
 					theme = { [variant] = { ui = { line_numbers = { active = "#abcdef" } } } },
 				},
 			})
-			local groups = require("kanagawa-paper.groups.editor").setup(result, {})
+			local groups = require("kanagawa-paper.highlights.editor").setup(result, {})
 			assert.same("#123456", groups.LineNr.fg)
 			assert.same("#abcdef", groups.CursorLineNr.fg)
 		end)

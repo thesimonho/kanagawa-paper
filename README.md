@@ -180,7 +180,7 @@ require("kanagawa-paper").setup({
  -- enable highlights for all plugins (disabled if using lazy.nvim)
  all_plugins = package.loaded.lazy == nil,
  -- manually enable/disable individual plugins.
- -- check the `groups/plugins` directory for the exact names
+ -- check the `highlights/plugins` directory for the exact names
  plugins = {
   -- examples:
   -- rainbow_delimiters = true

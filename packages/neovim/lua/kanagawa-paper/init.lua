@@ -37,7 +37,7 @@ function M.load(opts)
 			end
 
 			local colors = require("kanagawa-paper.colors").setup(opts)
-			local groups, _ = require("kanagawa-paper.groups").setup(colors, opts)
+			local groups, _ = require("kanagawa-paper.highlights").setup(colors, opts)
 			local term_colors = require("kanagawa-paper.colors").terminal(colors, opts)
 			local cache_opts = cache.get_opts(opts)
 			local current_theme = util.get_current_theme(opts)

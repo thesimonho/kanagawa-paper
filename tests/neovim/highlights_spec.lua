@@ -1,16 +1,59 @@
 local Config = require("kanagawa-paper.config")
-local Groups = require("kanagawa-paper.groups")
+local Highlights = require("kanagawa-paper.highlights")
 
 before_each(function()
 	Config.setup()
 end)
 
+describe("plugin discovery cache", function()
+	local Cache = require("kanagawa-paper.lib.cache")
+	local old_root
+
+	before_each(function()
+		Highlights.plugins = nil
+		Cache.delete("plugins")
+		old_root = vim.fn.tempname() .. "/kanagawa-paper/groups/plugins"
+	end)
+
+	after_each(function()
+		Highlights.plugins = nil
+		Cache.delete("plugins")
+		vim.fn.delete(old_root:match("^(.*)/kanagawa%-paper/groups/plugins$"), "rf")
+	end)
+
+	it("discovers plugins without a cache and reuses the current directory", function()
+		local plugins = Highlights.get_all_plugins()
+		assert.is_true(vim.list_contains(plugins, "neo_tree"))
+		local cached = Cache.read("plugins")
+		assert.is_true(cached.plugin_root:match("/highlights/plugins$") ~= nil)
+		Highlights.plugins = nil
+		assert.same(plugins, Highlights.get_all_plugins())
+	end)
+
+	for _, exists in ipairs({ true, false }) do
+		it("replaces the previous directory cache when it " .. (exists and "exists" or "is missing"), function()
+			if exists then
+				vim.fn.mkdir(old_root, "p")
+			end
+			Cache.write("plugins", {
+				plugin_root = old_root,
+				mtime = os.time() + 3600,
+				plugins = { "obsolete_plugin" },
+			})
+			local plugins = Highlights.get_all_plugins()
+			assert.is_true(vim.list_contains(plugins, "neo_tree"))
+			assert.is_false(vim.list_contains(plugins, "obsolete_plugin"))
+			assert.is_true(Cache.read("plugins").plugin_root:match("/highlights/plugins$") ~= nil)
+		end)
+	end
+end)
+
 describe("group is loadable", function()
-	for name in vim.fs.dir("packages/neovim/lua/kanagawa-paper/groups/plugins") do
+	for name in vim.fs.dir("packages/neovim/lua/kanagawa-paper/highlights/plugins") do
 		name = name:match("(.+)%.lua$")
 		it(name .. " has a plugin mapping", function()
 			local mapping = false
-			for _, v in pairs(Groups.get_all_plugins()) do
+			for _, v in pairs(Highlights.get_all_plugins()) do
 				if v == name then
 					mapping = true
 					break
@@ -47,7 +90,7 @@ describe("group config", function()
 				},
 			})
 			local colors = require("kanagawa-paper.colors").setup(opts)
-			local groups = Groups.setup(colors, opts)
+			local groups = Highlights.setup(colors, opts)
 			assert.same({ link = "Directory" }, groups.NeoTreeDirectoryName)
 			assert.same({ link = "Directory" }, groups.NeoTreeDirectoryIcon)
 			assert.same(groups.MiniFilesDirectory, groups.NeoTreeDirectoryName)
@@ -92,7 +135,7 @@ describe("group config", function()
 				},
 			})
 			local colors = require("kanagawa-paper.colors").setup(opts)
-			local groups = Groups.setup(colors, opts)
+			local groups = Highlights.setup(colors, opts)
 			assert.same({ link = "NonText" }, groups.CmpItemMenu)
 			assert.same(groups.BlinkCmpKind, groups.CmpItemKindDefault)
 			assert.same(groups.NeoTreeFileNameOpened, groups.NvimTreeOpenedFile)
@@ -147,7 +190,7 @@ describe("group config", function()
 				},
 			})
 			local colors = require("kanagawa-paper.colors").setup(opts)
-			local groups = Groups.setup(colors, opts)
+			local groups = Highlights.setup(colors, opts)
 			assert.same("#123456", groups.SnacksIndentScope.fg)
 			assert.same(groups.SnacksIndentScope.fg, groups.MiniIndentscopeSymbol.fg)
 			assert.same(groups.SnacksIndentScope.fg, groups.IblScope.fg)
@@ -162,18 +205,18 @@ describe("group config", function()
 	it("does all plugins", function()
 		local opts = Config.extend({ all_plugins = true, auto_plugins = false })
 		local all = {}
-		for _, name in pairs(Groups.get_all_plugins()) do
+		for _, name in pairs(Highlights.get_all_plugins()) do
 			all[name] = true
 		end
 		local colors = require("kanagawa-paper.colors").setup(opts)
-		local _, plugins = Groups.setup(colors, opts)
+		local _, plugins = Highlights.setup(colors, opts)
 		assert.same(all, plugins)
 	end)
 
 	it("does no plugins", function()
 		local opts = Config.extend({ all_plugins = false, auto_plugins = false })
 		local colors = require("kanagawa-paper.colors").setup(opts)
-		local _, plugins = Groups.setup(colors, opts)
+		local _, plugins = Highlights.setup(colors, opts)
 		assert.same({}, plugins)
 	end)
 
@@ -190,7 +233,7 @@ describe("group config", function()
 		all.aerial = true
 		all.snacks = true
 		local colors = require("kanagawa-paper.colors").setup(opts)
-		local _, plugins = Groups.setup(colors, opts)
+		local _, plugins = Highlights.setup(colors, opts)
 		assert.same(all, plugins)
 	end)
 
@@ -203,7 +246,7 @@ describe("group config", function()
 		all.lazy = true
 		all.mini = true
 		local colors = require("kanagawa-paper.colors").setup(opts)
-		local _, plugins = Groups.setup(colors, opts)
+		local _, plugins = Highlights.setup(colors, opts)
 		assert.same(all, plugins)
 	end)
 
@@ -220,7 +263,7 @@ describe("group config", function()
 		all.neo_tree = true
 		all.snacks = true
 		local colors = require("kanagawa-paper.colors").setup(opts)
-		local _, plugins = Groups.setup(colors, opts)
+		local _, plugins = Highlights.setup(colors, opts)
 		assert.same(all, plugins)
 	end)
 
@@ -237,7 +280,7 @@ describe("group config", function()
 		all.aerial = false
 		all.snacks = true
 		local colors = require("kanagawa-paper.colors").setup(opts)
-		local _, plugins = Groups.setup(colors, opts)
+		local _, plugins = Highlights.setup(colors, opts)
 		assert.same(all, plugins)
 	end)
 end)

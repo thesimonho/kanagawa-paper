@@ -1,10 +1,10 @@
-import type { Theme } from "../../shared/theme.ts";
+import type { Theme } from "../../../shared/theme.ts";
 import {
   textMateStyle,
   semanticStyle,
   type StylePolicy,
   type TextStyle,
-} from "../../shared/styles.ts";
+} from "../../../shared/styles.ts";
 
 function withDeprecatedStyles<T extends object>(rules: T, style: TextStyle) {
   // Each derived selector outranks its base style reset, regardless of JSON key order.

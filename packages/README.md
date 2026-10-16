@@ -27,11 +27,11 @@ shared palette, theme roles, and text styles
 
 ## Target boundaries
 
-`neovim/` has an additional runtime layer. Its TypeScript adapter projects shared colors into Neovim's public `ui`, `syn`, and other role names. Its builder emits Lua palette, theme, and style defaults, then copies the handwritten runtime. At load time, that runtime applies user overrides and constructs actual highlight groups, including plugin integrations such as Neo-tree. Those Lua groups are also target mappings; their style values come from the generated shared defaults through the resolved configuration.
+`neovim/` has an additional runtime layer. Its TypeScript adapter projects shared colors into Neovim's public `ui`, `syn`, and other role names. Its builder emits Lua palette, theme, and style defaults, then copies the handwritten runtime. At load time, that runtime applies user overrides and constructs actual highlight groups, including plugin integrations such as Neo-tree. The runtime mappings live in `lua/kanagawa-paper/highlights/`, with semantic tokens in `semantic.lua` and LSP UI in `lsp.lua`. Those Lua highlights are also target mappings; their style values come from the generated shared defaults through the resolved configuration.
 
-`vscode/` maps shared roles directly into UI colors, TextMate rules, and semantic-token rules. Its builder writes the theme JSON files and assembles the extension.
+`vscode/highlights/` maps shared roles directly into UI colors, TextMate rules, and semantic-token rules; `adapter.ts` exposes the assembled theme. Its builder writes the theme JSON files and assembles the extension.
 
-`zed/` maps shared roles into Zed's UI and syntax styles. Its builder validates the pinned theme schema and assembles the extension. Zed's own semantic-token rules determine which theme styles semantic tokens select; the theme package cannot control every such distinction. It supports independent archive releases, but the archive publisher does not manage Zed registry entries.
+`zed/highlights/` maps shared roles into Zed's UI and combined syntax/semantic styles; `adapter.ts` exposes the assembled theme. Its builder validates the pinned theme schema and assembles the extension. Zed's own semantic-token rules determine which theme styles semantic tokens select; the theme package cannot control every such distinction. It supports independent archive releases, but the archive publisher does not manage Zed registry entries.
 
 `extras/` owns the registry, builder, and adapters for copyable application configurations. Builds write to `dist/extras/`; generation updates the root `extras/` directory. It has no independent application version or automated release.
 

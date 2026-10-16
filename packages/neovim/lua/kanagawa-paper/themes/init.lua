@@ -37,7 +37,7 @@ function M.setup(opts)
 		local apply_saturation = require("kanagawa-paper.colors").apply_saturation
 		local apply_brightness = require("kanagawa-paper.colors").apply_brightness
 		local colors = require("kanagawa-paper.colors").setup(opts)
-		local groups, _ = require("kanagawa-paper.groups").setup(colors, opts)
+		local groups, _ = require("kanagawa-paper.highlights").setup(colors, opts)
 		local term_colors = require("kanagawa-paper.colors").terminal(colors, opts)
 
 		for hl, spec in pairs(groups) do

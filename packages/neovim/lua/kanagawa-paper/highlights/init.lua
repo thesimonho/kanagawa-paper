@@ -13,9 +13,15 @@ function M.get_all_plugins()
 		return M.plugins
 	end
 
+	local runtime_files = vim.api.nvim_get_runtime_file("**/kanagawa-paper/highlights/plugins", false)
+	if #runtime_files == 0 then
+		return {}
+	end
+
+	local plugin_root = runtime_files[1]
 	local cache_data = cache.read("plugins")
-	if cache_data and cache_data.plugin_root then
-		local stat = vim.uv.fs_stat(cache_data.plugin_root)
+	if cache_data and cache_data.plugin_root == plugin_root then
+		local stat = vim.uv.fs_stat(plugin_root)
 		if stat and stat.mtime.sec <= cache_data.mtime then
 			M.plugins = cache_data.plugins
 			return cache_data.plugins
@@ -23,12 +29,6 @@ function M.get_all_plugins()
 	end
 
 	-- cache is missing or stale
-	local runtime_files = vim.api.nvim_get_runtime_file("**/kanagawa-paper/groups/plugins", false)
-	if #runtime_files == 0 then
-		return {}
-	end
-
-	local plugin_root = runtime_files[1]
 	local stat = vim.uv.fs_stat(plugin_root)
 	local current_mtime = stat and stat.mtime.sec or 0
 
@@ -65,8 +65,8 @@ function M.setup(colors, opts)
 	local groups = {}
 
 	-- add base groups
-	for _, group in ipairs({ "editor", "syntax", "treesitter", "lsp", "ft" }) do
-		local mod = require("kanagawa-paper.groups." .. group)
+	for _, group in ipairs({ "editor", "syntax", "treesitter", "semantic", "lsp", "ft" }) do
+		local mod = require("kanagawa-paper.highlights." .. group)
 		for hl, spec in pairs(mod.setup(colors, opts)) do
 			groups[hl] = spec
 		end
@@ -100,7 +100,7 @@ function M.setup(colors, opts)
 	for plugin, enabled in pairs(enabled_plugins) do
 		if enabled then
 			-- use pcall to avoid error if plugin doesnt exist
-			local ok, res = pcall(require, "kanagawa-paper.groups.plugins." .. plugin)
+			local ok, res = pcall(require, "kanagawa-paper.highlights.plugins." .. plugin)
 			if not ok then
 				vim.notify(
 					"Error loading plugin: " .. plugin .. "\n" .. res,
