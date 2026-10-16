@@ -323,7 +323,11 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
     },
     {
       name: "Import Keywords",
-      scope: ["keyword.control.import", "keyword.control.from"],
+      scope: [
+        "keyword.control.import",
+        "keyword.control.from",
+        "keyword.control.export",
+      ],
       settings: { foreground: theme.syntax.preprocessor },
     },
     {
