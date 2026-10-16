@@ -27,3 +27,7 @@ generate:
 
 check:
     @npm run check
+
+# Collect highlighting evidence without a desktop window (VS Code needs Xvfb).
+theme-audit editor fixture *args:
+    @node scripts/theme-audit/headless.cjs "{{ editor }}" "{{ fixture }}" {{ args }}

@@ -2,7 +2,7 @@ local M = {}
 local root = vim.fn.fnamemodify(debug.getinfo(1, "S").source:sub(2), ":p:h")
 
 -- Call inside the configured editor after its parser and language server attach.
-function M.collect(theme)
+function M.collect(theme, directory)
   assert(type(theme) == "string" and theme ~= "", "Supply the common theme name used in both reports")
   local file = vim.api.nvim_buf_get_name(0)
   local manifest = vim.json.decode(table.concat(vim.fn.readfile(root .. "/fixtures/manifest.json"), "\n"))
@@ -47,8 +47,9 @@ function M.collect(theme)
     fixture = fixture.file, sourceHash = vim.fn.sha256(source), observations = observations,
     collection = { languageServers = clients, colorscheme = vim.g.colors_name },
   }
-  vim.fn.mkdir(root .. "/reports", "p")
-  local output = root .. "/reports/neovim-" .. fixture.file .. ".json"
+  directory = directory or (root .. "/reports")
+  vim.fn.mkdir(directory, "p")
+  local output = directory .. "/neovim-" .. fixture.file .. ".json"
   vim.fn.writefile({ vim.json.encode(report) }, output)
   print(output)
   return report
