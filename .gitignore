@@ -24,3 +24,5 @@ node_modules/
 
 # Local planning records and visual review evidence
 /docs/plans/
+
+/scripts/theme-audit/reports/

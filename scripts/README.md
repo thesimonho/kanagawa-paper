@@ -12,7 +12,7 @@ Install Node 22 or later, then `npm ci --ignore-scripts` at the repository root.
 
 `generate.ts` updates extras and the palette Markdown. The generation action uses it plus panvimdoc to produce Neovim help from the root README. Never hand-edit generated help. PR validation generates these files and uploads them for inspection. The post-merge publisher commits only generated files; normal source work still requires PR review. `ci/release/` owns independent versions and frozen artifact publication.
 
-`ci/` contains hosted publication entry points and their dependencies. `build/` contains shared build and assembly tools; `test/` contains test runners and bootstrap code. Generation and syntax preview scripts remain at this level.
+`ci/` contains hosted publication entry points and their dependencies. `build/` contains shared build and assembly tools; `test/` contains test runners and bootstrap code. Generation and syntax preview scripts remain at this level. `theme-audit/` contains contributor fixtures, editor collectors, and evidence comparison tools; it is not included in theme distributions.
 
 Build output, local previews, and temporary experiments are disposable.
 

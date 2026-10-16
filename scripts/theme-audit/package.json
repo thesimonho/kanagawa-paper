@@ -1,0 +1,20 @@
+{
+  "name": "theme-audit-tools",
+  "displayName": "Theme Audit Tools",
+  "description": "Collect semantic token evidence for contributor theme comparisons.",
+  "version": "0.0.1",
+  "private": true,
+  "publisher": "local-tools",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "main": "./vscode.cjs",
+  "contributes": {
+    "commands": [
+      {
+        "command": "themeAudit.collect",
+        "title": "Theme Audit: Collect Active Fixture"
+      }
+    ]
+  }
+}
