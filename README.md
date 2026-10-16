@@ -147,7 +147,11 @@ require("kanagawa-paper").setup({
   -- style for comments
   comment = { italic = true },
   -- style for functions
-  functions = { italic = false, bold = false },
+  functions = { italic = false, bold = true },
+  functionDeclaration = { bold = true },
+  functionCall = { bold = true },
+  typeDeclaration = { bold = true },
+  controlFlow = { bold = true },
   -- style for keywords
   keyword = { italic = false, bold = false },
   -- style for statements

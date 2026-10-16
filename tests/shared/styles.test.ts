@@ -12,13 +12,20 @@ import { zedTheme } from "../../packages/zed/adapter.ts";
 import { resolveTheme } from "../../shared/color/evaluate.ts";
 import { canvas } from "../../shared/themes/canvas.ts";
 
-test("chosen emphasis is limited to comments, documentation, and deprecation", () => {
+test("chosen emphasis separates structural bold from supporting data", () => {
   for (const [name, style] of Object.entries(textStyles)) {
     const expected =
       name === "deprecated"
         ? { strikethrough: true }
         : {
-            bold: false,
+            bold: [
+              "functions",
+              "functionDeclaration",
+              "functionCall",
+              "typeDeclaration",
+              "controlFlow",
+              "readonlyFunction",
+            ].includes(name),
             italic: name === "comment" || name === "documentation",
             underline: false,
             strikethrough: false,
@@ -42,25 +49,55 @@ test("editor output enables only the selected emphasis", () => {
           "Strings: Documentation",
         ].includes(rule.name)
           ? "italic"
-          : rule.name === "Deprecated"
-            ? "strikethrough"
-            : "",
+          : [
+                "Functions",
+                "Function Declarations",
+                "Function Calls",
+                "Type Declarations",
+                "Control Flow",
+              ].includes(rule.name)
+            ? "bold"
+            : rule.name === "Deprecated"
+              ? "strikethrough"
+              : "",
         rule.name,
       );
   for (const [name, style] of Object.entries(vscode.semanticTokenColors)) {
     if (typeof style === "string") continue;
-    if ("fontStyle" in style) assert.equal(style.fontStyle, "", name);
+    if ("fontStyle" in style)
+      assert.equal(
+        style.fontStyle,
+        /^(function|method)(\.|$)/.test(name) || name === "keyword.controlFlow"
+          ? "bold"
+          : "",
+        name,
+      );
     for (const attribute of ["bold", "italic", "underline", "strikethrough"])
       assert.equal(
         (style as Record<string, unknown>)[attribute] === true,
-        name.endsWith(".deprecated") && attribute === "strikethrough",
+        (name.endsWith(".deprecated") && attribute === "strikethrough") ||
+          (!name.endsWith(".deprecated") &&
+            /\.(declaration|definition)$/.test(name) &&
+            attribute === "bold"),
         name,
       );
   }
   for (const [name, style] of Object.entries(
     zedTheme(theme, "canvas").style.syntax,
   )) {
-    assert.notEqual(style.font_weight, 700, name);
+    assert.equal(
+      style.font_weight === 700,
+      [
+        "function",
+        "function.builtin",
+        "function.call",
+        "function.method.call",
+        "constructor",
+        "type.definition",
+        "keyword.control",
+      ].includes(name),
+      name,
+    );
     assert.equal(
       style.font_style === "italic",
       ["comment", "comment.doc", "string.doc", "string.documentation"].includes(
@@ -189,4 +226,45 @@ test("existing semantic replacements keep resets that outrank inherited decorati
       strikethrough: false,
     },
   );
+});
+
+test("structural styles distinguish declarations, calls, references, and imports", () => {
+  const policy: StylePolicy = {
+    ...textStyles,
+    functionDeclaration: { bold: false, italic: true },
+    functionCall: { bold: false },
+    typeDeclaration: { bold: true },
+  };
+  const theme = resolveTheme(canvas);
+  const vs = vscodeTheme(theme, "canvas", policy);
+  assert.deepEqual(vs.semanticTokenColors["class.builtin.declaration"], {
+    bold: true,
+  });
+  assert.deepEqual(vs.semanticTokenColors["function.builtin.declaration"], {
+    bold: false,
+    italic: true,
+  });
+  assert.deepEqual(
+    vs.semanticTokenColors["function.builtin.declaration.deprecated"],
+    { strikethrough: true },
+  );
+  assert.equal(vs.semanticTokenColors.type.fontStyle, "");
+  assert.equal(
+    vs.tokenColors.find((r) => r.name === "Import Keywords")?.settings
+      .fontStyle,
+    "",
+  );
+  assert.equal(
+    vs.tokenColors.find((r) => r.name === "Function Calls")?.settings.fontStyle,
+    "",
+  );
+  assert.equal(
+    vs.tokenColors.find((r) => r.name === "Function Declarations")?.settings
+      .fontStyle,
+    "italic",
+  );
+  const zed = zedTheme(theme, "canvas", policy).style.syntax;
+  assert.equal(zed.type.font_weight, 400);
+  assert.equal(zed["type.definition"].font_weight, 700);
+  assert.equal(zed["function.call"].font_weight, 400);
 });

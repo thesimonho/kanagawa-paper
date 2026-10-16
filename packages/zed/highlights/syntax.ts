@@ -23,7 +23,7 @@ export function zedSyntaxColors(theme: Theme, styles: StylePolicy) {
     },
     "string.doc": { color: syntax.string, ...zedStyle(styles.documentation) },
     constant: { color: syntax.constant },
-    constructor: { color: syntax.type, ...zedStyle(styles.type) },
+    constructor: { color: syntax.type, ...zedStyle(styles.functionCall) },
     embedded: { color: syntax.identifier },
     emphasis: { color: ui.text.primary, ...zedStyle(styles.markupItalic) },
     "emphasis.strong": {
@@ -35,6 +35,22 @@ export function zedSyntaxColors(theme: Theme, styles: StylePolicy) {
     "function.builtin": {
       color: syntax.builtinFunction,
       ...zedStyle(styles.functions),
+    },
+    "function.call": {
+      color: syntax.function,
+      ...zedStyle(styles.functionCall),
+    },
+    "function.method.call": {
+      color: syntax.function,
+      ...zedStyle(styles.functionCall),
+    },
+    "type.definition": {
+      color: syntax.type,
+      ...zedStyle(styles.typeDeclaration),
+    },
+    "keyword.control": {
+      color: syntax.keyword,
+      ...zedStyle(styles.controlFlow),
     },
     hint: { color: status.hint.base },
     keyword: { color: syntax.keyword },

@@ -2,6 +2,35 @@
 vim.opt.runtimepath:prepend(assert(arg[1]))
 require("kanagawa-paper").setup({ _theme = "canvas", cache = false, all_plugins = true })
 local _, defaults = require("kanagawa-paper").load()
+local bold_groups = {
+	Function = true,
+	Conditional = true,
+	Repeat = true,
+	Label = true,
+	Exception = true,
+	["@function"] = true,
+	["@function.method"] = true,
+	["@function.call"] = true,
+	["@function.method.call"] = true,
+	["@function.builtin"] = true,
+	["@constructor"] = true,
+	["@type.definition"] = true,
+	["@keyword.return"] = true,
+	["@keyword.exception"] = true,
+	["@keyword.conditional"] = true,
+	["@keyword.repeat"] = true,
+	["@lsp.type.function"] = true,
+	["@lsp.type.method"] = true,
+	["@lsp.typemod.function.builtin"] = true,
+	["@lsp.typemod.function.defaultLibrary"] = true,
+	["@lsp.typemod.function.readonly"] = true,
+	["@lsp.typemod.method.defaultLibrary"] = true,
+}
+for _, token in ipairs({ "class", "type", "struct", "enum", "interface", "function", "method" }) do
+	for _, modifier in ipairs({ "declaration", "definition" }) do
+		bold_groups["@lsp.typemod." .. token .. "." .. modifier] = true
+	end
+end
 for name, highlight in pairs(defaults) do
 	for _, attribute in ipairs({ "bold", "italic", "underline", "strikethrough" }) do
 		local italic = attribute == "italic"
@@ -18,7 +47,11 @@ for name, highlight in pairs(defaults) do
 				or name == "CmpItemAbbrDeprecated"
 				or name == "BlinkCmpLabelDeprecated"
 			)
-		assert((highlight[attribute] == true) == (italic or deprecated), name .. "." .. attribute)
+		assert(
+			(highlight[attribute] == true)
+				== (italic or deprecated or (attribute == "bold" and bold_groups[name] == true)),
+			name .. "." .. attribute
+		)
 	end
 end
 
@@ -28,6 +61,9 @@ require("kanagawa-paper").setup({
 	all_plugins = true,
 	styles = {
 		functions = { bold = false, italic = true },
+		functionDeclaration = { bold = false, italic = true },
+		functionCall = { bold = false },
+		typeDeclaration = { bold = true },
 		boolean = { bold = false },
 		openedFile = { italic = false },
 		activeLineNumber = { bold = false },
@@ -63,3 +99,11 @@ assert(gui({ bold = false }) == "")
 assert(gui({ bold = true, italic = true }) == "bold,italic")
 assert(require("lualine.themes.kanagawa-paper-canvas").inactive.b.gui == "bold,italic")
 assert(require("lualine.themes.kanagawa-paper-ink").inactive.b.gui == "bold,italic")
+
+assert(groups["@function"].bold == false)
+assert(groups["@function"].italic == true)
+assert(groups["@function.call"].bold == false)
+assert(groups.Type.bold == false)
+assert(groups["@lsp.typemod.class.declaration"].bold == true)
+assert(groups["@lsp.typemod.class.declaration"].fg == nil)
+assert(groups["@lsp.type.keyword"].bold == nil)

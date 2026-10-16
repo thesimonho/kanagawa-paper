@@ -5,13 +5,14 @@ function M.setup(colors, opts)
 	opts = opts or require("kanagawa-paper.config").options
 	local styles = opts.styles or require("kanagawa-paper.config").options.styles
 	local theme = colors.theme
-	return {
+	local highlights = {
 
 		-- ["@lsp.type.class"] = { link = "Structure" },
 		-- ["@lsp.type.decorator"] = { link = "Function" },
 		-- ["@lsp.type.enum"] = { link = "Structure" },
 		-- ["@lsp.type.enumMember"] = { link = "Constant" },
 		-- ["@lsp.type.interface"] = { link = "Structure" },
+		["@lsp.type.keyword"] = { fg = theme.syn.keyword },
 		["@lsp.type.function"] = vim.tbl_extend("force", { fg = theme.syn.fun }, styles.functions),
 		["@lsp.type.macro"] = { fg = theme.syn.preproc },
 		["@lsp.type.method"] = vim.tbl_extend("force", { fg = theme.syn.fun }, styles.functions), -- Function
@@ -52,7 +53,7 @@ function M.setup(colors, opts)
 			{ fg = theme.syn.fun_builtin },
 			styles.functions
 		),
-		["@lsp.typemod.method.defaultLibrary"] = { fg = theme.syn.keyword },
+		["@lsp.typemod.method.defaultLibrary"] = vim.tbl_extend("force", { fg = theme.syn.keyword }, styles.functions),
 
 		["@lsp.typemod.operator.injected"] = { fg = theme.syn.operator },
 		["@lsp.typemod.string.injected"] = { fg = theme.syn.string },
@@ -60,6 +61,19 @@ function M.setup(colors, opts)
 
 		["@lsp.typemod.function.readonly"] = vim.tbl_extend("force", { fg = theme.syn.fun }, styles.readonlyFunction),
 	}
+	for _, token in ipairs({ "class", "type", "struct", "enum", "interface" }) do
+		for _, modifier in ipairs({ "declaration", "definition" }) do
+			highlights["@lsp.typemod." .. token .. "." .. modifier] =
+				vim.tbl_extend("force", {}, styles.typeDeclaration)
+		end
+	end
+	for _, token in ipairs({ "function", "method" }) do
+		for _, modifier in ipairs({ "declaration", "definition" }) do
+			highlights["@lsp.typemod." .. token .. "." .. modifier] =
+				vim.tbl_extend("force", {}, styles.functionDeclaration)
+		end
+	end
+	return highlights
 end
 
 return M

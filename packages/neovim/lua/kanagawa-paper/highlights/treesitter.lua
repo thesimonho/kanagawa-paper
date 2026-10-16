@@ -48,6 +48,7 @@ function M.setup(colors, opts)
 		--
 		-- @type                   type or class definitions and annotations
 		-- @type.builtin           built-in types
+		["@type.definition"] = vim.tbl_extend("force", { fg = theme.syn.type }, styles.typeDeclaration),
 		-- @type.definition        identifiers in type definitions (e.g. `typedef <type> <identifier>` in C)
 		--
 		-- @attribute              attribute annotations (e.g. Python decorators, Rust lifetimes)
@@ -55,6 +56,10 @@ function M.setup(colors, opts)
 		-- @attribute.builtin      builtin annotations (e.g. `@property` in Python)
 		-- @property               the key in key/value pairs
 		--
+		["@function"] = vim.tbl_extend("force", { fg = theme.syn.fun }, styles.functionDeclaration),
+		["@function.method"] = vim.tbl_extend("force", { fg = theme.syn.fun }, styles.functionDeclaration),
+		["@function.call"] = vim.tbl_extend("force", { fg = theme.syn.fun }, styles.functionCall),
+		["@function.method.call"] = vim.tbl_extend("force", { fg = theme.syn.fun }, styles.functionCall),
 		-- @function               function definitions
 		-- @function.builtin       built-in functions
 		["@function.builtin"] = vim.tbl_extend("force", { fg = theme.syn.fun_builtin }, styles.functions),
@@ -65,7 +70,7 @@ function M.setup(colors, opts)
 		-- @function.method.call   method calls
 		--
 		-- @constructor            constructor calls and type instantiations
-		["@constructor"] = { fg = theme.syn.type },
+		["@constructor"] = vim.tbl_extend("force", { fg = theme.syn.type }, styles.functionCall),
 		-- @operator               symbolic operators (e.g. `+`, `*`)
 		["@operator"] = { fg = theme.syn.operator },
 		--
@@ -80,10 +85,12 @@ function M.setup(colors, opts)
 		-- @keyword.modifier       keywords defining type modifiers (e.g. `const`, `static`, `public`)
 		-- @keyword.repeat         keywords related to loops (e.g. `for`, `while`)
 		-- @keyword.return         keywords like `return` and `yield`
-		["@keyword.return"] = vim.tbl_extend("force", { fg = theme.syn.keyword }, styles.keyword),
+		["@keyword.return"] = vim.tbl_extend("force", { fg = theme.syn.keyword }, styles.controlFlow),
 		-- @keyword.debug          keywords related to debugging
 		-- @keyword.exception      keywords related to exceptions (e.g. `throw`, `catch`)
-		["@keyword.exception"] = vim.tbl_extend("force", { fg = theme.syn.keyword }, styles.statement),
+		["@keyword.exception"] = vim.tbl_extend("force", { fg = theme.syn.keyword }, styles.controlFlow),
+		["@keyword.conditional"] = vim.tbl_extend("force", { fg = theme.syn.statement }, styles.controlFlow),
+		["@keyword.repeat"] = vim.tbl_extend("force", { fg = theme.syn.statement }, styles.controlFlow),
 
 		-- @keyword.conditional         keywords related to conditionals (e.g. `if`, `else`)
 		-- @keyword.conditional.ternary ternary operator (e.g. `?`, `:`)

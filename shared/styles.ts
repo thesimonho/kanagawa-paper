@@ -17,7 +17,10 @@ const plain = {
 export const textStyles = {
   // Syntax roles retain the existing Neovim configuration names.
   comment: { ...plain, italic: true },
-  functions: { ...plain },
+  functions: { ...plain, bold: true },
+  functionDeclaration: { ...plain, bold: true },
+  functionCall: { ...plain, bold: true },
+  typeDeclaration: { ...plain, bold: true },
   keyword: { ...plain },
   statement: { ...plain },
   type: { ...plain },
@@ -27,8 +30,8 @@ export const textStyles = {
   builtinType: { ...plain },
   builtinMember: { ...plain },
   keywordOperator: { ...plain },
-  controlFlow: { ...plain },
-  readonlyFunction: { ...plain },
+  controlFlow: { ...plain, bold: true },
+  readonlyFunction: { ...plain, bold: true },
   documentation: { ...plain, italic: true },
   commentMarker: { ...plain },
   section: { ...plain },

@@ -63,7 +63,10 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
       "keyword.control.from",
       "keyword.control.export",
     ],
-    settings: { foreground: theme.syntax.preprocessor },
+    settings: {
+      foreground: theme.syntax.preprocessor,
+      fontStyle: textMateStyle(styles.keyword),
+    },
   },
   {
     name: "Declaration Keywords",
@@ -149,6 +152,32 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
       fontStyle: textMateStyle(styles.functions),
       foreground: theme.syntax.function,
     },
+  },
+  {
+    name: "Function Declarations",
+    scope: "entity.name.function",
+    settings: { fontStyle: textMateStyle(styles.functionDeclaration) },
+  },
+  {
+    name: "Function Calls",
+    scope: ["support.function", "variable.function"],
+    settings: { fontStyle: textMateStyle(styles.functionCall) },
+  },
+  {
+    name: "Control Flow",
+    scope: "keyword.control",
+    settings: { fontStyle: textMateStyle(styles.controlFlow) },
+  },
+  {
+    name: "Type Declarations",
+    scope: [
+      "entity.name.type.class",
+      "entity.name.type.interface",
+      "entity.name.type.struct",
+      "entity.name.type.enum",
+      "entity.name.type.alias",
+    ],
+    settings: { fontStyle: textMateStyle(styles.typeDeclaration) },
   },
   {
     name: "Classes",

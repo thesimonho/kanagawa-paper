@@ -31,6 +31,9 @@ function M.setup(colors, opts)
 
 		-- *Statement	any statement
 		Statement = vim.tbl_extend("force", { fg = theme.syn.statement }, styles.statement),
+		Conditional = vim.tbl_extend("force", { fg = theme.syn.statement }, styles.controlFlow),
+		Repeat = vim.tbl_extend("force", { fg = theme.syn.statement }, styles.controlFlow),
+		Label = vim.tbl_extend("force", { fg = theme.syn.statement }, styles.controlFlow),
 		--  Conditional	if, then, else, endif, switch, etc.
 		--  Repeat		for, do, while, etc.
 		--  Label		case, default, etc.
@@ -39,7 +42,7 @@ function M.setup(colors, opts)
 		--  Keyword	any other keyword
 		Keyword = vim.tbl_extend("force", { fg = theme.syn.keyword }, styles.keyword),
 		--  Exception	try, catch, throw
-		Exception = { fg = theme.diag.error },
+		Exception = vim.tbl_extend("force", { fg = theme.diag.error }, styles.controlFlow),
 
 		-- *PreProc	generic Preprocessor
 		PreProc = { fg = theme.syn.preproc },
