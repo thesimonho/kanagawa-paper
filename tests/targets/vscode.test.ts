@@ -230,10 +230,7 @@ test("VS Code tracks current installed Neovim semantics", async () => {
           rendered.semanticTokenColors[token].foreground,
           hex(group),
         );
-      assert.equal(
-        rendered.semanticTokenColors.selfParameter.fontStyle,
-        "italic",
-      );
+      assert.equal(rendered.semanticTokenColors.selfParameter.fontStyle, "");
       // Parent-type modifier rules outrank custom parameter subtypes such as selfParameter.
       assert.ok(
         !Object.hasOwn(rendered.semanticTokenColors, "parameter.declaration"),

@@ -1,5 +1,13 @@
 -- Exercise public style overrides against the assembled plugin and integrations.
 vim.opt.runtimepath:prepend(assert(arg[1]))
+require("kanagawa-paper").setup({ _theme = "canvas", cache = false, all_plugins = true })
+local _, defaults = require("kanagawa-paper").load()
+for name, highlight in pairs(defaults) do
+	for _, attribute in ipairs({ "bold", "italic", "underline", "strikethrough" }) do
+		assert(highlight[attribute] ~= true, name .. "." .. attribute)
+	end
+end
+
 require("kanagawa-paper").setup({
 	_theme = "canvas",
 	cache = false,
@@ -12,6 +20,7 @@ require("kanagawa-paper").setup({
 		markupUnderline = { underline = false },
 		jumpLabel = { bold = false },
 		tabNumber = { bold = true },
+		inactiveStatusline = { bold = true, italic = true },
 	},
 })
 local _, groups = require("kanagawa-paper").load()
@@ -33,3 +42,10 @@ assert(groups["@lsp.mod.readonly"].bold == nil)
 assert(groups["@lsp.mod.readonly"].italic == nil)
 assert(groups["@variable"].bold == nil)
 assert(groups["@variable"].italic == nil)
+
+local gui = require("kanagawa-paper.lib.lualine_style").gui
+assert(gui({}) == nil)
+assert(gui({ bold = false }) == "")
+assert(gui({ bold = true, italic = true }) == "bold,italic")
+assert(require("lualine.themes.kanagawa-paper-canvas").inactive.b.gui == "bold,italic")
+assert(require("lualine.themes.kanagawa-paper-ink").inactive.b.gui == "bold,italic")

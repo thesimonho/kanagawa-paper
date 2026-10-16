@@ -145,17 +145,17 @@ require("kanagawa-paper").setup({
 
  styles = {
   -- style for comments
-  comment = { italic = true },
+  comment = { italic = false },
   -- style for functions
-  functions = { italic = false, bold = true },
+  functions = { italic = false, bold = false },
   -- style for keywords
   keyword = { italic = false, bold = false },
   -- style for statements
   statement = { italic = false, bold = false },
   -- style for types
-  type = { italic = false, bold = true },
+  type = { italic = false, bold = false },
   -- style for string escapes
-  escape = { bold = true },
+  escape = { bold = false },
  },
  -- override default palette and theme colors
  colors = {

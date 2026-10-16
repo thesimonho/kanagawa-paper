@@ -12,7 +12,7 @@ The adapter maps canonical UI, syntax, status, changes, and ANSI roles to all 14
 
 `theme.schema.json` is the unmodified v0.2.0 schema retrieved from [Zed](https://zed.dev/schema/themes/v0.2.0.json) on 2026-10-15. Builds validate against this pinned schema without network access. When refreshing it, review changes against the [theme extension contract](https://zed.dev/docs/extensions/themes). The adapter's style keys and background-appearance enum are typed from this schema. Build validation requires exact style-key coverage and valid hexadecimal colors, including nested accents, players and syntax fields, before publishing output. The upstream schema remains unmodified.
 
-Explicit text emphasis comes from `textStyles` in `shared/styles.ts` through `zedStyle`. A false bold/italic attribute emits normal weight/style; an omitted attribute inherits. The pinned theme format cannot express underline or strikethrough, and the translator rejects those attributes. Semantic token routing belongs to Zed's semantic rules, so adding a theme style alone cannot distinguish modifiers those rules discard.
+Explicit text emphasis comes from `textStyles` in `shared/styles.ts` through `zedStyle`. A false bold/italic attribute emits normal weight/style; an omitted attribute inherits. The pinned theme format cannot express underline or strikethrough, and the translator rejects enabling those attributes; disabled decorations require no Zed field. Semantic token routing belongs to Zed's semantic rules, so adding a theme style alone cannot distinguish modifiers those rules discard.
 
 ## Package metadata
 

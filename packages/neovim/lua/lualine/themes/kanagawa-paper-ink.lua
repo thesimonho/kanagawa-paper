@@ -1,5 +1,7 @@
 local colors = require("kanagawa-paper.colors").setup({ _theme = "ink" })
 local theme = colors.theme
+local styles = require("kanagawa-paper.config").options.styles
+local gui = require("kanagawa-paper.lib.lualine_style").gui
 
 return {
 	normal = {
@@ -25,7 +27,7 @@ return {
 	},
 	inactive = {
 		a = { bg = theme.ui.bg_m4, fg = theme.ui.fg_dim },
-		b = { bg = theme.ui.bg_m4, fg = theme.ui.fg_dim, gui = "bold" },
+		b = { bg = theme.ui.bg_m4, fg = theme.ui.fg_dim, gui = gui(styles.inactiveStatusline) },
 		c = { bg = theme.ui.bg_m4, fg = theme.ui.fg_dim },
 	},
 }
