@@ -64,3 +64,5 @@ Named text-style policy supplies syntax, markup, and UI emphasis. Comments and d
 Zed emits normal weight/style for disabled attributes and accepts disabled unsupported decorations without extra fields. Documentation styles are italic; strikethrough remains unsupported by the pinned theme format. Bundled Lualine inactive sections consume the shared inactiveStatusline role. Diagnostic and spelling decorations remain separate.
 
 Structural bold adds parser call/definition captures and style-only semantic declaration/definition modifiers. Generic function tokens use a bold fallback; semantic keywords in Neovim leave parser control-flow emphasis intact. Existing color values are unchanged. The six runtime and two VS Code artifact hashes include this style-only change.
+
+Base types inherit contextual emphasis so callable types can keep call styling. VS Code limits lexical built-in function emphasis to call context, preserving callable-variable emphasis. Its decorators use plain attribute styling, including semantic decorator modifiers. Runtime and VS Code hashes include these style-only changes; colors are unchanged.

@@ -30,6 +30,8 @@ function lua(value: unknown, path = "", indent = 0): string {
       : rendered;
   }
   if (!value || typeof value !== "object") return JSON.stringify(value);
+  if (!Array.isArray(value) && Object.keys(value).length === 0)
+    return "vim.empty_dict()";
   return (
     "{\n" +
     Object.entries(value)

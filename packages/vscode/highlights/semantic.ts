@@ -6,16 +6,20 @@ import {
   type TextStyle,
 } from "../../../shared/styles.ts";
 
-function withDeprecatedStyles<T extends object>(rules: T, style: TextStyle) {
+function withModifierStyles<T extends object, M extends string>(
+  rules: T,
+  modifier: M,
+  style: TextStyle,
+) {
   // Each derived selector outranks its base style reset, regardless of JSON key order.
   const overlays = Object.fromEntries(
     ["*", ...Object.keys(rules)].map((selector) => [
-      `${selector}.deprecated`,
+      `${selector}.${modifier}`,
       semanticStyle(style),
     ]),
   );
   return { ...rules, ...overlays } as T &
-    Record<`${Extract<keyof T, string> | "*"}.deprecated`, TextStyle>;
+    Record<`${Extract<keyof T, string> | "*"}.${M}`, TextStyle>;
 }
 
 export function vscodeSemanticColors(theme: Theme, styles: StylePolicy) {
@@ -136,5 +140,10 @@ export function vscodeSemanticColors(theme: Theme, styles: StylePolicy) {
         : [];
     }),
   ) as Record<`${DeclaredSelector}.${"declaration" | "definition"}`, TextStyle>;
-  return withDeprecatedStyles({ ...rules, ...declarations }, styles.deprecated);
+  const decorated = withModifierStyles(
+    { ...rules, ...declarations, decorator: semanticStyle(styles.attribute) },
+    "decorator",
+    styles.attribute,
+  );
+  return withModifierStyles(decorated, "deprecated", styles.deprecated);
 }

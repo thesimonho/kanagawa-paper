@@ -11,3 +11,7 @@ agent:
 TextMate and base semantic `fontStyle` values replace the whole style set. Semantic deprecated overlays retain independent attributes and are derived for every selector so they outrank base resets after sorted serialization. Preserve rule order in the TextMate array.
 
 Function tokens use the generic function style when call/reference context is unavailable. Declaration and definition modifiers receive style-only overlays, derived for existing selectors so built-in resets cannot hide them. Contextual TextMate rules emphasize declaration names and calls; import keywords remain plain even under the control-flow parent scope.
+
+Semantic variables and parameters retain contextual syntax emphasis, allowing callable variables to remain bold. Built-in syntax names receive bold only in call context; uncalled lexical built-in names stay plain. The base type style inherits call-site syntax; TextMate type declarations require declaration context so semantic fallback scopes cannot bold every class reference. Decorator modifiers derive style-only overrides for existing selectors, followed by deprecation overlays.
+
+Call scopes use the direct-parent combinator (`>`) rather than matching any call ancestor. More specific direct argument scopes use `functionReference`, so argument references remain plain while nested call targets retain call emphasis. Generic call-name scopes keep callable variables bold. Grammars that do not expose these contexts still rely on semantic function fallback.

@@ -147,10 +147,18 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
   },
   {
     name: "Functions",
-    scope: ["entity.name.function", "support.function"],
+    scope: "entity.name.function",
     settings: {
       fontStyle: textMateStyle(styles.functions),
       foreground: theme.syntax.function,
+    },
+  },
+  {
+    name: "Function Support",
+    scope: "support.function",
+    settings: {
+      foreground: theme.syntax.function,
+      fontStyle: textMateStyle(styles.functionReference),
     },
   },
   {
@@ -160,8 +168,21 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
   },
   {
     name: "Function Calls",
-    scope: ["support.function", "variable.function"],
+    scope: [
+      "meta.function-call > support.function",
+      "meta.function-call > variable.function",
+      "meta.function-call.generic",
+      "entity.name.function.call",
+    ],
     settings: { fontStyle: textMateStyle(styles.functionCall) },
+  },
+  {
+    name: "Function References in Arguments",
+    scope: [
+      "meta.function-call.arguments > support.function",
+      "meta.function-call.arguments > variable.function",
+    ],
+    settings: { fontStyle: textMateStyle(styles.functionReference) },
   },
   {
     name: "Control Flow",
@@ -171,13 +192,21 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
   {
     name: "Type Declarations",
     scope: [
-      "entity.name.type.class",
-      "entity.name.type.interface",
-      "entity.name.type.struct",
-      "entity.name.type.enum",
-      "entity.name.type.alias",
+      "meta.class entity.name.type.class",
+      "meta.interface entity.name.type.interface",
+      "meta.struct entity.name.type.struct",
+      "meta.enum entity.name.type.enum",
+      "meta.type.declaration entity.name.type.alias",
     ],
     settings: { fontStyle: textMateStyle(styles.typeDeclaration) },
+  },
+  {
+    name: "Decorators",
+    scope: [
+      "entity.name.function.decorator",
+      "meta.function.decorator entity.name.function",
+    ],
+    settings: { fontStyle: textMateStyle(styles.attribute) },
   },
   {
     name: "Classes",

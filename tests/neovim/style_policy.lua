@@ -103,7 +103,7 @@ assert(require("lualine.themes.kanagawa-paper-ink").inactive.b.gui == "bold,ital
 assert(groups["@function"].bold == false)
 assert(groups["@function"].italic == true)
 assert(groups["@function.call"].bold == false)
-assert(groups.Type.bold == false)
+assert(groups.Type.bold == nil)
 assert(groups["@lsp.typemod.class.declaration"].bold == true)
 assert(groups["@lsp.typemod.class.declaration"].fg == nil)
 assert(groups["@lsp.type.keyword"].bold == nil)

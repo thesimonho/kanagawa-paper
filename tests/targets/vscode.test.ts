@@ -190,7 +190,7 @@ test("VS Code tracks current installed Neovim semantics", async () => {
       }))
         assert.equal(tokens[name].foreground, hex(group));
       assert.equal(
-        tokens.Modules.fontStyle.includes("bold"),
+        (tokens.Modules.fontStyle ?? "").includes("bold"),
         Boolean(groups["@module"].bold),
       );
       assert.equal(
@@ -239,9 +239,9 @@ test("VS Code tracks current installed Neovim semantics", async () => {
         !Object.hasOwn(rendered.semanticTokenColors, "parameter.definition"),
       );
       assert.equal(
-        rendered.semanticTokenColors["class.builtin"].fontStyle.includes(
-          "bold",
-        ),
+        (
+          rendered.semanticTokenColors["class.builtin"].fontStyle ?? ""
+        ).includes("bold"),
         Boolean(groups.Type.bold),
       );
       assert.equal(

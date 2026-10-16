@@ -157,7 +157,7 @@ require("kanagawa-paper").setup({
   -- style for statements
   statement = { italic = false, bold = false },
   -- style for types
-  type = { italic = false, bold = false },
+  type = {},
   -- style for string escapes
   escape = { bold = false },
  },

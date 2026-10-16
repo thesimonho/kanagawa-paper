@@ -15,21 +15,23 @@ import { canvas } from "../../shared/themes/canvas.ts";
 test("chosen emphasis separates structural bold from supporting data", () => {
   for (const [name, style] of Object.entries(textStyles)) {
     const expected =
-      name === "deprecated"
-        ? { strikethrough: true }
-        : {
-            bold: [
-              "functions",
-              "functionDeclaration",
-              "functionCall",
-              "typeDeclaration",
-              "controlFlow",
-              "readonlyFunction",
-            ].includes(name),
-            italic: name === "comment" || name === "documentation",
-            underline: false,
-            strikethrough: false,
-          };
+      name === "type"
+        ? {}
+        : name === "deprecated"
+          ? { strikethrough: true }
+          : {
+              bold: [
+                "functions",
+                "functionDeclaration",
+                "functionCall",
+                "typeDeclaration",
+                "controlFlow",
+                "readonlyFunction",
+              ].includes(name),
+              italic: name === "comment" || name === "documentation",
+              underline: false,
+              strikethrough: false,
+            };
     assert.deepEqual(style, expected, name);
   }
   assert.notEqual(textStyles.comment, textStyles.functions);
@@ -64,7 +66,7 @@ test("editor output enables only the selected emphasis", () => {
       );
   for (const [name, style] of Object.entries(vscode.semanticTokenColors)) {
     if (typeof style === "string") continue;
-    if ("fontStyle" in style)
+    if ("fontStyle" in style && style.fontStyle !== undefined)
       assert.equal(
         style.fontStyle,
         /^(function|method)(\.|$)/.test(name) || name === "keyword.controlFlow"
@@ -248,7 +250,7 @@ test("structural styles distinguish declarations, calls, references, and imports
     vs.semanticTokenColors["function.builtin.declaration.deprecated"],
     { strikethrough: true },
   );
-  assert.equal(vs.semanticTokenColors.type.fontStyle, "");
+  assert.equal(vs.semanticTokenColors.type.fontStyle, undefined);
   assert.equal(
     vs.tokenColors.find((r) => r.name === "Import Keywords")?.settings
       .fontStyle,
@@ -264,7 +266,54 @@ test("structural styles distinguish declarations, calls, references, and imports
     "italic",
   );
   const zed = zedTheme(theme, "canvas", policy).style.syntax;
-  assert.equal(zed.type.font_weight, 400);
+  assert.equal(zed.type.font_weight, undefined);
   assert.equal(zed["type.definition"].font_weight, 700);
   assert.equal(zed["function.call"].font_weight, 400);
+});
+
+test("callable types and variables retain contextual bold while decorators stay plain", () => {
+  const vs = vscodeTheme(resolveTheme(canvas), "canvas");
+  assert.equal(typeof vs.semanticTokenColors.parameter, "string");
+  assert.equal(typeof vs.semanticTokenColors.variable, "string");
+  assert.equal(
+    vs.tokenColors.find((r) => r.name === "Function Support")?.settings
+      .fontStyle,
+    "",
+  );
+  const calls = vs.tokenColors.find((r) => r.name === "Function Calls");
+  assert.ok(Array.isArray(calls?.scope));
+  assert.ok(calls.scope.includes("meta.function-call.generic"));
+  assert.ok(!calls.scope.includes("support.function"));
+  assert.ok(calls.scope.includes("meta.function-call > support.function"));
+  assert.equal(
+    vs.tokenColors.find((r) => r.name === "Function References in Arguments")
+      ?.settings.fontStyle,
+    "",
+  );
+  assert.equal(vs.semanticTokenColors["class.builtin"].fontStyle, undefined);
+  assert.equal(
+    vs.tokenColors.find((r) => r.name === "Classes")?.settings.fontStyle,
+    undefined,
+  );
+  assert.equal(
+    vs.tokenColors.find((r) => r.name === "Decorators")?.settings.fontStyle,
+    "",
+  );
+  assert.deepEqual(
+    vs.semanticTokenColors["function.decorator"],
+    textStyles.attribute,
+  );
+  assert.deepEqual(
+    vs.semanticTokenColors["function.builtin.declaration.decorator"],
+    textStyles.attribute,
+  );
+  assert.deepEqual(
+    vs.semanticTokenColors["function.builtin.declaration.decorator.deprecated"],
+    { strikethrough: true },
+  );
+  const declarations = vs.tokenColors.find(
+    (r) => r.name === "Type Declarations",
+  );
+  assert.ok(Array.isArray(declarations?.scope));
+  assert.ok(declarations.scope.every((scope) => scope.includes(" ")));
 });
