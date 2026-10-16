@@ -26,3 +26,4 @@ node_modules/
 /docs/plans/
 
 /scripts/theme-audit/reports/
+/scripts/theme-audit/fixtures/python-preview.py
