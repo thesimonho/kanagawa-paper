@@ -48,11 +48,14 @@ function M.setup(colors, opts)
 		--
 		["@type"] = vim.tbl_extend("force", { fg = theme.syn.type }, styles.typeAnnotation),
 		["@type.builtin"] = vim.tbl_extend("force", { fg = theme.syn.special1 }, styles.typeAnnotation),
-		-- TypeScript query nodes distinguish type expressions from runtime class values.
+		-- Context queries distinguish type expressions from runtime class values.
 		["@type.typescript"] = vim.tbl_extend("force", { fg = theme.syn.type }, styles.type),
 		["@type.builtin.typescript"] = vim.tbl_extend("force", { fg = theme.syn.special1 }, styles.type),
 		["@type.tsx"] = vim.tbl_extend("force", { fg = theme.syn.type }, styles.type),
 		["@type.builtin.tsx"] = vim.tbl_extend("force", { fg = theme.syn.special1 }, styles.type),
+		["@type.python"] = vim.tbl_extend("force", { fg = theme.syn.type }, styles.type),
+		["@type.declaration"] = vim.tbl_extend("force", {}, styles.typeDeclaration),
+		["@type.builtin.python"] = vim.tbl_extend("force", { fg = theme.syn.special1 }, styles.type),
 		["@type.annotation"] = vim.tbl_extend("force", {}, styles.typeAnnotation),
 		-- @type                   type or class definitions and annotations
 		-- @type.builtin           built-in types
@@ -61,6 +64,17 @@ function M.setup(colors, opts)
 		--
 		-- @attribute              attribute annotations (e.g. Python decorators, Rust lifetimes)
 		["@attribute"] = vim.tbl_extend("force", { fg = theme.syn.attribute }, styles.annotation),
+		-- Decorator names also have call captures; metadata replaces that emphasis.
+		["@attribute.python"] = vim.tbl_extend(
+			"force",
+			{ fg = theme.syn.attribute, nocombine = true },
+			styles.annotation
+		),
+		["@attribute.builtin.python"] = vim.tbl_extend(
+			"force",
+			{ fg = theme.syn.special1, nocombine = true },
+			styles.annotation
+		),
 		-- @attribute.builtin      builtin annotations (e.g. `@property` in Python)
 		-- @property               the key in key/value pairs
 		--

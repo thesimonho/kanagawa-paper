@@ -74,3 +74,5 @@ Shared importance styling adds bold Markdown strong text/headings and Neovim foc
 Neovim runtime hashes include additive TypeScript/TSX generic type groups and the style-only annotation capture used by the parser query extension. Existing foregrounds and other languages remain unchanged.
 
 Tree roots and opened-file labels use the shared bold navigation styles; runtime snapshots include these emphasis changes without color changes.
+
+Python generic type groups are now color-only and annotation regions use the existing style-only capture. Runtime hashes include the additive type and decorator language groups; all existing colors and shared defaults remain unchanged.

@@ -79,6 +79,7 @@ bold_groups.NeoTreeRootName = true
 bold_groups.NvimTreeRootFolder = true
 bold_groups.NeoTreeFileNameOpened = true
 bold_groups.NvimTreeOpenedFile = true
+bold_groups["@type.declaration"] = true
 bold_groups.markdownBold = true
 bold_groups.markdownBoldItalic = true
 for _, mode in ipairs({ "Command", "Insert", "Normal", "Other", "Replace", "Visual" }) do
@@ -104,6 +105,8 @@ for name, highlight in pairs(defaults) do
 				or name == "@type.builtin"
 				or name == "@type.annotation"
 				or name == "@attribute"
+				or name == "@attribute.python"
+				or name == "@attribute.builtin.python"
 				or name == "@lsp.type.decorator"
 				or name:match("^@lsp.typemod%..+%.typeHint$") ~= nil
 			)
@@ -198,7 +201,7 @@ assert(defaults.NeoTreeFileNameOpened.bold == true)
 assert(defaults.markdownBoldItalic.bold == true)
 assert(defaults.markdownBoldItalic.italic == true)
 
-for _, language in ipairs({ "typescript", "tsx" }) do
+for _, language in ipairs({ "typescript", "tsx", "python" }) do
 	assert(defaults["@type." .. language].italic == nil)
 	assert(defaults["@type.builtin." .. language].italic == nil)
 	assert(defaults["@type." .. language].fg == defaults["@type"].fg)
@@ -206,3 +209,5 @@ for _, language in ipairs({ "typescript", "tsx" }) do
 end
 assert(defaults["@type.annotation"].italic == true)
 assert(defaults["@type.annotation"].fg == nil)
+
+assert(defaults["@type.declaration"].fg == nil)

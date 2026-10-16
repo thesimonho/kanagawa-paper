@@ -1,10 +1,12 @@
 ; extends
 
 ; Syntax type nodes exclude runtime identifiers such as Object in Object.values().
-([
-  (type_identifier)
-  (predefined_type)
-] @type.annotation
+((type_identifier) @type.annotation
+  (#not-has-parent? @type.annotation type_alias_declaration interface_declaration
+    class_declaration abstract_class_declaration type_parameter)
+  (#set! priority 110))
+
+((predefined_type) @type.annotation
   (#set! priority 110))
 
 ; Declaration names are landmarks, even though they use the same type node.

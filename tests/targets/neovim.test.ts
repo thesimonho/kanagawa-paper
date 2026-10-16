@@ -151,6 +151,7 @@ test("Neovim distribution loads both variants and includes help and README", asy
   try {
     const tree = await build("neovim", output);
     await access(join(tree, "queries/typescript/highlights.scm"));
+    await access(join(tree, "queries/python/highlights.scm"));
     await assert.rejects(access(join(tree, "lua/kanagawa-paper/extras")), {
       code: "ENOENT",
     });

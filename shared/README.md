@@ -21,3 +21,5 @@ UI text styling depends on the target API. Neovim exposes highlight groups for a
 Markdown strong, emphasis, and quote styles are overlays so nested captures can combine. VS Code additionally emits combined strong/emphasis and heading/emphasis rules because TextMate replaces the full font-style set. Plain and inactive UI roles use explicit resets.
 
 Tree roots and opened-file labels also use bold as navigation landmarks; ordinary file labels keep their regular style. These retain independent `treeRoot` and `openedFile` overrides.
+
+In Neovim, false clears an attribute on that highlight group; overlapping captures can still contribute the attribute. Prefer non-overlapping context captures. A target mapping can use `nocombine` when one classification must replace another’s presentation, as with Python decorator names that also match call captures. This differs from TextMate’s whole-style replacement.
