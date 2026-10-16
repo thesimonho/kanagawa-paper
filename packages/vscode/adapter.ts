@@ -3,9 +3,10 @@ import { alpha } from "../../shared/color/expression.ts";
 import {
   textStyles,
   textMateStyle,
-  semanticStyle,
   type StylePolicy,
 } from "../../shared/styles.ts";
+
+import { vscodeSemanticColors } from "./semantic.ts";
 
 export const vscodeTheme = (
   theme: Theme,
@@ -300,7 +301,18 @@ export const vscodeTheme = (
       scope: ["comment.documentation", "comment.block.documentation"],
       settings: {
         foreground: theme.syntax.documentation,
+        fontStyle: textMateStyle(styles.documentation),
       },
+    },
+    {
+      name: "Strings: Documentation",
+      scope: ["string.quoted.docstring", "string.documentation"],
+      settings: { fontStyle: textMateStyle(styles.documentation) },
+    },
+    {
+      name: "Deprecated",
+      scope: "invalid.deprecated",
+      settings: { fontStyle: textMateStyle(styles.deprecated) },
     },
     {
       name: "Invalid - Illegal",
@@ -763,96 +775,5 @@ export const vscodeTheme = (
       },
     },
   ],
-  semanticTokenColors: {
-    arithmetic: theme.syntax.operator,
-    class: {
-      foreground: theme.syntax.type,
-      fontStyle: textMateStyle(styles.type),
-    },
-    "class.defaultLibrary": theme.syntax.keyword,
-    "class.builtin": {
-      foreground: theme.accents.special.one,
-      fontStyle: textMateStyle(styles.type),
-    },
-    enum: {
-      foreground: theme.syntax.type,
-      fontStyle: textMateStyle(styles.type),
-    },
-    enumMember: theme.syntax.constant,
-    event: theme.syntax.type,
-    function: {
-      foreground: theme.syntax.function,
-      fontStyle: textMateStyle(styles.functions),
-    },
-    "function.defaultLibrary": {
-      foreground: theme.syntax.builtinFunction,
-      fontStyle: textMateStyle(styles.functions),
-    },
-    "function.builtin": {
-      foreground: theme.syntax.builtinFunction,
-      fontStyle: textMateStyle(styles.functions),
-    },
-    interface: {
-      foreground: theme.syntax.type,
-      fontStyle: textMateStyle(styles.type),
-    },
-    "keyword.controlFlow": {
-      foreground: theme.syntax.statement,
-      fontStyle: textMateStyle(styles.controlFlow),
-    },
-    macro: theme.syntax.preprocessor,
-    method: {
-      foreground: theme.syntax.function,
-      fontStyle: textMateStyle(styles.functions),
-    },
-    module: {
-      foreground: theme.syntax.type,
-      fontStyle: textMateStyle(styles.type),
-    },
-    namespace: theme.syntax.keyword,
-    newOperator: theme.syntax.operator,
-    numberLiteral: theme.syntax.number,
-    operator: theme.syntax.operator,
-    parameter: theme.syntax.parameter,
-    selfParameter: {
-      foreground: theme.syntax.constant,
-      fontStyle: textMateStyle(styles.builtinVariable),
-    },
-    property: theme.syntax.identifier,
-    "property.readonly": theme.syntax.constant,
-    stringLiteral: theme.syntax.string,
-    struct: {
-      foreground: theme.syntax.type,
-      fontStyle: textMateStyle(styles.type),
-    },
-    type: {
-      foreground: theme.syntax.type,
-      fontStyle: textMateStyle(styles.type),
-    },
-    "type.builtin": {
-      foreground: theme.accents.special.one,
-      fontStyle: textMateStyle(styles.type),
-    },
-    "type.defaultLibrary": theme.syntax.keyword,
-    typeParameter: {
-      foreground: theme.syntax.type,
-      fontStyle: textMateStyle(styles.type),
-    },
-    variable: theme.ui.text.primary,
-    "variable.builtin": {
-      foreground: theme.syntax.constant,
-      fontStyle: textMateStyle(styles.builtinVariable),
-    },
-    "variable.builtin.classMember": {
-      foreground: theme.syntax.member,
-      ...semanticStyle(styles.builtinMember),
-    },
-    "variable.classMember": { foreground: theme.syntax.member },
-    "variable.classMember.readonly": theme.syntax.constant,
-    "variable.readonly": theme.syntax.constant,
-    "variable.static": { foreground: theme.syntax.constant },
-    "variable.readonly.defaultLibrary": theme.syntax.keyword,
-    "variable.defaultLibrary": theme.syntax.keyword,
-    "method.defaultLibrary": theme.syntax.keyword,
-  },
+  semanticTokenColors: vscodeSemanticColors(theme, styles),
 });

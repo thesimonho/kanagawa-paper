@@ -12,35 +12,48 @@ import { zedTheme } from "../../packages/zed/adapter.ts";
 import { resolveTheme } from "../../shared/color/evaluate.ts";
 import { canvas } from "../../shared/themes/canvas.ts";
 
-test("every named role starts plain and remains independently editable", () => {
-  for (const [name, style] of Object.entries(textStyles))
-    assert.deepEqual(
-      style,
-      {
-        bold: false,
-        italic: false,
-        underline: false,
-        strikethrough: false,
-      },
-      name,
-    );
+test("chosen emphasis is limited to comments, documentation, and deprecation", () => {
+  for (const [name, style] of Object.entries(textStyles)) {
+    const expected =
+      name === "deprecated"
+        ? { strikethrough: true }
+        : {
+            bold: false,
+            italic: name === "comment" || name === "documentation",
+            underline: false,
+            strikethrough: false,
+          };
+    assert.deepEqual(style, expected, name);
+  }
   assert.notEqual(textStyles.comment, textStyles.functions);
   assert.notEqual(textStyles.functions, textStyles.type);
 });
 
-test("editor output contains no enabled theme emphasis", () => {
+test("editor output enables only the selected emphasis", () => {
   const theme = resolveTheme(canvas);
   const vscode = vscodeTheme(theme, "canvas");
   for (const rule of vscode.tokenColors)
     if (rule.settings.fontStyle !== undefined)
-      assert.equal(rule.settings.fontStyle, "", rule.name);
+      assert.equal(
+        rule.settings.fontStyle,
+        [
+          "Comments",
+          "Comments: Documentation",
+          "Strings: Documentation",
+        ].includes(rule.name)
+          ? "italic"
+          : rule.name === "Deprecated"
+            ? "strikethrough"
+            : "",
+        rule.name,
+      );
   for (const [name, style] of Object.entries(vscode.semanticTokenColors)) {
     if (typeof style === "string") continue;
     if ("fontStyle" in style) assert.equal(style.fontStyle, "", name);
     for (const attribute of ["bold", "italic", "underline", "strikethrough"])
-      assert.notEqual(
-        (style as Record<string, unknown>)[attribute],
-        true,
+      assert.equal(
+        (style as Record<string, unknown>)[attribute] === true,
+        name.endsWith(".deprecated") && attribute === "strikethrough",
         name,
       );
   }
@@ -48,7 +61,13 @@ test("editor output contains no enabled theme emphasis", () => {
     zedTheme(theme, "canvas").style.syntax,
   )) {
     assert.notEqual(style.font_weight, 700, name);
-    assert.notEqual(style.font_style, "italic", name);
+    assert.equal(
+      style.font_style === "italic",
+      ["comment", "comment.doc", "string.doc", "string.documentation"].includes(
+        name,
+      ),
+      name,
+    );
   }
 });
 
@@ -76,6 +95,24 @@ test("style translators distinguish inheritance from explicit disabling", () => 
   assert.deepEqual(zedStyle({ underline: false, strikethrough: false }), {});
   for (const style of [{ underline: true }, { strikethrough: true }])
     assert.throws(() => zedStyle(style), /do not support/);
+});
+
+test("deprecated overlays outrank each existing selector without resetting other emphasis", () => {
+  const rules = vscodeTheme(resolveTheme(canvas), "canvas").semanticTokenColors;
+  for (const name of Object.keys(rules)) {
+    if (name.endsWith(".deprecated")) continue;
+    assert.deepEqual(
+      rules[`${name}.deprecated` as keyof typeof rules],
+      {
+        strikethrough: true,
+      },
+      name,
+    );
+  }
+  assert.deepEqual(rules["*.deprecated"], { strikethrough: true });
+  assert.deepEqual(rules["variable.builtin.classMember.deprecated"], {
+    strikethrough: true,
+  });
 });
 
 test("central policy changes reach syntax and semantic consumers without changing colors", () => {

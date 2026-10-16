@@ -28,6 +28,7 @@ function M.setup(colors, opts)
 		--
 		-- @string                 string literals
 		-- @string.documentation   string documenting code (e.g. Python docstrings)
+		["@string.documentation"] = vim.tbl_extend("force", { fg = theme.syn.string }, styles.documentation),
 		-- @string.regexp          regular expressions
 		["@string.regexp"] = { fg = theme.syn.regex },
 		-- @string.escape          escape sequences

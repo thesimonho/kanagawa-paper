@@ -145,7 +145,7 @@ require("kanagawa-paper").setup({
 
  styles = {
   -- style for comments
-  comment = { italic = false },
+  comment = { italic = true },
   -- style for functions
   functions = { italic = false, bold = false },
   -- style for keywords

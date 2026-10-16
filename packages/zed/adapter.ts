@@ -154,7 +154,15 @@ export function zedTheme(
       attribute: { color: syntax.attribute },
       boolean: { color: syntax.constant },
       comment: { color: syntax.comment, ...zedStyle(styles.comment) },
-      "comment.doc": { color: syntax.documentation },
+      "comment.doc": {
+        color: syntax.documentation,
+        ...zedStyle(styles.documentation),
+      },
+      "string.documentation": {
+        color: syntax.string,
+        ...zedStyle(styles.documentation),
+      },
+      "string.doc": { color: syntax.string, ...zedStyle(styles.documentation) },
       constant: { color: syntax.constant },
       constructor: { color: syntax.type, ...zedStyle(styles.type) },
       embedded: { color: syntax.identifier },

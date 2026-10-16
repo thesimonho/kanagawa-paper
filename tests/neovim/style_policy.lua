@@ -4,7 +4,21 @@ require("kanagawa-paper").setup({ _theme = "canvas", cache = false, all_plugins 
 local _, defaults = require("kanagawa-paper").load()
 for name, highlight in pairs(defaults) do
 	for _, attribute in ipairs({ "bold", "italic", "underline", "strikethrough" }) do
-		assert(highlight[attribute] ~= true, name .. "." .. attribute)
+		local italic = attribute == "italic"
+			and (
+				name == "Comment"
+				or name == "@comment"
+				or name == "@comment.documentation"
+				or name == "@string.documentation"
+			)
+		local deprecated = attribute == "strikethrough"
+			and (
+				name == "DiagnosticDeprecated"
+				or name == "@lsp.mod.deprecated"
+				or name == "CmpItemAbbrDeprecated"
+				or name == "BlinkCmpLabelDeprecated"
+			)
+		assert((highlight[attribute] == true) == (italic or deprecated), name .. "." .. attribute)
 	end
 end
 

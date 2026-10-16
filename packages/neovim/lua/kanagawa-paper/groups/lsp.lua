@@ -43,6 +43,7 @@ function M.setup(colors, opts)
 		["@lsp.mod.typeHint"] = { fg = theme.syn.type },
 		["@lsp.mod.defaultLibrary"] = { fg = theme.syn.keyword },
 		["@lsp.mod.builtin"] = { fg = theme.syn.constant },
+		["@lsp.mod.deprecated"] = vim.tbl_extend("force", {}, styles.deprecated),
 
 		["@lsp.typemod.operator.controlFlow"] = { fg = theme.syn.operator },
 		["@lsp.typemod.keyword.documentation"] = { fg = theme.syn.keyword },

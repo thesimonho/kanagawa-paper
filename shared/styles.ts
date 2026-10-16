@@ -16,7 +16,7 @@ const plain = {
 /** Presentation policy; editor classifications and color choices stay in adapters. */
 export const textStyles = {
   // Syntax roles retain the existing Neovim configuration names.
-  comment: { ...plain },
+  comment: { ...plain, italic: true },
   functions: { ...plain },
   keyword: { ...plain },
   statement: { ...plain },
@@ -29,7 +29,7 @@ export const textStyles = {
   keywordOperator: { ...plain },
   controlFlow: { ...plain },
   readonlyFunction: { ...plain },
-  documentation: { ...plain },
+  documentation: { ...plain, italic: true },
   commentMarker: { ...plain },
   section: { ...plain },
   attribute: { ...plain },
@@ -68,7 +68,7 @@ export const textStyles = {
   inlayHint: { ...plain },
   signatureParameter: { ...plain },
   codeLens: { ...plain },
-  deprecated: { ...plain },
+  deprecated: { strikethrough: true },
   indentContext: { ...plain },
   cursorWord: { ...plain },
   testEmphasis: { ...plain },
