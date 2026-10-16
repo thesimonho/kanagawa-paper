@@ -51,6 +51,6 @@ VS Code import `from` and `export` scopes and storage types inside variable-decl
 
 VS Code semantic static variables use the shared constant foreground, matching Neovim. Both VS Code artifact hashes include this mapping.
 
-Zed structural and focused borders use the shared floating-border foreground. The Zed theme artifact hash includes this mapping.
+Zed structural and focused borders use the shared m3 surface tone. The Zed theme artifact hash includes this mapping.
 
 Canvas active line numbers use canvasBlue1 across targets; Ink retains dragonYellow. Canvas runtime and VS Code hashes include this change.
