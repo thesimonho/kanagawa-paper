@@ -62,6 +62,11 @@
         "id": "return",
         "line": "        return name",
         "text": "return"
+      },
+      {
+        "id": "null",
+        "line": "        missing = None",
+        "text": "None"
       }
     ]
   },
@@ -118,6 +123,11 @@
         "id": "builtin-call",
         "line": "    return",
         "text": "String"
+      },
+      {
+        "id": "builtin-variable",
+        "line": "    return this.enabled",
+        "text": "this"
       }
     ]
   },
@@ -164,6 +174,16 @@
         "id": "type-call",
         "line": "        let path",
         "text": "Path"
+      },
+      {
+        "id": "self-type",
+        "line": "    fn identity(&self) -> &Self { self }",
+        "text": "Self"
+      },
+      {
+        "id": "parent-module",
+        "line": "    use super::Sample;",
+        "text": "super"
       }
     ]
   }
