@@ -70,3 +70,7 @@ Base types inherit contextual emphasis so callable types can keep call styling. 
 Supplementary italics add independent type-annotation and declaration-metadata roles. VS Code uses contextual type scopes and semantic typeHint/decorator overlays, Neovim parser types/attributes and typeHint groups consume them, and Zed uses distinct annotation captures where available. Base class/type styles remain inheritable and object properties stay unchanged. Runtime and VS Code hashes include style-only changes; colors are unchanged.
 
 Shared importance styling adds bold Markdown strong text/headings and Neovim focus/action roles, plus italic Markdown emphasis/quotes and Neovim supplementary hints/details. Runtime and VS Code artifact hashes include these style changes; existing colors remain unchanged.
+
+Neovim runtime hashes include additive TypeScript/TSX generic type groups and the style-only annotation capture used by the parser query extension. Existing foregrounds and other languages remain unchanged.
+
+Tree roots and opened-file labels use the shared bold navigation styles; runtime snapshots include these emphasis changes without color changes.

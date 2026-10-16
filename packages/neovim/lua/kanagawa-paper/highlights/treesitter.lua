@@ -48,6 +48,12 @@ function M.setup(colors, opts)
 		--
 		["@type"] = vim.tbl_extend("force", { fg = theme.syn.type }, styles.typeAnnotation),
 		["@type.builtin"] = vim.tbl_extend("force", { fg = theme.syn.special1 }, styles.typeAnnotation),
+		-- TypeScript query nodes distinguish type expressions from runtime class values.
+		["@type.typescript"] = vim.tbl_extend("force", { fg = theme.syn.type }, styles.type),
+		["@type.builtin.typescript"] = vim.tbl_extend("force", { fg = theme.syn.special1 }, styles.type),
+		["@type.tsx"] = vim.tbl_extend("force", { fg = theme.syn.type }, styles.type),
+		["@type.builtin.tsx"] = vim.tbl_extend("force", { fg = theme.syn.special1 }, styles.type),
+		["@type.annotation"] = vim.tbl_extend("force", {}, styles.typeAnnotation),
 		-- @type                   type or class definitions and annotations
 		-- @type.builtin           built-in types
 		["@type.definition"] = vim.tbl_extend("force", { fg = theme.syn.type }, styles.typeDeclaration),

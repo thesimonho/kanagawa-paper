@@ -27,7 +27,7 @@ shared palette, theme roles, and text styles
 
 ## Target boundaries
 
-`neovim/` has an additional runtime layer. Its TypeScript adapter projects shared colors into Neovim's public `ui`, `syn`, and other role names. Its builder emits Lua palette, theme, and style defaults, then copies the handwritten runtime. At load time, that runtime applies user overrides and constructs actual highlight groups, including plugin integrations such as Neo-tree. The runtime mappings live in `lua/kanagawa-paper/highlights/`, with semantic tokens in `semantic.lua` and LSP UI in `lsp.lua`. Those Lua highlights are also target mappings; their style values come from the generated shared defaults through the resolved configuration.
+`neovim/` has an additional runtime layer. Its TypeScript adapter projects shared colors into Neovim's public `ui`, `syn`, and other role names. Its builder emits Lua palette, theme, and style defaults, then copies the handwritten runtime. At load time, that runtime applies user overrides and constructs actual highlight groups, including plugin integrations such as Neo-tree. Its `queries/` directory extends parser context where generic classifications cannot distinguish annotations from runtime values. The runtime mappings live in `lua/kanagawa-paper/highlights/`, with semantic tokens in `semantic.lua` and LSP UI in `lsp.lua`. Those Lua highlights are also target mappings; their style values come from the generated shared defaults through the resolved configuration.
 
 `vscode/highlights/` maps shared roles directly into UI colors, TextMate rules, and semantic-token rules; `adapter.ts` exposes the assembled theme. Its builder writes the theme JSON files and assembles the extension.
 

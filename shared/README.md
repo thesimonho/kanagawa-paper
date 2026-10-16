@@ -19,3 +19,5 @@ The presentation rule is: **bold means pay attention to this; italic means inter
 UI text styling depends on the target API. Neovim exposes highlight groups for active tabs, line numbers, mode indicators, jump labels, active signature parameters, test focus/marks, inlay hints, code lenses, and detail labels. VS Code and Zed theme UI fields mostly expose colors, so these roles cannot force font styles there. Markdown syntax mappings affect the editor buffer; rendered Markdown viewers control their own presentation.
 
 Markdown strong, emphasis, and quote styles are overlays so nested captures can combine. VS Code additionally emits combined strong/emphasis and heading/emphasis rules because TextMate replaces the full font-style set. Plain and inactive UI roles use explicit resets.
+
+Tree roots and opened-file labels also use bold as navigation landmarks; ordinary file labels keep their regular style. These retain independent `treeRoot` and `openedFile` overrides.

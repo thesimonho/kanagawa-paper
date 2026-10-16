@@ -75,6 +75,10 @@ for i = 1, 6 do
 	bold_groups["RenderMarkdownH" .. i .. "Bg"] = true
 end
 bold_groups["@markup.heading"] = true
+bold_groups.NeoTreeRootName = true
+bold_groups.NvimTreeRootFolder = true
+bold_groups.NeoTreeFileNameOpened = true
+bold_groups.NvimTreeOpenedFile = true
 bold_groups.markdownBold = true
 bold_groups.markdownBoldItalic = true
 for _, mode in ipairs({ "Command", "Insert", "Normal", "Other", "Replace", "Visual" }) do
@@ -98,6 +102,7 @@ for name, highlight in pairs(defaults) do
 				or name == "@string.documentation"
 				or name == "@type"
 				or name == "@type.builtin"
+				or name == "@type.annotation"
 				or name == "@attribute"
 				or name == "@lsp.type.decorator"
 				or name:match("^@lsp.typemod%..+%.typeHint$") ~= nil
@@ -188,7 +193,16 @@ assert(defaults.MiniTablineVisible.bold == false)
 assert(defaults.BufferInactive.bold == false)
 assert(defaults.LspInlayHint.italic == true)
 assert(defaults.LspSignatureActiveParameter.bold == true)
-assert(defaults.NeoTreeFileNameOpened.bold == false)
+assert(defaults.NeoTreeFileNameOpened.bold == true)
 
 assert(defaults.markdownBoldItalic.bold == true)
 assert(defaults.markdownBoldItalic.italic == true)
+
+for _, language in ipairs({ "typescript", "tsx" }) do
+	assert(defaults["@type." .. language].italic == nil)
+	assert(defaults["@type.builtin." .. language].italic == nil)
+	assert(defaults["@type." .. language].fg == defaults["@type"].fg)
+	assert(defaults["@type.builtin." .. language].fg == defaults["@type.builtin"].fg)
+end
+assert(defaults["@type.annotation"].italic == true)
+assert(defaults["@type.annotation"].fg == nil)

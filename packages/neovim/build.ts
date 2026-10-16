@@ -57,7 +57,7 @@ function annotation(name: string, value: Record<string, unknown>): string {
   return body + children;
 }
 export async function buildNeovim(root: string, destination: string) {
-  for (const directory of ["lua", "colors", "doc"]) {
+  for (const directory of ["lua", "colors", "doc", "queries"]) {
     await cp(
       join(root, "packages/neovim", directory),
       join(destination, directory),

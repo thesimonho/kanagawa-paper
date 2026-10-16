@@ -36,6 +36,8 @@ test("chosen emphasis separates structural bold from supporting data", () => {
                     "activeLineNumber",
                     "title",
                     "activeTab",
+                    "treeRoot",
+                    "openedFile",
                     "modeIndicator",
                     "jumpLabel",
                     "signatureParameter",

@@ -55,8 +55,8 @@ export const textStyles = {
   // UI states shared across core and plugin integrations.
   activeLineNumber: { ...plain, bold: true },
   title: { ...plain, bold: true },
-  treeRoot: { ...plain },
-  openedFile: { ...plain },
+  treeRoot: { ...plain, bold: true },
+  openedFile: { ...plain, bold: true },
   executableFile: { ...plain },
   activeTab: { ...plain, bold: true },
   inactiveTab: { ...plain },

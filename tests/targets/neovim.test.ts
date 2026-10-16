@@ -150,6 +150,7 @@ test("Neovim distribution loads both variants and includes help and README", asy
   const output = await mkdtemp(join(tmpdir(), "kanagawa installable "));
   try {
     const tree = await build("neovim", output);
+    await access(join(tree, "queries/typescript/highlights.scm"));
     await assert.rejects(access(join(tree, "lua/kanagawa-paper/extras")), {
       code: "ENOENT",
     });
