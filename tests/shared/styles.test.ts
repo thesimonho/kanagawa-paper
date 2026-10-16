@@ -15,23 +15,47 @@ import { canvas } from "../../shared/themes/canvas.ts";
 test("chosen emphasis separates structural bold from supporting data", () => {
   for (const [name, style] of Object.entries(textStyles)) {
     const expected =
-      name === "type"
-        ? {}
-        : name === "deprecated"
-          ? { strikethrough: true }
-          : {
-              bold: [
-                "functions",
-                "functionDeclaration",
-                "functionCall",
-                "typeDeclaration",
-                "controlFlow",
-                "readonlyFunction",
-              ].includes(name),
-              italic: name === "comment" || name === "documentation",
-              underline: false,
-              strikethrough: false,
-            };
+      name === "markupStrong"
+        ? { bold: true }
+        : ["markupItalic", "markupQuote"].includes(name)
+          ? { italic: true }
+          : name === "type"
+            ? {}
+            : name === "deprecated"
+              ? { strikethrough: true }
+              : {
+                  bold: [
+                    "functions",
+                    "functionDeclaration",
+                    "functionCall",
+                    "typeDeclaration",
+                    "controlFlow",
+                    "readonlyFunction",
+                    "markupStrong",
+                    "renderedHeading",
+                    "activeLineNumber",
+                    "title",
+                    "activeTab",
+                    "modeIndicator",
+                    "jumpLabel",
+                    "signatureParameter",
+                    "testFocused",
+                    "testMarked",
+                  ].includes(name),
+                  italic: [
+                    "comment",
+                    "documentation",
+                    "typeAnnotation",
+                    "annotation",
+                    "markupItalic",
+                    "markupQuote",
+                    "inlayHint",
+                    "codeLens",
+                    "detailLabel",
+                  ].includes(name),
+                  underline: false,
+                  strikethrough: false,
+                };
     assert.deepEqual(style, expected, name);
   }
   assert.notEqual(textStyles.comment, textStyles.functions);
@@ -45,23 +69,37 @@ test("editor output enables only the selected emphasis", () => {
     if (rule.settings.fontStyle !== undefined)
       assert.equal(
         rule.settings.fontStyle,
-        [
-          "Comments",
-          "Comments: Documentation",
-          "Strings: Documentation",
-        ].includes(rule.name)
-          ? "italic"
+        ["Markup: Bold Italic", "Markup: Heading Emphasis"].includes(rule.name)
+          ? "bold italic"
           : [
-                "Functions",
-                "Function Declarations",
-                "Function Calls",
-                "Type Declarations",
-                "Control Flow",
+                "Comments",
+                "Comments: Documentation",
+                "Strings: Documentation",
+                "Type Annotations",
+                "Decorators",
+                "Markup: Italic",
+                "Markup Quote",
               ].includes(rule.name)
-            ? "bold"
-            : rule.name === "Deprecated"
-              ? "strikethrough"
-              : "",
+            ? "italic"
+            : [
+                  "Functions",
+                  "Function Declarations",
+                  "Function Calls",
+                  "Type Declarations",
+                  "Control Flow",
+                  "Markup: Bold",
+                  "Markup: Heading",
+                  "Markup: Heading 1",
+                  "Markup: Heading 2",
+                  "Markup: Heading 3",
+                  "Markup: Heading 4",
+                  "Markup: Heading 5",
+                  "Markup: Heading 6",
+                ].includes(rule.name)
+              ? "bold"
+              : rule.name === "Deprecated"
+                ? "strikethrough"
+                : "",
         rule.name,
       );
   for (const [name, style] of Object.entries(vscode.semanticTokenColors)) {
@@ -80,7 +118,11 @@ test("editor output enables only the selected emphasis", () => {
         (name.endsWith(".deprecated") && attribute === "strikethrough") ||
           (!name.endsWith(".deprecated") &&
             /\.(declaration|definition)$/.test(name) &&
-            attribute === "bold"),
+            attribute === "bold") ||
+          (attribute === "italic" &&
+            (name.endsWith(".typeHint") ||
+              name.endsWith(".decorator") ||
+              name === "decorator")),
         name,
       );
   }
@@ -97,14 +139,22 @@ test("editor output enables only the selected emphasis", () => {
         "constructor",
         "type.definition",
         "keyword.control",
+        "emphasis.strong",
+        "title",
       ].includes(name),
       name,
     );
     assert.equal(
       style.font_style === "italic",
-      ["comment", "comment.doc", "string.doc", "string.documentation"].includes(
-        name,
-      ),
+      [
+        "comment",
+        "comment.doc",
+        "string.doc",
+        "string.documentation",
+        "attribute",
+        "type.annotation",
+        "emphasis",
+      ].includes(name),
       name,
     );
   }
@@ -271,7 +321,7 @@ test("structural styles distinguish declarations, calls, references, and imports
   assert.equal(zed["function.call"].font_weight, 400);
 });
 
-test("callable types and variables retain contextual bold while decorators stay plain", () => {
+test("callable types and variables retain contextual bold while decorators use metadata style", () => {
   const vs = vscodeTheme(resolveTheme(canvas), "canvas");
   assert.equal(typeof vs.semanticTokenColors.parameter, "string");
   assert.equal(typeof vs.semanticTokenColors.variable, "string");
@@ -297,15 +347,15 @@ test("callable types and variables retain contextual bold while decorators stay 
   );
   assert.equal(
     vs.tokenColors.find((r) => r.name === "Decorators")?.settings.fontStyle,
-    "",
+    "italic",
   );
   assert.deepEqual(
     vs.semanticTokenColors["function.decorator"],
-    textStyles.attribute,
+    textStyles.annotation,
   );
   assert.deepEqual(
     vs.semanticTokenColors["function.builtin.declaration.decorator"],
-    textStyles.attribute,
+    textStyles.annotation,
   );
   assert.deepEqual(
     vs.semanticTokenColors["function.builtin.declaration.decorator.deprecated"],
@@ -316,4 +366,76 @@ test("callable types and variables retain contextual bold while decorators stay 
   );
   assert.ok(Array.isArray(declarations?.scope));
   assert.ok(declarations.scope.every((scope) => scope.includes(" ")));
+});
+
+test("supplementary styles apply to annotations without styling all class uses", () => {
+  const vs = vscodeTheme(resolveTheme(canvas), "canvas");
+  assert.deepEqual(
+    vs.semanticTokenColors["class.builtin.typeHint"],
+    textStyles.typeAnnotation,
+  );
+  assert.deepEqual(
+    vs.semanticTokenColors["class.builtin.typeHint.declaration"],
+    textStyles.typeDeclaration,
+  );
+  assert.deepEqual(
+    vs.semanticTokenColors["class.builtin.typeHint.declaration.decorator"],
+    textStyles.annotation,
+  );
+  assert.deepEqual(
+    vs.semanticTokenColors["class.builtin.typeHint.decorator.deprecated"],
+    { strikethrough: true },
+  );
+  assert.equal(vs.semanticTokenColors["class.builtin"].fontStyle, undefined);
+  assert.equal(
+    vs.tokenColors.find((r) => r.name === "Type Annotations")?.settings
+      .fontStyle,
+    "italic",
+  );
+  assert.deepEqual(
+    vs.semanticTokenColors["typeParameter.declaration"],
+    textStyles.typeDeclaration,
+  );
+  assert.equal(vs.semanticTokenColors.typeParameter.fontStyle, undefined);
+  const policy: StylePolicy = {
+    ...textStyles,
+    typeAnnotation: { italic: false },
+    annotation: { italic: false },
+  };
+  const custom = vscodeTheme(resolveTheme(canvas), "canvas", policy);
+  assert.deepEqual(custom.semanticTokenColors["class.builtin.typeHint"], {
+    italic: false,
+  });
+  assert.deepEqual(custom.semanticTokenColors["function.decorator"], {
+    italic: false,
+  });
+  const zed = zedTheme(resolveTheme(canvas), "canvas").style.syntax;
+  assert.equal(zed.type.font_style, undefined);
+  assert.equal(zed["type.annotation"].font_style, "italic");
+  assert.equal(zed["constructor" as string].font_style, "normal");
+  assert.equal(zed.property.font_style, undefined);
+});
+
+test("Markdown combines strong importance and alternate voice", () => {
+  const theme = resolveTheme(canvas);
+  const vs = vscodeTheme(theme, "canvas");
+  const combined = vs.tokenColors.find((r) => r.name === "Markup: Bold Italic");
+  assert.equal(combined?.settings.fontStyle, "bold italic");
+  assert.deepEqual(combined?.scope, [
+    "markup.bold markup.italic",
+    "markup.italic markup.bold",
+  ]);
+  const custom = vscodeTheme(theme, "canvas", {
+    ...textStyles,
+    markupStrong: { bold: false },
+  });
+  assert.equal(
+    custom.tokenColors.find((r) => r.name === "Markup: Bold Italic")?.settings
+      .fontStyle,
+    "italic",
+  );
+  assert.equal(
+    zedTheme(theme, "canvas").style.syntax["emphasis.strong"].font_style,
+    undefined,
+  );
 });

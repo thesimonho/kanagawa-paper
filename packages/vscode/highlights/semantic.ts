@@ -118,18 +118,41 @@ export function vscodeSemanticColors(theme: Theme, styles: StylePolicy) {
       fontStyle: textMateStyle(styles.functions),
     },
   };
-  type DeclaredToken =
-    "function" | "method" | "class" | "type" | "struct" | "enum" | "interface";
-  type DeclaredSelector = Extract<
+  const typeTokens = [
+    "class",
+    "type",
+    "struct",
+    "enum",
+    "interface",
+    "typeParameter",
+  ] as const;
+  type TypeToken = (typeof typeTokens)[number];
+  type TypeSelector = Extract<
     keyof typeof rules,
+    TypeToken | `${TypeToken}.${string}`
+  >;
+  const typeHints = Object.fromEntries(
+    Object.keys(rules)
+      .filter((selector) =>
+        (typeTokens as readonly string[]).includes(selector.split(".")[0]),
+      )
+      .map((selector) => [
+        `${selector}.typeHint`,
+        semanticStyle(styles.typeAnnotation),
+      ]),
+  ) as Record<`${TypeSelector}.typeHint`, TextStyle>;
+  const typed = { ...rules, ...typeHints };
+  type DeclaredToken = "function" | "method" | TypeToken;
+  type DeclaredSelector = Extract<
+    keyof typeof rules | keyof typeof typeHints,
     DeclaredToken | `${DeclaredToken}.${string}`
   >;
   const declarations = Object.fromEntries(
-    Object.keys(rules).flatMap((selector) => {
+    Object.keys(typed).flatMap((selector) => {
       const token = selector.split(".")[0];
       const style = ["function", "method"].includes(token)
         ? styles.functionDeclaration
-        : ["class", "type", "struct", "enum", "interface"].includes(token)
+        : (typeTokens as readonly string[]).includes(token)
           ? styles.typeDeclaration
           : undefined;
       return style
@@ -141,9 +164,9 @@ export function vscodeSemanticColors(theme: Theme, styles: StylePolicy) {
     }),
   ) as Record<`${DeclaredSelector}.${"declaration" | "definition"}`, TextStyle>;
   const decorated = withModifierStyles(
-    { ...rules, ...declarations, decorator: semanticStyle(styles.attribute) },
+    { ...typed, ...declarations, decorator: semanticStyle(styles.annotation) },
     "decorator",
-    styles.attribute,
+    styles.annotation,
   );
   return withModifierStyles(decorated, "deprecated", styles.deprecated);
 }

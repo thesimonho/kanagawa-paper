@@ -8,7 +8,7 @@ function M.setup(colors, opts)
 	local highlights = {
 
 		-- ["@lsp.type.class"] = { link = "Structure" },
-		-- ["@lsp.type.decorator"] = { link = "Function" },
+		["@lsp.type.decorator"] = vim.tbl_extend("force", { fg = theme.syn.attribute }, styles.annotation),
 		-- ["@lsp.type.enum"] = { link = "Structure" },
 		-- ["@lsp.type.enumMember"] = { link = "Constant" },
 		-- ["@lsp.type.interface"] = { link = "Structure" },
@@ -61,7 +61,7 @@ function M.setup(colors, opts)
 
 		["@lsp.typemod.function.readonly"] = vim.tbl_extend("force", { fg = theme.syn.fun }, styles.readonlyFunction),
 	}
-	for _, token in ipairs({ "class", "type", "struct", "enum", "interface" }) do
+	for _, token in ipairs({ "class", "type", "struct", "enum", "interface", "typeParameter" }) do
 		for _, modifier in ipairs({ "declaration", "definition" }) do
 			highlights["@lsp.typemod." .. token .. "." .. modifier] =
 				vim.tbl_extend("force", {}, styles.typeDeclaration)
@@ -72,6 +72,10 @@ function M.setup(colors, opts)
 			highlights["@lsp.typemod." .. token .. "." .. modifier] =
 				vim.tbl_extend("force", {}, styles.functionDeclaration)
 		end
+	end
+	for _, token in ipairs({ "class", "type", "struct", "enum", "interface", "typeParameter" }) do
+		highlights["@lsp.type." .. token] = { fg = theme.syn.type }
+		highlights["@lsp.typemod." .. token .. ".typeHint"] = vim.tbl_extend("force", {}, styles.typeAnnotation)
 	end
 	return highlights
 end

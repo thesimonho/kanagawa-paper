@@ -26,19 +26,81 @@ local bold_groups = {
 	["@lsp.typemod.function.readonly"] = true,
 	["@lsp.typemod.method.defaultLibrary"] = true,
 }
-for _, token in ipairs({ "class", "type", "struct", "enum", "interface", "function", "method" }) do
+for _, token in ipairs({ "class", "type", "struct", "enum", "interface", "typeParameter", "function", "method" }) do
 	for _, modifier in ipairs({ "declaration", "definition" }) do
 		bold_groups["@lsp.typemod." .. token .. "." .. modifier] = true
 	end
+end
+
+for _, name in ipairs({
+	"@markup.strong",
+	"Bold",
+	"CursorLineNr",
+	"FloatTitle",
+	"Title",
+	"ModeMsg",
+	"TabLineSel",
+	"BufferCurrent",
+	"BufferCurrentBtn",
+	"BufferCurrentTarget",
+	"BufferInactiveTarget",
+	"BufferAlternateTarget",
+	"BufferlineBufferSelected",
+	"BufferlineCloseButtonSelected",
+	"BufferlineTabSelected",
+	"FlashLabel",
+	"LeapLabel",
+	"MiniFilesTitle",
+	"MiniFilesTitleFocused",
+	"MiniJump2dSpot",
+	"MiniTablineCurrent",
+	"MiniTablineModifiedCurrent",
+	"NeoTreeFloatTitle",
+	"NeotestFocused",
+	"NeotestMarked",
+	"NvimTreeWindowPicker",
+	"OctoIssueTitle",
+	"LspSignatureActiveParameter",
+	"TelescopeTitle",
+	"TelescopeResultsTitle",
+	"TelescopePreviewTitle",
+	"WhichKeyTitle",
+}) do
+	bold_groups[name] = true
+end
+for i = 1, 6 do
+	bold_groups["@markup.heading." .. i] = true
+	bold_groups["Headline" .. i] = true
+	bold_groups["markdownH" .. i] = true
+	bold_groups["RenderMarkdownH" .. i .. "Bg"] = true
+end
+bold_groups["@markup.heading"] = true
+bold_groups.markdownBold = true
+bold_groups.markdownBoldItalic = true
+for _, mode in ipairs({ "Command", "Insert", "Normal", "Other", "Replace", "Visual" }) do
+	bold_groups["MiniStatuslineMode" .. mode] = true
 end
 for name, highlight in pairs(defaults) do
 	for _, attribute in ipairs({ "bold", "italic", "underline", "strikethrough" }) do
 		local italic = attribute == "italic"
 			and (
-				name == "Comment"
+				name == "markdownItalic"
+				or name == "markdownBoldItalic"
+				or name == "Italic"
+				or name == "@markup.italic"
+				or name == "@markup.quote"
+				or name == "LspCodeLens"
+				or name == "LspInlayHint"
+				or name == "OctoDetailsLabel"
+				or name == "Comment"
 				or name == "@comment"
 				or name == "@comment.documentation"
 				or name == "@string.documentation"
+				or name == "@type"
+				or name == "@type.builtin"
+				or name == "@attribute"
+				or name == "@lsp.type.decorator"
+				or name:match("^@lsp.typemod%..+%.typeHint$") ~= nil
 			)
 		local deprecated = attribute == "strikethrough"
 			and (
@@ -107,3 +169,26 @@ assert(groups.Type.bold == nil)
 assert(groups["@lsp.typemod.class.declaration"].bold == true)
 assert(groups["@lsp.typemod.class.declaration"].fg == nil)
 assert(groups["@lsp.type.keyword"].bold == nil)
+
+assert(defaults["@constructor"].bold == true)
+assert(defaults["@constructor"].italic == false)
+assert(defaults["@variable.member"].italic == nil)
+assert(defaults["@lsp.typemod.class.typeHint"].italic == true)
+assert(defaults["@lsp.typemod.class.typeHint"].fg == nil)
+assert(defaults["@lsp.type.class"].italic == nil)
+assert(defaults["@lsp.type.class"].bold == nil)
+assert(defaults["@lsp.type.decorator"].fg == defaults["@attribute"].fg)
+
+assert(defaults["@lsp.type.typeParameter"].bold == nil)
+assert(defaults["@lsp.typemod.typeParameter.declaration"].bold == true)
+
+assert(defaults.TabLineSel.bold == true)
+assert(defaults.TabLine.bold == false)
+assert(defaults.MiniTablineVisible.bold == false)
+assert(defaults.BufferInactive.bold == false)
+assert(defaults.LspInlayHint.italic == true)
+assert(defaults.LspSignatureActiveParameter.bold == true)
+assert(defaults.NeoTreeFileNameOpened.bold == false)
+
+assert(defaults.markdownBoldItalic.bold == true)
+assert(defaults.markdownBoldItalic.italic == true)

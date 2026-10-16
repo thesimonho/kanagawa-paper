@@ -88,7 +88,7 @@ function M.get(colors, opts)
 		BufferTabpages = vim.tbl_extend(
 			"force",
 			{ bg = theme.ui.tabline.bg, fg = theme.ui.tabline.fg_selected },
-			styles.activeTab
+			styles.tabNumber
 		),
 		BufferTabpageFill = { bg = theme.ui.tabline.bg },
 		BufferTabpagesSep = { link = "BufferTabpages" },

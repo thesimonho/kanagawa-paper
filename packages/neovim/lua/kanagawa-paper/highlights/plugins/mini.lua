@@ -180,17 +180,17 @@ function M.get(colors, opts)
 		MiniTablineModifiedVisible = vim.tbl_extend(
 			"force",
 			{ fg = theme.ui.tabline.bg, bg = theme.ui.special },
-			styles.activeTab
+			styles.inactiveTab
 		),
 		MiniTablineTabpagesection = vim.tbl_extend(
 			"force",
 			{ fg = theme.ui.fg, bg = theme.ui.bg_search },
-			styles.activeTab
+			styles.inactiveTab
 		),
 		MiniTablineVisible = vim.tbl_extend(
 			"force",
 			{ fg = theme.ui.special, bg = theme.ui.tabline.bg },
-			styles.activeTab
+			styles.inactiveTab
 		),
 
 		MiniTestEmphasis = vim.tbl_extend("force", {}, styles.testEmphasis),

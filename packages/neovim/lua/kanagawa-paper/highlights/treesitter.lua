@@ -46,13 +46,15 @@ function M.setup(colors, opts)
 		-- @number                 numeric literals
 		-- @number.float           floating-point number literals
 		--
+		["@type"] = vim.tbl_extend("force", { fg = theme.syn.type }, styles.typeAnnotation),
+		["@type.builtin"] = vim.tbl_extend("force", { fg = theme.syn.special1 }, styles.typeAnnotation),
 		-- @type                   type or class definitions and annotations
 		-- @type.builtin           built-in types
 		["@type.definition"] = vim.tbl_extend("force", { fg = theme.syn.type }, styles.typeDeclaration),
 		-- @type.definition        identifiers in type definitions (e.g. `typedef <type> <identifier>` in C)
 		--
 		-- @attribute              attribute annotations (e.g. Python decorators, Rust lifetimes)
-		["@attribute"] = { fg = theme.syn.attribute },
+		["@attribute"] = vim.tbl_extend("force", { fg = theme.syn.attribute }, styles.annotation),
 		-- @attribute.builtin      builtin annotations (e.g. `@property` in Python)
 		-- @property               the key in key/value pairs
 		--
@@ -131,16 +133,16 @@ function M.setup(colors, opts)
 		["@markup.underline"] = vim.tbl_extend("force", {}, styles.markupUnderline),
 		--
 		-- @markup.heading         headings, titles (including markers)
-		["@markup.heading"] = { fg = theme.rainbow.rainbow1 },
-		["@markup.heading.1"] = { fg = theme.rainbow.rainbow1 },
-		["@markup.heading.2"] = { fg = theme.rainbow.rainbow2 },
-		["@markup.heading.3"] = { fg = theme.rainbow.rainbow3 },
-		["@markup.heading.4"] = { fg = theme.rainbow.rainbow4 },
-		["@markup.heading.5"] = { fg = theme.rainbow.rainbow5 },
-		["@markup.heading.6"] = { fg = theme.rainbow.rainbow6 },
+		["@markup.heading"] = vim.tbl_extend("force", { fg = theme.rainbow.rainbow1 }, styles.renderedHeading),
+		["@markup.heading.1"] = vim.tbl_extend("force", { fg = theme.rainbow.rainbow1 }, styles.renderedHeading),
+		["@markup.heading.2"] = vim.tbl_extend("force", { fg = theme.rainbow.rainbow2 }, styles.renderedHeading),
+		["@markup.heading.3"] = vim.tbl_extend("force", { fg = theme.rainbow.rainbow3 }, styles.renderedHeading),
+		["@markup.heading.4"] = vim.tbl_extend("force", { fg = theme.rainbow.rainbow4 }, styles.renderedHeading),
+		["@markup.heading.5"] = vim.tbl_extend("force", { fg = theme.rainbow.rainbow5 }, styles.renderedHeading),
+		["@markup.heading.6"] = vim.tbl_extend("force", { fg = theme.rainbow.rainbow6 }, styles.renderedHeading),
 
 		-- @markup.quote           block quotes
-		["@markup.quote"] = { fg = theme.syn.punct },
+		["@markup.quote"] = vim.tbl_extend("force", { fg = theme.syn.punct }, styles.markupQuote),
 		-- @markup.math            math environments (e.g. `$ ... $` in LaTeX)
 		["@markup.math"] = { fg = theme.syn.constant },
 		-- @markup.environment     environments (e.g. in LaTeX)

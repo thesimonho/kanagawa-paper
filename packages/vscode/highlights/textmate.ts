@@ -1,6 +1,13 @@
 import type { Theme } from "../../../shared/theme.ts";
 import { textMateStyle, type StylePolicy } from "../../../shared/styles.ts";
 
+const callableTypeScopes = [
+  "support.type",
+  "support.type.builtin",
+  "support.type.primitive",
+  "entity.name.type.primitive",
+];
+
 export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
   {
     name: "Comments",
@@ -171,6 +178,7 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
     scope: [
       "meta.function-call > support.function",
       "meta.function-call > variable.function",
+      ...callableTypeScopes.map((scope) => `meta.function-call > ${scope}`),
       "meta.function-call.generic",
       "entity.name.function.call",
     ],
@@ -181,6 +189,9 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
     scope: [
       "meta.function-call.arguments > support.function",
       "meta.function-call.arguments > variable.function",
+      ...callableTypeScopes.map(
+        (scope) => `meta.function-call.arguments > ${scope}`,
+      ),
     ],
     settings: { fontStyle: textMateStyle(styles.functionReference) },
   },
@@ -188,6 +199,29 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
     name: "Control Flow",
     scope: "keyword.control",
     settings: { fontStyle: textMateStyle(styles.controlFlow) },
+  },
+  {
+    name: "Type Annotations",
+    scope: [
+      "meta.type.annotation",
+      "meta.return.type",
+      "meta.type.parameters",
+      ...[
+        "entity.name.type",
+        "support.type",
+        "storage.type",
+        "support.type.builtin",
+        "support.type.primitive",
+        "entity.name.type.primitive",
+      ].flatMap((scope) => [
+        `meta.type.annotation ${scope}`,
+        `meta.return.type ${scope}`,
+        `meta.type.parameters ${scope}`,
+        `meta.function.parameters > ${scope}`,
+        `meta.function > ${scope}`,
+      ]),
+    ],
+    settings: { fontStyle: textMateStyle(styles.typeAnnotation) },
   },
   {
     name: "Type Declarations",
@@ -206,7 +240,7 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
       "entity.name.function.decorator",
       "meta.function.decorator entity.name.function",
     ],
-    settings: { fontStyle: textMateStyle(styles.attribute) },
+    settings: { fontStyle: textMateStyle(styles.annotation) },
   },
   {
     name: "Classes",
@@ -431,6 +465,7 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
     scope: "markup.heading",
     settings: {
       foreground: theme.rainbow[1],
+      fontStyle: textMateStyle(styles.renderedHeading),
     },
   },
   {
@@ -438,6 +473,7 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
     scope: ["heading.1.markdown", "markup.heading.setext.1.markdown"],
     settings: {
       foreground: theme.rainbow[1],
+      fontStyle: textMateStyle(styles.renderedHeading),
     },
   },
   {
@@ -445,6 +481,7 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
     scope: ["heading.2.markdown", "markup.heading.setext.2.markdown"],
     settings: {
       foreground: theme.rainbow[2],
+      fontStyle: textMateStyle(styles.renderedHeading),
     },
   },
   {
@@ -452,6 +489,7 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
     scope: ["heading.3.markdown"],
     settings: {
       foreground: theme.rainbow[3],
+      fontStyle: textMateStyle(styles.renderedHeading),
     },
   },
   {
@@ -459,6 +497,7 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
     scope: ["heading.4.markdown"],
     settings: {
       foreground: theme.rainbow[4],
+      fontStyle: textMateStyle(styles.renderedHeading),
     },
   },
   {
@@ -466,6 +505,7 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
     scope: ["heading.5.markdown"],
     settings: {
       foreground: theme.rainbow[5],
+      fontStyle: textMateStyle(styles.renderedHeading),
     },
   },
   {
@@ -473,6 +513,7 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
     scope: ["heading.6.markdown"],
     settings: {
       foreground: theme.rainbow[6],
+      fontStyle: textMateStyle(styles.renderedHeading),
     },
   },
   {
@@ -493,6 +534,7 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
     name: "Markup Quote",
     scope: "markup.quote",
     settings: {
+      fontStyle: textMateStyle(styles.markupQuote),
       foreground: theme.syntax.punctuation,
     },
   },
@@ -515,6 +557,26 @@ export const vscodeTextMateColors = (theme: Theme, styles: StylePolicy) => [
     scope: "markup.italic",
     settings: {
       fontStyle: textMateStyle(styles.markupItalic),
+    },
+  },
+  {
+    name: "Markup: Bold Italic",
+    scope: ["markup.bold markup.italic", "markup.italic markup.bold"],
+    settings: {
+      fontStyle: textMateStyle({
+        ...styles.markupStrong,
+        ...styles.markupItalic,
+      }),
+    },
+  },
+  {
+    name: "Markup: Heading Emphasis",
+    scope: "markup.heading markup.italic",
+    settings: {
+      fontStyle: textMateStyle({
+        ...styles.renderedHeading,
+        ...styles.markupItalic,
+      }),
     },
   },
   {

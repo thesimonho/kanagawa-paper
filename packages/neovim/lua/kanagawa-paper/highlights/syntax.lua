@@ -84,15 +84,18 @@ function M.setup(colors, opts)
 		Todo = vim.tbl_extend("force", { fg = theme.ui.bg, bg = theme.diag.info }, styles.commentMarker),
 
 		-- Markdown
+		markdownBold = vim.tbl_extend("force", {}, styles.markupStrong),
+		markdownItalic = vim.tbl_extend("force", {}, styles.markupItalic),
+		markdownBoldItalic = vim.tbl_extend("force", {}, styles.markupStrong, styles.markupItalic),
 		markdownCode = { fg = theme.syn.string },
 		markdownCodeBlock = { fg = theme.syn.string },
 		markdownEscape = { fg = theme.syn.symbol },
-		markdownH1 = { fg = theme.rainbow.rainbow1 },
-		markdownH2 = { fg = theme.rainbow.rainbow2 },
-		markdownH3 = { fg = theme.rainbow.rainbow3 },
-		markdownH4 = { fg = theme.rainbow.rainbow4 },
-		markdownH5 = { fg = theme.rainbow.rainbow5 },
-		markdownH6 = { fg = theme.rainbow.rainbow6 },
+		markdownH1 = vim.tbl_extend("force", { fg = theme.rainbow.rainbow1 }, styles.renderedHeading),
+		markdownH2 = vim.tbl_extend("force", { fg = theme.rainbow.rainbow2 }, styles.renderedHeading),
+		markdownH3 = vim.tbl_extend("force", { fg = theme.rainbow.rainbow3 }, styles.renderedHeading),
+		markdownH4 = vim.tbl_extend("force", { fg = theme.rainbow.rainbow4 }, styles.renderedHeading),
+		markdownH5 = vim.tbl_extend("force", { fg = theme.rainbow.rainbow5 }, styles.renderedHeading),
+		markdownH6 = vim.tbl_extend("force", { fg = theme.rainbow.rainbow6 }, styles.renderedHeading),
 	}
 end
 

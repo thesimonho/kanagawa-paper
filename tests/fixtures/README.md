@@ -66,3 +66,7 @@ Zed emits normal weight/style for disabled attributes and accepts disabled unsup
 Structural bold adds parser call/definition captures and style-only semantic declaration/definition modifiers. Generic function tokens use a bold fallback; semantic keywords in Neovim leave parser control-flow emphasis intact. Existing color values are unchanged. The six runtime and two VS Code artifact hashes include this style-only change.
 
 Base types inherit contextual emphasis so callable types can keep call styling. VS Code limits lexical built-in function emphasis to call context, preserving callable-variable emphasis. Its decorators use plain attribute styling, including semantic decorator modifiers. Runtime and VS Code hashes include these style-only changes; colors are unchanged.
+
+Supplementary italics add independent type-annotation and declaration-metadata roles. VS Code uses contextual type scopes and semantic typeHint/decorator overlays, Neovim parser types/attributes and typeHint groups consume them, and Zed uses distinct annotation captures where available. Base class/type styles remain inheritable and object properties stay unchanged. Runtime and VS Code hashes include style-only changes; colors are unchanged.
+
+Shared importance styling adds bold Markdown strong text/headings and Neovim focus/action roles, plus italic Markdown emphasis/quotes and Neovim supplementary hints/details. Runtime and VS Code artifact hashes include these style changes; existing colors remain unchanged.

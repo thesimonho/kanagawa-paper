@@ -10,7 +10,11 @@ type Highlight = {
 export function zedSyntaxColors(theme: Theme, styles: StylePolicy) {
   const { ui, syntax, status, changes } = theme;
   const highlights: Record<string, Highlight> = {
-    attribute: { color: syntax.attribute },
+    attribute: { color: syntax.attribute, ...zedStyle(styles.annotation) },
+    "type.annotation": {
+      color: syntax.type,
+      ...zedStyle(styles.typeAnnotation),
+    },
     boolean: { color: syntax.constant },
     comment: { color: syntax.comment, ...zedStyle(styles.comment) },
     "comment.doc": {
@@ -83,7 +87,7 @@ export function zedSyntaxColors(theme: Theme, styles: StylePolicy) {
     "string.special.symbol": { color: syntax.symbol },
     "text.literal": { color: syntax.string },
     tag: { color: syntax.tag },
-    title: { color: theme.rainbow[1] },
+    title: { color: theme.rainbow[1], ...zedStyle(styles.renderedHeading) },
     type: { color: syntax.type, ...zedStyle(styles.type) },
     variable: { color: syntax.variable },
     "variable.parameter": { color: syntax.parameter },
