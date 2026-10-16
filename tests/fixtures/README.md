@@ -56,3 +56,5 @@ Zed structural and focused borders use the shared m3 surface tone. The Zed theme
 Canvas active line numbers use canvasBlue1 across targets; Ink retains dragonYellow. Canvas runtime and VS Code hashes include this change.
 
 Zed keyword.import captures use the shared preprocessor foreground instead of falling back to the ordinary keyword style.
+
+Zed gutter backgrounds match the editor surface, corresponding to Neovim default gutter=false and VS Code. The dedicated shared gutter role remains available to Neovim gutter=true.

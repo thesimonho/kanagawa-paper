@@ -46,7 +46,7 @@ export function zedTheme(theme: Theme, variant: Variant) {
     "icon.accent": theme.accents.primary,
     "editor.background": ui.surface.editor.background,
     "editor.foreground": ui.text.primary,
-    "editor.gutter.background": ui.editor.gutter.background,
+    "editor.gutter.background": ui.surface.editor.background,
     "editor.subheader.background": ui.surface.tones.m1,
     "editor.line_number": ui.editor.lineNumbers.default,
     "editor.active_line_number": ui.editor.lineNumbers.active,
