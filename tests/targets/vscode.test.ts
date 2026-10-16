@@ -222,6 +222,7 @@ test("VS Code tracks current installed Neovim semantics", async () => {
         "class.builtin": "@type.builtin",
         "type.builtin": "@type.builtin",
         "variable.builtin.classMember": "@variable.member",
+        "variable.classMember": "@variable.member",
       }))
         assert.equal(
           rendered.semanticTokenColors[token].foreground,
@@ -230,6 +231,13 @@ test("VS Code tracks current installed Neovim semantics", async () => {
       assert.equal(
         rendered.semanticTokenColors.selfParameter.fontStyle,
         "italic",
+      );
+      // Parent-type modifier rules outrank custom parameter subtypes such as selfParameter.
+      assert.ok(
+        !Object.hasOwn(rendered.semanticTokenColors, "parameter.declaration"),
+      );
+      assert.ok(
+        !Object.hasOwn(rendered.semanticTokenColors, "parameter.definition"),
       );
       assert.equal(
         rendered.semanticTokenColors["class.builtin"].fontStyle.includes(
@@ -240,6 +248,10 @@ test("VS Code tracks current installed Neovim semantics", async () => {
       assert.equal(
         rendered.semanticTokenColors["variable.builtin.classMember"].fontStyle,
         "",
+      );
+      assert.equal(
+        rendered.semanticTokenColors["variable.classMember.readonly"],
+        theme.syn.constant,
       );
       // Providers can classify booleans and null with this same token; retain TextMate fallback.
       assert.ok(

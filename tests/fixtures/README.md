@@ -44,3 +44,5 @@ Built-in function, tag, and selector roles are additive shared semantics; the co
 Telescope field results link to `@variable.member`, and Grug-far command headers link to `@markup.link.url`. Runtime hashes include these current capture links.
 
 VS Code maps generic import/declaration scopes, modules, built-in types and variables, booleans, and builtin-qualified semantic tokens to Neovim’s corresponding roles and emphasis. The two VS Code artifact hashes include these selector changes. Broad builtin constants retain fallback styling because some providers use the same classification for booleans and null values. Built-in variable italics use specific scopes: grammars can classify both a receiver value and a type such as Rust `Self` under `variable.language.self`. Neovim colors and runtime hashes remain unchanged.
+
+VS Code semantic variables marked `classMember` use the member foreground, including declarations; readonly class members retain the constant foreground. Parameter declarations and definitions inherit the base parameter role so custom subtypes retain their own foregrounds. Both VS Code artifact hashes include these general selectors.
