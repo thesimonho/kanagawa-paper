@@ -323,7 +323,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
     },
     {
       name: "Import Keywords",
-      scope: "keyword.control.import",
+      scope: ["keyword.control.import", "keyword.control.from"],
       settings: { foreground: theme.syntax.preprocessor },
     },
     {
@@ -337,6 +337,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
         "storage.type.namespace",
         "storage.type.type",
         "keyword.declaration storage.type",
+        "meta.var.expr storage.type",
       ],
       settings: {
         foreground: theme.syntax.keyword,
@@ -380,6 +381,11 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
       settings: {
         foreground: theme.syntax.constant,
       },
+    },
+    {
+      name: "Members",
+      scope: "variable.other.property",
+      settings: { foreground: theme.syntax.member },
     },
     {
       name: "Variables",
@@ -787,7 +793,7 @@ export const vscodeTheme = (theme: Theme, variant: Variant) => ({
     operator: theme.syntax.operator,
     parameter: theme.syntax.parameter,
     selfParameter: { foreground: theme.syntax.constant, fontStyle: "italic" },
-    property: theme.syntax.member,
+    property: theme.syntax.identifier,
     "property.readonly": theme.syntax.constant,
     stringLiteral: theme.syntax.string,
     struct: {

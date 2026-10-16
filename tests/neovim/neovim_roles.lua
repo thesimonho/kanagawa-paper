@@ -11,6 +11,8 @@ for _, variant in ipairs({ "ink", "canvas" }) do
 		"@type.builtin",
 		"@variable.builtin",
 		"@variable.member",
+		"@lsp.type.property",
+		"@lsp.mod.readonly",
 		"Boolean",
 		"Type",
 		"@keyword.function",

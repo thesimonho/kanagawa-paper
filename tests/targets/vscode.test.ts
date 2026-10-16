@@ -184,6 +184,7 @@ test("VS Code tracks current installed Neovim semantics", async () => {
         "Declaration Keywords": "@keyword.function",
         "Built-in Types": "@type.builtin",
         Modules: "@module",
+        Members: "@variable.member",
         "Built-in Variables": "@variable.builtin",
         Booleans: "Boolean",
       }))
@@ -252,6 +253,14 @@ test("VS Code tracks current installed Neovim semantics", async () => {
       assert.equal(
         rendered.semanticTokenColors["variable.classMember.readonly"],
         theme.syn.constant,
+      );
+      assert.equal(
+        rendered.semanticTokenColors.property,
+        hex("@lsp.type.property"),
+      );
+      assert.equal(
+        rendered.semanticTokenColors["property.readonly"],
+        hex("@lsp.mod.readonly"),
       );
       // Providers can classify booleans and null with this same token; retain TextMate fallback.
       assert.ok(
