@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 # Kanagawa Paper Canvas
-# Upstream: https://github.com/thesimonho/kanagawa-paper.nvim/master/extras/nushell/kanagawa-paper-canvas.nu
+# Upstream: https://github.com/thesimonho/kanagawa-paper/tree/main/extras/nushell/kanagawa-paper-canvas.nu
 # URL: https://www.nushell.sh/
 # -----------------------------------------------------------------------------
 
@@ -64,7 +64,7 @@ export def main [] {
         shape_filepath: '#6a7893'
         shape_flag: { fg: '#6c828c' attr: 'b' }
         shape_float: { fg: '#b56e6b' attr: 'b' }
-        shape_garbage: { fg: '${fg.dim}' bg: '#a36360' attr: 'b' } # Keeping red and white for garbage
+        shape_garbage: { fg: '#77746c' bg: '#a36360' attr: 'b' }
         shape_glob_interpolation: { fg: '#6a7893' attr: 'b' }
         shape_globpattern: { fg: '#6a7893' attr: 'b' }
         shape_int: { fg: '#a36360' attr: 'b' }

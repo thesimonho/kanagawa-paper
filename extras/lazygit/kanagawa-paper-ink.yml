@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 # Kanagawa Paper Ink
-# Upstream: https://github.com/thesimonho/kanagawa-paper.nvim/master/extras/lazygit/kanagawa-paper-ink.yml
+# Upstream: https://github.com/thesimonho/kanagawa-paper/tree/main/extras/lazygit/kanagawa-paper-ink.yml
 # URL: https://github.com/jesseduffield/lazygit
 # -----------------------------------------------------------------------------
 
@@ -15,7 +15,7 @@ gui:
       - "#938AA9"
       - "bold"
     optionsTextColor:
-      - "#8ea49e"
+      - "#658594"
     selectedLineBgColor:
       - "#2A2A37"
     cherryPickedCommitFgColor:

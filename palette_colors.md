@@ -1,6 +1,6 @@
 # Palette Colors
 
-(this file is auto generated from `lua/kanagawa-paper/colors.lua`)
+(this file is auto generated from `shared/palette.ts`)
 
 | Name  | Color  | Hex   |
 | ----- | :----: | :---: |

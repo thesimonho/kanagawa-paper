@@ -1,0 +1,43 @@
+name: Generate theme files
+description: Build extras, palette preview, and Neovim help from reviewed sources.
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v6
+      with:
+        node-version: '22'
+        cache: npm
+        cache-dependency-path: package-lock.json
+    - run: npm ci --ignore-scripts
+      shell: bash
+    - name: Build extras and palette
+      shell: bash
+      run: npm run generate
+    - name: Prepare panvimdoc output directory
+      shell: bash
+      run: |
+        mkdir -p doc
+        rm -f doc/kanagawa-paper.nvim.txt packages/neovim/doc/kanagawa-paper.nvim.txt
+    - name: Generate Neovim help from README
+      uses: kdheepak/panvimdoc@v4.0.1
+      with:
+        vimdoc: kanagawa-paper.nvim
+        pandoc: README.md
+        version: NVIM v0.8.0
+        toc: true
+        # A fixed title avoids a generated commit merely because the date changed.
+        description: Kanagawa Paper
+        demojify: true
+        dedupsubheadings: false
+        treesitter: true
+        ignorerawblocks: true
+        docmapping: false
+        docmappingprojectname: true
+        shiftheadinglevelby: 0
+        incrementheadinglevelby: 0
+    - name: Place help in the Neovim package
+      shell: bash
+      run: |
+        test -s doc/kanagawa-paper.nvim.txt
+        mv doc/kanagawa-paper.nvim.txt packages/neovim/doc/kanagawa-paper.nvim.txt
+        rmdir doc

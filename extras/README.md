@@ -1,5 +1,14 @@
+---
+agent:
+  instruction: Edit shared colors or generator templates instead of generated extras; keep this warning visible.
+  on-change: "extras/**"
+---
+
+> [!WARNING]
+> **Generated files — do not edit the configurations in this directory manually.** Changes will be overwritten. Edit the palette and theme roles in `shared/` or the templates in `packages/extras/adapters/` instead.
+
 # Extras
 
-The files in this directory are auto-generated as part of a build process.
+When `KANAGAWA_RELEASES_ENABLED=true`, automation generates these files after source changes merge into `main`. The bot commits updated output to `main`; contributors do not need to generate or commit it locally.
 
-Don't commit any files here or make any changes - they will be overridden.
+Edit the shared theme sources or templates in `packages/extras/` instead of these generated files, which will be overwritten.

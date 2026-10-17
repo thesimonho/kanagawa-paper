@@ -1,0 +1,89 @@
+name: Generate files and release applications
+on:
+  workflow_dispatch:
+    inputs:
+      authentication_only:
+        description: Check Marketplace authentication without generating or publishing files
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+concurrency:
+  group: application-releases
+  cancel-in-progress: false
+permissions:
+  contents: read
+jobs:
+  authentication:
+    if: github.event_name == 'workflow_dispatch' && inputs.authentication_only && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - run: npm ci --ignore-scripts
+      - run: npm ci --prefix scripts/ci/release --ignore-scripts
+      - name: Check Marketplace token exchange
+        run: node --import tsx scripts/ci/release/check-marketplace-auth.mts --live
+  generate:
+    if: ${{ vars.KANAGAWA_RELEASES_ENABLED == 'true' && github.ref == 'refs/heads/main' && !inputs.authentication_only }}
+    runs-on: ubuntu-latest
+    outputs:
+      source: ${{ steps.source.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # Use the latest reviewed source, including any earlier bot update.
+          ref: main
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+      - uses: ./.github/actions/generate
+      - name: Publish generated files
+        run: bash scripts/ci/publish-generated.sh
+      - name: Record generated source
+        id: source
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+  release:
+    if: ${{ vars.KANAGAWA_RELEASES_ENABLED == 'true' && github.ref == 'refs/heads/main' && !inputs.authentication_only }}
+    permissions:
+      contents: write
+      pull-requests: write
+      deployments: write
+      id-token: write
+    needs: generate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.generate.outputs.source }}
+          fetch-depth: 0
+          # Pushes made with this key trigger validation on automation/release.
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            scripts/ci/release/package-lock.json
+            package-lock.json
+      - uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: v0.11.5
+      - run: pip install -r scripts/ci/release/requirements.txt
+      - run: npm ci --prefix scripts/ci/release --ignore-scripts
+      - run: npm ci --ignore-scripts
+      - name: Reconcile publication and prepare combined release PR
+        env:
+          KANAGAWA_GENERATED_SOURCE: ${{ needs.generate.outputs.source }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/ci/release/coordinator.py run

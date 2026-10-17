@@ -1,0 +1,190 @@
+[
+  {
+    "file": "sample.py",
+    "language": "python",
+    "probes": [
+      {
+        "id": "import",
+        "line": "import random",
+        "text": "import"
+      },
+      {
+        "id": "module",
+        "line": "import random",
+        "text": "random"
+      },
+      {
+        "id": "class-keyword",
+        "line": "class Sample",
+        "text": "class"
+      },
+      {
+        "id": "class",
+        "line": "class Sample",
+        "text": "Sample"
+      },
+      {
+        "id": "function-keyword",
+        "line": "    def value",
+        "text": "def"
+      },
+      {
+        "id": "parameter",
+        "line": "    def value",
+        "text": "self"
+      },
+      {
+        "id": "builtin-type",
+        "line": "    def value",
+        "text": "bool"
+      },
+      {
+        "id": "boolean",
+        "line": "    def value",
+        "text": "False"
+      },
+      {
+        "id": "builtin-call",
+        "line": "        name = type",
+        "text": "type"
+      },
+      {
+        "id": "builtin-member",
+        "line": "        name = type",
+        "text": "__name__"
+      },
+      {
+        "id": "comment",
+        "line": "        # Ordinary",
+        "text": "Ordinary"
+      },
+      {
+        "id": "return",
+        "line": "        return name",
+        "text": "return"
+      },
+      {
+        "id": "null",
+        "line": "        missing = None",
+        "text": "None"
+      }
+    ]
+  },
+  {
+    "file": "sample.ts",
+    "language": "typescript",
+    "probes": [
+      {
+        "id": "import",
+        "line": "import {",
+        "text": "import"
+      },
+      {
+        "id": "imported-function",
+        "line": "import {",
+        "text": "basename"
+      },
+      {
+        "id": "class-keyword",
+        "line": "export class",
+        "text": "class"
+      },
+      {
+        "id": "class",
+        "line": "export class",
+        "text": "Sample"
+      },
+      {
+        "id": "builtin-type",
+        "line": "  readonly",
+        "text": "boolean"
+      },
+      {
+        "id": "boolean",
+        "line": "  readonly",
+        "text": "false"
+      },
+      {
+        "id": "method",
+        "line": "  value",
+        "text": "value"
+      },
+      {
+        "id": "parameter",
+        "line": "  value",
+        "text": "input"
+      },
+      {
+        "id": "comment",
+        "line": "    // Ordinary",
+        "text": "Ordinary"
+      },
+      {
+        "id": "builtin-call",
+        "line": "    return",
+        "text": "String"
+      },
+      {
+        "id": "builtin-variable",
+        "line": "    return this.enabled",
+        "text": "this"
+      }
+    ]
+  },
+  {
+    "file": "sample.rs",
+    "language": "rust",
+    "probes": [
+      {
+        "id": "import",
+        "line": "use std",
+        "text": "use"
+      },
+      {
+        "id": "module",
+        "line": "use std",
+        "text": "std"
+      },
+      {
+        "id": "type",
+        "line": "pub struct",
+        "text": "Sample"
+      },
+      {
+        "id": "builtin-type",
+        "line": "    enabled",
+        "text": "bool"
+      },
+      {
+        "id": "method",
+        "line": "    fn value",
+        "text": "value"
+      },
+      {
+        "id": "parameter",
+        "line": "    fn value",
+        "text": "self"
+      },
+      {
+        "id": "comment",
+        "line": "        // Ordinary",
+        "text": "Ordinary"
+      },
+      {
+        "id": "type-call",
+        "line": "        let path",
+        "text": "Path"
+      },
+      {
+        "id": "self-type",
+        "line": "    fn identity(&self) -> &Self { self }",
+        "text": "Self"
+      },
+      {
+        "id": "parent-module",
+        "line": "    use super::Sample;",
+        "text": "super"
+      }
+    ]
+  }
+]

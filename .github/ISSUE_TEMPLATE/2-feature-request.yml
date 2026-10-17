@@ -1,47 +1,56 @@
 name: Feature Request
-description: Suggest a new feature
+description: Suggest an improvement or a new target
 title: "request: "
 labels: [enhancement]
 body:
-  - type: checkboxes
+  - type: markdown
     attributes:
-      label: Did you check the docs?
-      description: Make sure you read all the docs before submitting a feature request
-      options:
-        - label: I have read all the kanagawa-paper.nvim docs
-          required: true
+      value: |
+        Check the [documentation](https://github.com/thesimonho/kanagawa-paper) and
+        [existing issues](https://github.com/thesimonho/kanagawa-paper/issues) before submitting.
+  - type: input
+    id: application
+    attributes:
+      label: Application
+      description: Name the application or plugin this request concerns. List more than one if needed.
+      placeholder: "Neovim, VS Code, Zed, Ghostty, or another application"
+    validations:
+      required: true
   - type: dropdown
-    id: plugin
+    id: theme
     attributes:
-      label: Is your request related to an external plugin?
-      multiple: false
+      label: Theme
+      multiple: true
       options:
-        - 'No'
-        - 'Yes'
-      default: 0
+        - Ink
+        - Canvas
+        - Not theme-specific
     validations:
       required: true
   - type: input
+    id: integration
     attributes:
-      label: Please provide the link to the plugin, if applicable
+      label: Application or plugin link
+      description: For a new target, extra, or plugin integration, link to its project or theme documentation.
       placeholder: "https://"
     validations:
       required: false
   - type: textarea
-    validations:
-      required: false
+    id: problem
     attributes:
-      label: Is your feature request related to a problem? Please describe.
-      description: A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+      label: What problem would this solve?
+    validations:
+      required: true
   - type: textarea
-    validations:
-      required: false
+    id: solution
     attributes:
-      label: Describe the solution you'd like
-      description: A clear and concise description of what you want to happen.
+      label: Proposed behavior
+      description: Describe the result you want. Include examples or screenshots when useful.
+    validations:
+      required: true
   - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives or additional context
     validations:
       required: false
-    attributes:
-      label: Additional context
-      description: Add any other context or screenshots about the feature request here.

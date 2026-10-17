@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------------
 --- Kanagawa Paper Ink
---- Upstream: https://github.com/thesimonho/kanagawa-paper.nvim/master/extras/wezterm_tabline/kanagawa-paper-ink.lua
+--- Upstream: https://github.com/thesimonho/kanagawa-paper/tree/main/extras/wezterm_tabline/kanagawa-paper-ink.lua
 --- URL: https://github.com/michaelbrusegard/tabline.wez
 -----------------------------------------------------------------------------
 

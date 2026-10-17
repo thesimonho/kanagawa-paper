@@ -1,0 +1,22 @@
+[kanagawa.release]
+profile = "git-archive"
+
+[semantic_release]
+commit_parser = "conventional-monorepo"
+tag_format = "zed-source-{version}"
+version_variables = ["packages/zed/extension.toml:version"]
+allow_zero_version = true
+major_on_zero = false
+
+[semantic_release.branches.main]
+match = "main"
+
+[semantic_release.commit_parser_options]
+path_filters = ["packages/zed/**", "shared/**", "README.md", "LICENSE", "scripts/*.ts", "scripts/build/**", "package.json", "package-lock.json", "tsconfig.json", "scripts/ci/release/**"]
+
+[semantic_release.changelog]
+mode = "update"
+exclude_commit_patterns = ["^chore\\(release\\):"]
+
+[semantic_release.changelog.default_templates]
+changelog_file = "packages/zed/CHANGELOG.md"

@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "types": ["node"],
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "shared/**/*.ts",
+    "packages/**/*.ts",
+    "scripts/*.ts",
+    "scripts/build/*.ts",
+    "scripts/ci/release/*.mts",
+    "tests/shared/*.ts",
+    "tests/targets/*.ts",
+    "tests/support/*.ts",
+    "tests/release/*.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
+}

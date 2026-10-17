@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 # Kanagawa Paper Canvas
-# Upstream: https://github.com/thesimonho/kanagawa-paper.nvim/master/extras/fzf/kanagawa-paper-canvas.rc
+# Upstream: https://github.com/thesimonho/kanagawa-paper/tree/main/extras/fzf/kanagawa-paper-canvas.rc
 # URL: https://github.com/junegunn/fzf/tree/master#environment-variables
 # Note: You can either export the following as an environment variable (export FZF_DEFAULT_OPTS='...') or
 #       add the following to an opts file and point FZF_DEFAULT_OPTS_FILE to it.

@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------------
-// ${_style_name}
-// Upstream: ${_upstream_url}
-// URL: ${_url}
+// Kanagawa Paper Ink
+// Upstream: https://github.com/thesimonho/kanagawa-paper/tree/main/extras/zellij/kanagawa-paper-ink.kdl
+// URL: https://zellij.dev/
 // -----------------------------------------------------------------------------
 
 themes {

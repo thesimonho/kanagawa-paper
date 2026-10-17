@@ -1,41 +1,46 @@
-name: Run Tests
+name: Validate
 on:
   workflow_dispatch:
   pull_request:
-    types: [opened, synchronize, reopened]
+  push:
+    branches: [main, automation/release]
+permissions:
+  contents: read
 jobs:
-  tests:
-    name: Run tests
+  checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
-          ssh-key: ${{ secrets.DEPLOY_KEY }}
-      - name: Fetch PR merge commit (only on PR)
-        if: github.event_name == 'pull_request'
-        run: git fetch origin +refs/pull/${{ github.event.pull_request.number }}/merge
-      - name: Check for test-relevant changes
-        id: test-changes
-        run: |
-          echo "Checking for test-relevant changes..."
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            echo "run-tests=true" >> $GITHUB_OUTPUT
-          elif git diff --name-only FETCH_HEAD^1 FETCH_HEAD | grep -E '(^scripts/test\.sh$|^\.github/workflows/run-tests\.yml$|\.lua$)'; then
-            echo "run-tests=true" >> $GITHUB_OUTPUT
-          else
-            echo "run-tests=false" >> $GITHUB_OUTPUT
-          fi
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            scripts/ci/release/package-lock.json
+            package-lock.json
+      - uses: ./.github/actions/generate
+      - run: pip install -r scripts/ci/release/requirements.txt
+      - run: npm ci --prefix scripts/ci/release --ignore-scripts
       - uses: rhysd/action-setup-vim@v1
-        if: steps.test-changes.outputs.run-tests == 'true'
         with:
           neovim: true
-      - name: Set permissions
-        if: steps.test-changes.outputs.run-tests == 'true'
-        run: chmod +x scripts/test.sh
-      - name: Run test script
-        if: steps.test-changes.outputs.run-tests == 'true'
+          version: v0.11.5
+      - run: npm run check
+      - name: Check release freshness
+        if: github.head_ref == 'automation/release' || github.ref == 'refs/heads/automation/release'
         run: |
-          scripts/test.sh || { echo "❌ Test script failed!"; exit 1; }
-      - name: Mark test as skipped
-        if: steps.test-changes.outputs.run-tests == 'false'
-        run: echo "✅ No test-relevant changes, skipping tests."
+          git fetch origin main
+          RELEASE_BASE_SHA=$(git rev-parse origin/main) python scripts/ci/release/coordinator.py check-plan
+      - name: Upload generated files for inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-theme-files
+          path: |
+            extras/
+            palette_colors.md
+            packages/neovim/doc/kanagawa-paper.nvim.txt

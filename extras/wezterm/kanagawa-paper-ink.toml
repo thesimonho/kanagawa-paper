@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 # Kanagawa Paper Ink
-# Upstream: https://github.com/thesimonho/kanagawa-paper.nvim/master/extras/wezterm/kanagawa-paper-ink.toml
+# Upstream: https://github.com/thesimonho/kanagawa-paper/tree/main/extras/wezterm/kanagawa-paper-ink.toml
 # URL: https://wezterm.org/config/appearance.html
 # -----------------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ cursor_fg = "#1F1F28"
 selection_bg = "#363646"
 selection_fg = "#DCD7BA"
 split = "#8992a7"
-compose_cursor = "#8ea49e"
+compose_cursor = "#658594"
 scrollbar_thumb = "#363646"
 
 ansi = [
@@ -70,4 +70,4 @@ intensity = "Bold"
 [metadata]
 name = "kanagawa-paper-ink"
 author = "Simon Ho"
-origin_url = "https://github.com/thesimonho/kanagawa-paper.nvim/master/extras/wezterm/kanagawa-paper-ink.toml"
+origin_url = "https://github.com/thesimonho/kanagawa-paper/tree/main/extras/wezterm/kanagawa-paper-ink.toml"

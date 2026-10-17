@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------------
 --- Kanagawa Paper Canvas
---- Upstream: https://github.com/thesimonho/kanagawa-paper.nvim/master/extras/wezterm_tabline/kanagawa-paper-canvas.lua
+--- Upstream: https://github.com/thesimonho/kanagawa-paper/tree/main/extras/wezterm_tabline/kanagawa-paper-canvas.lua
 --- URL: https://github.com/michaelbrusegard/tabline.wez
 -----------------------------------------------------------------------------
 
