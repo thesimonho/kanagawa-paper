@@ -14,7 +14,7 @@ Remixed light and dark Kanagawa color scheme with muted colors. For Neovim, VS C
 <img alt="GitHub branch check runs" src="https://img.shields.io/github/check-runs/thesimonho/kanagawa-paper/main?style=for-the-badge&label=build&labelColor=1F1F28&color=699469">
 </p>
 
-**Get started:** [VS Code](#vs-code) · [Neovim](#neovim) · [Zed](#zed) · [Other applications](#other-applications)
+**Get started:** [VS Code](#vs-code) · [Zed](#zed) · [Neovim](#neovim) · [Other applications](#other-applications)
 
 ## 💡 Motivation
 
@@ -41,6 +41,14 @@ I love the original [kanagawa.nvim](https://github.com/rebelot/kanagawa.nvim) co
 ### Customization
 
 Use VS Code's `workbench.colorCustomizations` setting for interface colors and `editor.tokenColorCustomizations` for syntax colors. See the [VS Code theme customization guide](https://code.visualstudio.com/docs/configure/themes#_customizing-a-color-theme) for examples and theme-specific overrides.
+
+## Zed
+
+### Installation
+
+1. Open Zed's Extensions view and search for **Kanagawa Paper**.
+2. Install the extension.
+3. Open the theme selector and choose **Kanagawa Paper Ink** for a dark theme or **Kanagawa Paper Canvas** for a light theme.
 
 ## Neovim
 
@@ -121,9 +129,6 @@ return {
 ```
 
 ### Configuration
-
-> [!NOTE]
-> Config options have changed between v1 and v2 of the color scheme.
 
 > [!IMPORTANT]
 > Set the configuration **BEFORE** loading the color scheme to ensure the settings are applied, otherwise defaults will be used.
@@ -272,10 +277,6 @@ Examples of situations where this might be useful:
 - You want to change background color mid-session (either by manually setting `vim.o.background` or with something like dark background toggle in LazyVim)
 - You use a plugin for live previews of color schemes
 
-#### [WezTerm](https://wezfurlong.org/wezterm/) and [WezTerm Tabline](https://github.com/michaelbrusegard/tabline.wez) (deprecated)
-
-This feature has been deprecated. If you'd like to use it, you can still find the old script and instructions (README) in [v3.1](https://github.com/thesimonho/kanagawa-paper/tree/v3.1?tab=readme-ov-file#-integrations)
-
 ### Customizing colors
 
 There are two kinds of colors: `PaletteColors` and `ThemeColors`.
@@ -374,16 +375,6 @@ and use them in your `opts` function. Example:
 }
 ```
 
-## Zed
-
-The Zed extension contains **Kanagawa Paper Ink** and **Kanagawa Paper Canvas**. To build and install it locally:
-
-1. From the source checkout, install Node 22 or later and run `npm ci --ignore-scripts`, then `just build zed`.
-2. In Zed's Extensions view, choose **Install Dev Extension** and select the generated `dist/zed` directory.
-3. Open the theme selector and choose either Kanagawa Paper variant.
-
-For an already assembled distribution, select its root directory in step 2; no build is needed. Source under `packages/zed` must be built first.
-
 ## Other applications
 
 - [alacritty](https://github.com/thesimonho/kanagawa-paper/tree/main/extras/alacritty)
@@ -423,7 +414,7 @@ How to add a new extra template:
 3. Open a PR. CI checks that the extras, palette, and Neovim help generators run successfully. For an optional local preview, run `just generate`.
 
 > [!IMPORTANT]
-> When `KANAGAWA_RELEASES_ENABLED=true`, post-merge automation on `main` generates and commits the extras, palette preview, and Neovim help. You do not need to generate or commit these outputs locally, including when contributing from a fork.
+> Post-merge automation on `main` generates and commits the extras, palette preview, and Neovim help. You do not need to generate or commit these outputs locally, including when contributing from a fork.
 
 ## 👏 Acknowledgements
 
