@@ -66,6 +66,14 @@ Install the theme with your preferred package manager, such as [lazy.nvim](https
 
 The `neovim` branch contains the installable runtime. The `main` branch contains development source. To pin a release, replace `branch` with `tag = "neovim-X.Y.Z"` using a published Neovim version. Historical `v*` tags remain available; they do not receive a separate update track.
 
+### Migrating an existing installation
+
+Change your plugin specification to the repository and `neovim` branch shown above, then update the plugin. Existing `setup()` options and colorscheme names remain available. Install from the distribution branch or a `neovim-X.Y.Z` tag; the development source requires a build before Neovim can load it.
+
+If your configuration directly requires an internal `kanagawa-paper.groups` module, update that path to `kanagawa-paper.highlights`. Semantic-token mappings now live in `kanagawa-paper.highlights.semantic`; LSP interface highlights live in `kanagawa-paper.highlights.lsp`. The old module paths have no compatibility aliases. Configurations that only use `setup()`, color overrides, or highlight overrides do not need these internal path changes.
+
+The default text styles now use bold for declarations, calls, and control flow, and italic for comments, documentation, and type annotations where the editor can identify them. Use the named `styles` roles described below to customize these choices. Restart Neovim after updating so its parser queries reload. The included Python and TypeScript queries extend installed Tree-sitter queries; they do not install parsers or language servers.
+
 ### Usage
 
 Kanagawa Paper comes in a few variants:
