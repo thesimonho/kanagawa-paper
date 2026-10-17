@@ -416,13 +416,7 @@ How to add a new extra template:
 > [!IMPORTANT]
 > Post-merge automation on `main` generates and commits the extras, palette preview, and Neovim help. You do not need to generate or commit these outputs locally, including when contributing from a fork.
 
-## 👏 Acknowledgements
-
-- [Kanagawa for Neovim](https://github.com/rebelot/kanagawa.nvim)
-- [Kanagawa for VS Code](https://github.com/barklan/kanagawa.vscode)
-- [Tokyo Night](https://github.com/folke/tokyonight.nvim)
-
-## Development
+### Development
 
 Install Node 22 or later and run `npm ci --ignore-scripts` at the repository root. Run `just build` to assemble Neovim, VS Code, Zed, and extras under `dist/`, or `just watch neovim` to rebuild the Neovim target after source edits.
 
@@ -437,3 +431,9 @@ Build once, then open Neovim from the repository root with your existing lazy.nv
 | `extras/`   | Copyable generated application configurations          |
 | `scripts/`  | Tests, package assembly, and release coordination      |
 | `tests/`    | Runtime and package checks                             |
+
+## 👏 Acknowledgements
+
+- [Kanagawa for Neovim](https://github.com/rebelot/kanagawa.nvim)
+- [Kanagawa for VS Code](https://github.com/barklan/kanagawa.vscode)
+- [Tokyo Night](https://github.com/folke/tokyonight.nvim)
