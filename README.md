@@ -1,8 +1,5 @@
 # 🌊 Kanagawa Paper
 
-> [!IMPORTANT]
-> `master` is now the compatibility branch for existing Neovim installations. Use [`main`](https://github.com/thesimonho/kanagawa-paper.nvim/tree/main) for future updates and current documentation. Follow the installation instructions on `main` to move to the new release track; Neovim installations use the `neovim` distribution branch.
-
 <p align="center">
 Remixed light and dark Kanagawa color scheme with muted colors. For Neovim, VS Code, and Zed.
 </p>
@@ -12,9 +9,9 @@ Remixed light and dark Kanagawa color scheme with muted colors. For Neovim, VS C
 
 <img alt="GitHub Release" src="https://img.shields.io/github/v/release/thesimonho/kanagawa-paper?style=for-the-badge&labelColor=1F1F28&color=887389">
 
-<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/thesimonho/kanagawa-paper?style=for-the-badge&labelColor=1F1F28&color=5d7a88">
+<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/thesimonho/kanagawa-paper/main?display_timestamp=committer&style=for-the-badge&labelColor=1F1F28&color=5d7a88">
 
-<img alt="GitHub branch check runs" src="https://img.shields.io/github/check-runs/thesimonho/kanagawa-paper/main?style=for-the-badge&label=build&labelColor=1F1F28&color=699469">
+<img alt="GitHub Actions validation" src="https://img.shields.io/github/actions/workflow/status/thesimonho/kanagawa-paper/run-tests.yml?branch=main&event=push&style=for-the-badge&label=build&labelColor=1F1F28&color=699469">
 </p>
 
 **Get started:** [VS Code](#vs-code) · [Zed](#zed) · [Neovim](#neovim) · [Other applications](#other-applications)
