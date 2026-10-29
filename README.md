@@ -30,6 +30,12 @@ I love the original [kanagawa.nvim](https://github.com/rebelot/kanagawa.nvim) co
 
 ![canvas](https://github.com/user-attachments/assets/b653e9a0-260d-462a-8ad8-93290deed0b8)
 
+## Unified editor themes
+
+Neovim, VS Code, and Zed share one palette and presentation policy. Bold marks structure and execution landmarks; italics mark comments, documentation, type annotations, and other supporting information where each editor supports them.
+
+For existing Neovim installations, follow the [migration instructions](#migrating-an-existing-installation) before updating. The installable runtime is published on the `neovim` branch; `main` contains the shared development source.
+
 ## VS Code
 
 ### Installation
