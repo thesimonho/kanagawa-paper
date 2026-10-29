@@ -1,0 +1,8 @@
+id = "kanagawa-paper-theme"
+name = "Kanagawa Paper"
+version = "0.2.0"
+schema_version = 1
+authors = ["Simon Ho"]
+description = "Muted Ink and Canvas themes inspired by Kanagawa."
+repository = "https://github.com/thesimonho/kanagawa-paper"
+themes = ["themes/kanagawa-paper.json"]
