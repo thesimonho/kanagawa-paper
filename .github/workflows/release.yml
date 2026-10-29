@@ -9,6 +9,16 @@ on:
   push:
     branches: [main]
     paths-ignore:
+      - '.lazy.lua'
+      - '.vscode/**'
+      - '.github/pull_request_template.md'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/advanced-issue-labeler.yml'
+      - '.github/workflows/label-issues.yml'
+      - 'tests/**'
+      - 'scripts/test/**'
+      - 'scripts/theme-audit/**'
+      - 'scripts/build/watch.ts'
       - 'extras/**'
       - palette_colors.md
       - packages/neovim/doc/kanagawa-paper.nvim.txt
