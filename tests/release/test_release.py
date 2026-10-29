@@ -576,6 +576,24 @@ class Selection(unittest.TestCase):
 
 
 class ArtifactValidation(unittest.TestCase):
+    def test_vsce_wrapper_preserves_arguments_status_and_diagnostics(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            wrapper = root / "vsce.sh"
+            shutil.copy2(ROOT / "scripts/ci/release/vsce.sh", wrapper)
+            client = root / "node_modules/.bin/vsce"
+            client.parent.mkdir(parents=True)
+            client.write_text('#!/usr/bin/env bash\nprintf "%s\\n" "$@"\nexit 7\n')
+            client.chmod(0o755)
+            result = subprocess.run(
+                ["bash", str(wrapper), "publish", "--oidc", "--packagePath", "a b.vsix"],
+                text=True,
+                capture_output=True,
+            )
+            self.assertEqual(result.returncode, 7)
+            self.assertEqual(result.stdout, "")
+            self.assertEqual(result.stderr, "publish\n--oidc\n--packagePath\na b.vsix\n")
+
     def test_release_lookup_finds_drafts_and_published_by_id(self):
         for draft in (True, False):
             with (
