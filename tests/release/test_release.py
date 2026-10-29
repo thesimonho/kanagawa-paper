@@ -1,4 +1,5 @@
 import importlib.util
+from contextlib import chdir
 import io
 import json
 import os
@@ -370,24 +371,31 @@ class Selection(unittest.TestCase):
         # Exercise real fetch/worktree/child-process plumbing with a local publisher.
         record = Path(self.temporary.name) / "published-source"
         child = self.root / "scripts/ci/release/coordinator.py"
-        child.write_text(
+        current_child = (
             "import json, subprocess, os\nfrom pathlib import Path\n"
             "assert os.environ['ACTIONS_ID_TOKEN_REQUEST_URL'] == 'https://example.invalid/oidc'\n"
             "assert os.environ['ACTIONS_ID_TOKEN_REQUEST_TOKEN'] == 'fixture-token'\n"
             "assert os.environ['KANAGAWA_VSCE']\n"
+            "assert '--source-root' in __import__('sys').argv\n"
+            "assert '--source-sha' in __import__('sys').argv\n"
+            "assert Path(__import__('sys').argv[3]).resolve() == Path.cwd()\n"
             f"Path({str(record)!r}).write_text(subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())\n"
             "plan=json.loads(Path('.release-plan.json').read_text())\n"
             "for target,item in plan['targets'].items():\n"
             " subprocess.run(['git','tag',target+'-source-'+item['version']],check=True)\n"
         )
+        child.write_text("raise RuntimeError('frozen coordinator must not execute')\n")
         self.change("shared/palette.ts", "fix: shared palette")
         release.prepare()
         self.commit("chore(release): prepare application releases")
         source = self.git("rev-parse", "HEAD")
+        child.write_text(current_child)
+        self.commit("chore: update publication tooling")
         self.change("packages/neovim/runtime.lua", "fix: subsequent runtime")
         latest = self.git("rev-parse", "HEAD")
         self.git("push", "origin", "main", "--tags")
         with (
+            patch.object(release, "TOOL_ROOT", self.root),
             patch.object(release, "open_pr") as open_pr,
             patch.dict(
                 os.environ,
@@ -419,7 +427,28 @@ class Selection(unittest.TestCase):
         self.assertEqual(second["targets"]["neovim"]["version"], "4.1.2")
         self.assertNotIn("shared palette", second["targets"]["neovim"]["notes"].lower())
 
+    def test_publication_source_boundary(self):
+        source = self.git("rev-parse", "HEAD")
+        with patch.object(release, "TOOL_ROOT", self.root):
+            with self.assertRaisesRegex(ValueError, "current worktree root"):
+                release.configure_source(str(self.root), source)
+            with chdir(self.root):
+                with self.assertRaisesRegex(ValueError, "Invalid publication source"):
+                    release.configure_source(str(self.root), "main")
+                with self.assertRaisesRegex(ValueError, "HEAD differs"):
+                    release.configure_source(str(self.root), "0" * 40)
+                release.configure_source(str(self.root), source)
+            with chdir(ROOT):
+                with self.assertRaisesRegex(ValueError, "another repository"):
+                    release.configure_source(str(ROOT), source)
+
     def test_publication_retry_keeps_frozen_artifact(self):
+        self.publication_retry()
+
+    def test_reviewed_rejection_reconciles_without_publication(self):
+        self.publication_retry(reject=True)
+
+    def publication_retry(self, reject=False):
         self.add_archive_target()
         self.change("shared/palette.ts", "fix: shared palette")
         plan = release.prepare()
@@ -489,6 +518,8 @@ class Selection(unittest.TestCase):
                                 )
                 else:
                     self.assertEqual(args[1:4], ("publish", "--oidc", "--packagePath"))
+                    if reject:
+                        raise OSError("permanent rejection")
                     published.append(Path(args[-1]).read_bytes())
                 return ""
             return original_run(*args, cwd=cwd, **kwargs)
@@ -515,18 +546,57 @@ class Selection(unittest.TestCase):
             patch.object(release, "release", side_effect=lambda tag: releases.get(tag)),
             patch.object(release, "download_asset", side_effect=download),
             patch.object(release, "repo_name", return_value="example/theme"),
-            patch.object(release, "deployment"),
+            patch.object(release, "deployment") as deployment,
             patch.object(release, "marketplace_matches", side_effect=marketplace),
         ):
             with self.assertRaisesRegex(OSError, "before candidate sealing"):
                 release.publish(plan, source)
             self.assertIsNone(release.ref_sha("refs/tags/neovim-source-4.1.1"))
             self.assertEqual(published, [])
-            with self.assertRaisesRegex(OSError, "timeout"):
+            with self.assertRaisesRegex(
+                OSError, "permanent rejection" if reject else "timeout"
+            ):
                 release.publish(plan, source)
             self.assertFalse(releases["neovim-4.1.1"]["draft"])
             self.assertTrue(releases["vscode-2.2.2"]["draft"])
             first_assets = dict(uploaded)
+            if reject:
+                record = {
+                    "source": source,
+                    "target": "vscode",
+                    "version": "2.2.2",
+                    "candidate_sha256": release.hashlib.sha256(
+                        uploaded["vscode-2.2.2/candidate.json"]
+                    ).hexdigest(),
+                    "reason": "permanent rejection",
+                    "evidence_url": "https://example.test/rejection",
+                }
+                identity = (source, "vscode", "2.2.2")
+                with patch.object(
+                    release, "load_rejections", return_value={identity: record}
+                ):
+                    with patch.object(
+                        release, "marketplace_matches", return_value=True
+                    ):
+                        with self.assertRaisesRegex(
+                            ValueError, "Cannot reject a published"
+                        ):
+                            release.publish(plan, source)
+                    with patch.object(release, "digest", return_value="0" * 64):
+                        with self.assertRaisesRegex(ValueError, "hash mismatch"):
+                            release.publish(plan, source)
+                    release.publish(plan, source)
+                    release.publish(plan, source)
+                self.assertTrue(releases["vscode-2.2.2"]["draft"])
+                self.assertEqual(published, [])
+                self.assertIsNone(release.remote_branch("vscode"))
+                self.assertFalse(releases["zed-0.1.1"]["draft"])
+                self.assertEqual(first_assets, uploaded)
+                self.assertEqual(len(package_count), 1)
+                self.assertNotIn(
+                    "vscode", [call.args[0] for call in deployment.call_args_list]
+                )
+                return
             release.publish(plan, source)
             self.assertFalse(releases["vscode-2.2.2"]["draft"])
             self.assertFalse(releases["fixture-1.0.1"]["draft"])
@@ -576,6 +646,53 @@ class Selection(unittest.TestCase):
 
 
 class ArtifactValidation(unittest.TestCase):
+    def test_rejection_declarations_fail_closed(self):
+        record = {
+            "source": "a" * 40,
+            "target": "vscode",
+            "version": "3.0.0",
+            "candidate_sha256": "b" * 64,
+            "reason": "Permanent validation failure",
+            "evidence_url": "https://example.test/failure",
+        }
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "rejections.json"
+            release.write_json(path, {"schema": 1, "rejections": [record]})
+            self.assertEqual(len(release.load_rejections(path)), 1)
+            for field, invalid in (
+                ("source", "main"),
+                ("version", "3"),
+                ("candidate_sha256", "bad"),
+                ("reason", ""),
+                ("evidence_url", "http://example.test"),
+            ):
+                with self.subTest(field=field):
+                    release.write_json(
+                        path, {"schema": 1, "rejections": [{**record, field: invalid}]}
+                    )
+                    with self.assertRaisesRegex(ValueError, "Invalid rejection"):
+                        release.load_rejections(path)
+            release.write_json(path, {"schema": 1, "rejections": [record, record]})
+            with self.assertRaisesRegex(ValueError, "Duplicate"):
+                release.load_rejections(path)
+
+    def test_rejection_requires_existing_sealed_draft(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            for current in (
+                None,
+                {"draft": True, "assets": []},
+                {"draft": False, "assets": [{"name": "candidate.json"}]},
+            ):
+                with patch.object(release, "release", return_value=current):
+                    with self.assertRaisesRegex(ValueError, "sealed draft"):
+                        release.candidate(
+                            "vscode",
+                            {"version": "3.0.0"},
+                            "a" * 40,
+                            Path(temporary),
+                            require_sealed=True,
+                        )
+
     def test_vsce_wrapper_preserves_arguments_status_and_diagnostics(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -586,13 +703,22 @@ class ArtifactValidation(unittest.TestCase):
             client.write_text('#!/usr/bin/env bash\nprintf "%s\\n" "$@"\nexit 7\n')
             client.chmod(0o755)
             result = subprocess.run(
-                ["bash", str(wrapper), "publish", "--oidc", "--packagePath", "a b.vsix"],
+                [
+                    "bash",
+                    str(wrapper),
+                    "publish",
+                    "--oidc",
+                    "--packagePath",
+                    "a b.vsix",
+                ],
                 text=True,
                 capture_output=True,
             )
             self.assertEqual(result.returncode, 7)
             self.assertEqual(result.stdout, "")
-            self.assertEqual(result.stderr, "publish\n--oidc\n--packagePath\na b.vsix\n")
+            self.assertEqual(
+                result.stderr, "publish\n--oidc\n--packagePath\na b.vsix\n"
+            )
 
     def test_release_lookup_finds_drafts_and_published_by_id(self):
         for draft in (True, False):

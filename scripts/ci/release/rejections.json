@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "rejections": [
+    {
+      "source": "6eab39977cf3681d2a6bfed59373d909dc13838d",
+      "target": "vscode",
+      "version": "3.0.0",
+      "candidate_sha256": "04b939030fbdb9e1ec424e4b9d018c6729aeff49c100e981553a6968cdfd52ce",
+      "reason": "Marketplace rejected the 1200 by 1200 icon; maximum dimensions are 1024 by 1024.",
+      "evidence_url": "https://github.com/thesimonho/kanagawa-paper/actions/runs/40828851828"
+    }
+  ]
+}
