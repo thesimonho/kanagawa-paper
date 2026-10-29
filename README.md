@@ -7,14 +7,18 @@ Remixed light and dark Kanagawa color scheme with muted colors. For Neovim, VS C
 <p align="center">
 <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/thesimonho/kanagawa-paper?style=for-the-badge&labelColor=1F1F28&color=c4b28a">
 
-<img alt="GitHub Release" src="https://img.shields.io/github/v/release/thesimonho/kanagawa-paper?style=for-the-badge&labelColor=1F1F28&color=887389">
-
 <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/thesimonho/kanagawa-paper/main?display_timestamp=committer&style=for-the-badge&labelColor=1F1F28&color=5d7a88">
 
 <img alt="GitHub Actions validation" src="https://img.shields.io/github/actions/workflow/status/thesimonho/kanagawa-paper/run-tests.yml?branch=main&event=push&style=for-the-badge&label=build&labelColor=1F1F28&color=699469">
+<br />
+<img alt="Neovim release" src="https://img.shields.io/github/v/release/thesimonho/kanagawa-paper?filter=neovim-*&label=Neovim&style=for-the-badge&labelColor=1F1F28&color=887389">
+
+<img alt="VS Code release" src="https://img.shields.io/github/v/release/thesimonho/kanagawa-paper?filter=vscode-*&label=VS%20Code&style=for-the-badge&labelColor=1F1F28&color=887389">
+
+<img alt="Zed release" src="https://img.shields.io/github/v/release/thesimonho/kanagawa-paper?filter=zed-*&label=Zed&style=for-the-badge&labelColor=1F1F28&color=887389">
 </p>
 
-**Get started:** [VS Code](#vs-code) · [Zed](#zed) · [Neovim](#neovim) · [Other applications](#other-applications)
+**Get started:** [Neovim](#neovim) · [VS Code](#vs-code) · [Zed](#zed) · [Other applications](#other-applications)
 
 ## 💡 Motivation
 
@@ -138,8 +142,6 @@ return {
 
 > [!IMPORTANT]
 > Set the configuration **BEFORE** loading the color scheme to ensure the settings are applied, otherwise defaults will be used.
-
-The default configuration can be found [here](https://github.com/thesimonho/kanagawa-paper/blob/main/packages/neovim/lua/kanagawa-paper/config.lua)
 
 <details>
 <summary>Default configuration</summary>
