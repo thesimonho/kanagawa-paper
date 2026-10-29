@@ -37,16 +37,23 @@ jobs:
       - name: Check Marketplace token exchange
         run: node --import tsx scripts/ci/release/check-marketplace-auth.mts --live
   generate:
-    if: ${{ vars.KANAGAWA_RELEASES_ENABLED == 'true' && github.ref == 'refs/heads/main' && !inputs.authentication_only }}
+    if: ${{ github.ref == 'refs/heads/main' && !inputs.authentication_only }}
     runs-on: ubuntu-latest
     outputs:
       source: ${{ steps.source.outputs.sha }}
     steps:
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          app-id: ${{ vars.PR_MASTER_APP_ID }}
+          private-key: ${{ secrets.PR_MASTER_PRIVATE_KEY }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write
       - uses: actions/checkout@v6
         with:
           # Use the latest reviewed source, including any earlier bot update.
           ref: main
-          ssh-key: ${{ secrets.DEPLOY_KEY }}
+          token: ${{ steps.app-token.outputs.token }}
       - uses: ./.github/actions/generate
       - name: Publish generated files
         run: bash scripts/ci/publish-generated.sh
@@ -54,7 +61,7 @@ jobs:
         id: source
         run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
   release:
-    if: ${{ vars.KANAGAWA_RELEASES_ENABLED == 'true' && github.ref == 'refs/heads/main' && !inputs.authentication_only }}
+    if: ${{ github.ref == 'refs/heads/main' && !inputs.authentication_only }}
     permissions:
       contents: write
       pull-requests: write
@@ -63,12 +70,19 @@ jobs:
     needs: generate
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          app-id: ${{ vars.PR_MASTER_APP_ID }}
+          private-key: ${{ secrets.PR_MASTER_PRIVATE_KEY }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write
       - uses: actions/checkout@v6
         with:
           ref: ${{ needs.generate.outputs.source }}
           fetch-depth: 0
-          # Pushes made with this key trigger validation on automation/release.
-          ssh-key: ${{ secrets.DEPLOY_KEY }}
+          # App-authenticated pushes trigger validation on automation/release.
+          token: ${{ steps.app-token.outputs.token }}
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
