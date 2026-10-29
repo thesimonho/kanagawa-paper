@@ -1,7 +1,7 @@
 # 🌊 Kanagawa Paper
 
 <p align="center">
-Remixed light and dark Kanagawa color scheme with muted colors. For Neovim, VS Code, and Zed.
+Remixed light and dark Kanagawa color scheme with muted colors.
 </p>
 
 <p align="center">
