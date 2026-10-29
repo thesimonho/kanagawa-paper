@@ -18,14 +18,16 @@ Table of Contents                      *kanagawa-paper.nvim-table-of-contents*
 ==============================================================================
 1. Kanagawa Paper                         *kanagawa-paper.nvim-kanagawa-paper*
 
-Remixed light and dark Kanagawa color scheme with muted colors. For Neovim, VS Code, and Zed.
+Remixed light and dark Kanagawa color scheme with muted colors.
 
 
 
 
 
-**Get started:** |kanagawa-paper.nvim-vs-code| · |kanagawa-paper.nvim-zed| ·
-|kanagawa-paper.nvim-neovim| · |kanagawa-paper.nvim-other-applications|
+
+
+**Get started:** |kanagawa-paper.nvim-neovim| · |kanagawa-paper.nvim-vs-code|
+· |kanagawa-paper.nvim-zed| · |kanagawa-paper.nvim-other-applications|
 
 
 MOTIVATION                                    *kanagawa-paper.nvim-motivation*
@@ -194,9 +196,6 @@ CONFIGURATION ~
 
   [!IMPORTANT] Setthe configuration **BEFORE** loading the color scheme to ensure
   the settings are applied, otherwise defaults will be used.
-The default configuration can be found here
-<https://github.com/thesimonho/kanagawa-paper/blob/main/packages/neovim/lua/kanagawa-paper/config.lua>
-
 Default configuration ~
 
 >lua
