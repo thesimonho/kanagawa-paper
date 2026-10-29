@@ -6,6 +6,26 @@ import { ink } from "../../shared/themes/ink.ts";
 import { canvas } from "../../shared/themes/canvas.ts";
 import { json } from "../../scripts/build/output.ts";
 
+export function validateIconDimensions(value: Buffer) {
+  const signature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+  if (
+    value.length < 33 ||
+    !value.subarray(0, 8).equals(signature) ||
+    value.readUInt32BE(8) !== 13 ||
+    value.toString("ascii", 12, 16) !== "IHDR"
+  )
+    throw new Error(
+      "Extension icon requires a PNG with a complete IHDR header",
+    );
+  const width = value.readUInt32BE(16);
+  const height = value.readUInt32BE(20);
+  const maximum = 1024;
+  if (width === 0 || height === 0 || width > maximum || height > maximum)
+    throw new Error(
+      `Extension icon is ${width} × ${height}; dimensions must be 1–${maximum} pixels`,
+    );
+}
+
 export function validateTheme(value: ReturnType<typeof vscodeTheme>) {
   function check(item: unknown): void {
     if (Array.isArray(item)) {
@@ -50,6 +70,8 @@ export async function buildVscode(root: string, destination: string) {
   const manifest = JSON.parse(
     await readFile(join(source, "package.json"), "utf8"),
   );
+  if (manifest.icon)
+    validateIconDimensions(await readFile(join(source, manifest.icon)));
   delete manifest.scripts;
   delete manifest.devDependencies;
   await writeFile(
