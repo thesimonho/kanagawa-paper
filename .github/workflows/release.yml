@@ -8,6 +8,10 @@ on:
         default: false
   push:
     branches: [main]
+    paths-ignore:
+      - 'extras/**'
+      - palette_colors.md
+      - packages/neovim/doc/kanagawa-paper.nvim.txt
 concurrency:
   group: application-releases
   cancel-in-progress: false
