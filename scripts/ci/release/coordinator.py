@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import gzip
 import hashlib
 import io
 import json
@@ -538,6 +539,8 @@ def marketplace_matches(target: str, version: str, artifact: Path) -> bool:
     try:
         with urllib.request.urlopen(url, timeout=60) as response:
             remote = response.read()
+            if response.headers.get("Content-Encoding", "").lower() == "gzip":
+                remote = gzip.decompress(remote)
     except urllib.error.HTTPError as error:
         if error.code == 404:
             return False
