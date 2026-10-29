@@ -51,6 +51,11 @@ class Selection(unittest.TestCase):
         # Keep fixtures stable when a release PR stamps real package versions.
         baselines = {"neovim": "4.1.0", "vscode": "2.2.1", "zed": "0.1.0"}
         for target, definition in release.release_targets().items():
+            # A prepared release may already contain the fixture's next version.
+            # Reset changelogs together with versions so PSR sees fresh history.
+            (self.root / definition.changelog).write_text(
+                "# Changelog\n\n<!-- version list -->\n"
+            )
             path = self.root / definition.version_file
             if path.suffix == ".json":
                 package = json.loads(path.read_text())
