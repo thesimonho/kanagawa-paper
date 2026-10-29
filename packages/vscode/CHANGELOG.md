@@ -2,6 +2,20 @@
 
 <!-- version list -->
 
+## v3.0.1 (2026-10-29)
+
+### Bug Fixes
+
+- **vscode**: Resize icon ([#114](https://github.com/thesimonho/kanagawa-paper/pull/114),
+  [`38b4fd4`](https://github.com/thesimonho/kanagawa-paper/commit/38b4fd4e174eab4f6ff36d05b271d6c219f050ce))
+
+### Continuous Integration
+
+- Retain VSCE publication diagnostics
+  ([#112](https://github.com/thesimonho/kanagawa-paper/pull/112),
+  [`4fb6a70`](https://github.com/thesimonho/kanagawa-paper/commit/4fb6a70efcd128f8c967be261de77d8f6edeaf13))
+
+
 ## v3.0.0 (2026-10-29)
 
 ### Documentation

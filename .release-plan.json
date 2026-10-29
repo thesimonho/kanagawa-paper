@@ -1,27 +1,13 @@
 {
-  "prepared_from": "e8ecb8d32bd86fe262e7d02dfddb1e32fe2b5536",
+  "prepared_from": "38b4fd4e174eab4f6ff36d05b271d6c219f050ce",
   "schema": 1,
   "targets": {
-    "neovim": {
-      "notes": "## v5.0.0 (2026-10-29)\n\n### Chores\n\n- Refresh generated theme files\n  ([`57db8b1`](https://github.com/thesimonho/kanagawa-paper/commit/57db8b1b8f133c2d1a9cfff6d06e57892d9620a9))\n\n### Documentation\n\n- Correct repository README presentation\n  ([#105](https://github.com/thesimonho/kanagawa-paper/pull/105),\n  [`c15657d`](https://github.com/thesimonho/kanagawa-paper/commit/c15657d96fccec35b2997ea879bf4b7edf2d15c2))\n\n- Organize contributing and acknowledgements\n  ([#106](https://github.com/thesimonho/kanagawa-paper/pull/106),\n  [`d0e7b42`](https://github.com/thesimonho/kanagawa-paper/commit/d0e7b420178171a3967106d05b73bdccd9c467c4))\n\n- **README**: Move customization sections to wiki\n  ([#107](https://github.com/thesimonho/kanagawa-paper/pull/107),\n  [`ba5fcfc`](https://github.com/thesimonho/kanagawa-paper/commit/ba5fcfc65adc28ff06d0795be367726995107818))\n\n### Features\n\n- Introduce consolidated editor releases\n  ([#109](https://github.com/thesimonho/kanagawa-paper/pull/109),\n  [`b985f48`](https://github.com/thesimonho/kanagawa-paper/commit/b985f48593a0ea16e7d7b6e531305647d893313f))",
-      "previous_distribution": null,
-      "previous_source_tag": "neovim-source-4.1.0",
-      "previous_version": "4.1.0",
-      "version": "5.0.0"
-    },
     "vscode": {
-      "notes": "## v3.0.0 (2026-10-29)\n\n### Documentation\n\n- Correct repository README presentation\n  ([#105](https://github.com/thesimonho/kanagawa-paper/pull/105),\n  [`c15657d`](https://github.com/thesimonho/kanagawa-paper/commit/c15657d96fccec35b2997ea879bf4b7edf2d15c2))\n\n- Organize contributing and acknowledgements\n  ([#106](https://github.com/thesimonho/kanagawa-paper/pull/106),\n  [`d0e7b42`](https://github.com/thesimonho/kanagawa-paper/commit/d0e7b420178171a3967106d05b73bdccd9c467c4))\n\n- **README**: Move customization sections to wiki\n  ([#107](https://github.com/thesimonho/kanagawa-paper/pull/107),\n  [`ba5fcfc`](https://github.com/thesimonho/kanagawa-paper/commit/ba5fcfc65adc28ff06d0795be367726995107818))\n\n### Features\n\n- Introduce consolidated editor releases\n  ([#109](https://github.com/thesimonho/kanagawa-paper/pull/109),\n  [`b985f48`](https://github.com/thesimonho/kanagawa-paper/commit/b985f48593a0ea16e7d7b6e531305647d893313f))",
+      "notes": "## v3.0.1 (2026-10-29)\n\n### Bug Fixes\n\n- **vscode**: Resize icon ([#114](https://github.com/thesimonho/kanagawa-paper/pull/114),\n  [`38b4fd4`](https://github.com/thesimonho/kanagawa-paper/commit/38b4fd4e174eab4f6ff36d05b271d6c219f050ce))\n\n### Continuous Integration\n\n- Retain VSCE publication diagnostics\n  ([#112](https://github.com/thesimonho/kanagawa-paper/pull/112),\n  [`4fb6a70`](https://github.com/thesimonho/kanagawa-paper/commit/4fb6a70efcd128f8c967be261de77d8f6edeaf13))",
       "previous_distribution": null,
-      "previous_source_tag": "vscode-source-2.2.1",
-      "previous_version": "2.2.1",
-      "version": "3.0.0"
-    },
-    "zed": {
-      "notes": "## v0.2.0 (2026-10-29)\n\n### Documentation\n\n- Correct repository README presentation\n  ([#105](https://github.com/thesimonho/kanagawa-paper/pull/105),\n  [`c15657d`](https://github.com/thesimonho/kanagawa-paper/commit/c15657d96fccec35b2997ea879bf4b7edf2d15c2))\n\n- Organize contributing and acknowledgements\n  ([#106](https://github.com/thesimonho/kanagawa-paper/pull/106),\n  [`d0e7b42`](https://github.com/thesimonho/kanagawa-paper/commit/d0e7b420178171a3967106d05b73bdccd9c467c4))\n\n- **README**: Move customization sections to wiki\n  ([#107](https://github.com/thesimonho/kanagawa-paper/pull/107),\n  [`ba5fcfc`](https://github.com/thesimonho/kanagawa-paper/commit/ba5fcfc65adc28ff06d0795be367726995107818))\n\n### Features\n\n- Introduce consolidated editor releases\n  ([#109](https://github.com/thesimonho/kanagawa-paper/pull/109),\n  [`b985f48`](https://github.com/thesimonho/kanagawa-paper/commit/b985f48593a0ea16e7d7b6e531305647d893313f))",
-      "previous_distribution": null,
-      "previous_source_tag": "zed-source-0.1.0",
-      "previous_version": "0.1.0",
-      "version": "0.2.0"
+      "previous_source_tag": "vscode-source-3.0.0",
+      "previous_version": "3.0.0",
+      "version": "3.0.1"
     }
   }
 }
