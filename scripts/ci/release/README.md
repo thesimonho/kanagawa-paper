@@ -45,7 +45,11 @@ Only after every selected candidate is sealed does the coordinator atomically pu
 
 Archive publication for Neovim and Zed advances the target’s installable branch and publishes the draft. VS Code publishes the frozen VSIX, confirms that exact version's payload in Marketplace, then advances its branch and publishes its draft. A timeout is retried against the same artifact. An already present Marketplace version must match all candidate ZIP payload entries; a conflicting version stops the run. A published GitHub Release marks that target complete. Successful deployment records use stable application environment names and link to the public release or Marketplace. Status repair is idempotent.
 
-The workflow serializes release work and blocks the next release PR until the previous batch finishes. Ordinary source commits can continue meanwhile. Retry a failed run with workflow dispatch. Do not edit `.release-plan.json`, move tags, delete candidates, or manufacture another version to bypass a failed publication.
+The workflow serializes release work and blocks the next release PR until the previous batch finishes. Ordinary source commits can continue meanwhile. Retry a failed run with workflow dispatch. Do not edit `.release-plan.json`, move tags, delete candidates, or manufacture another version to bypass a retryable publication failure.
+
+For a permanent Marketplace validation rejection, a reviewed declaration in `rejections.json` can retire the candidate without claiming publication. Each declaration binds the source, target, version, and SHA-256 of the original `candidate.json`, with a reason and evidence URL. Recovery requires a sealed draft whose artifacts and immutable tag still match, and confirms the version is absent from Marketplace. The draft, artifacts, tags, and channel remain unchanged; no successful deployment is recorded. Other targets finish normally, after which a separately corrected release may be prepared. Rejections are never inferred from a failed command.
+
+Reconciliation runs the current coordinator against the exact frozen source worktree using paired `publish --source-root PATH --source-sha SHA` arguments. The source must be the current worktree root, share the tooling checkout's Git directory, and have the requested HEAD. Current tooling owns rejection declarations and publication dependencies; the frozen source owns release definitions, package versions, assembly code, and build dependencies. Sealed candidates are still downloaded and verified rather than rebuilt.
 
 ## Authentication probe
 

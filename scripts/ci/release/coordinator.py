@@ -18,22 +18,27 @@ import zipfile
 from functools import cache
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[3]
+TOOL_ROOT = Path(__file__).resolve().parents[3]
+ROOT = TOOL_ROOT
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from definitions import discover
+from rejections import load as load_rejections
 
 PLAN = ".release-plan.json"
 BRANCH = "automation/release"
 VERSION = re.compile(r"\d+\.\d+\.\d+\Z")
-VSCE = ROOT / "scripts/ci/release/node_modules/.bin/vsce"
+VSCE = TOOL_ROOT / "scripts/ci/release/node_modules/.bin/vsce"
 
 
 def run(
-    *args: str, cwd: Path = ROOT, env: dict | None = None, input: str | None = None
+    *args: str,
+    cwd: Path | None = None,
+    env: dict | None = None,
+    input: str | None = None,
 ) -> str:
     return subprocess.run(
         args,
-        cwd=cwd,
+        cwd=cwd or ROOT,
         env=env,
         input=input,
         text=True,
@@ -393,11 +398,17 @@ def archive_tree(tree: Path, output: Path) -> None:
                 archive.addfile(info, io.BytesIO(data))
 
 
-def candidate(target: str, item: dict, source: str, output: Path) -> dict:
+def candidate(
+    target: str, item: dict, source: str, output: Path, *, require_sealed: bool = False
+) -> dict:
     tag = f"{target}-{item['version']}"
     current = release(tag)
     assets = {asset["name"]: asset for asset in current["assets"]} if current else {}
     metadata_path = output / "candidate.json"
+    if require_sealed and (
+        not current or not current["draft"] or "candidate.json" not in assets
+    ):
+        raise ValueError("Rejection requires a sealed draft candidate")
     if "candidate.json" in assets:
         download_asset(assets["candidate.json"], metadata_path)
         sealed = json.loads(metadata_path.read_text())
@@ -590,13 +601,39 @@ def publish(plan: dict, source: str) -> None:
     validate_plan(plan, source)
     if git("rev-parse", "HEAD") != source:
         raise ValueError("Publication must run from the exact merged release source")
+    rejected = {}
+    for (declared_source, target, version), record in load_rejections(
+        TOOL_ROOT / "scripts/ci/release/rejections.json"
+    ).items():
+        if declared_source != source:
+            continue
+        if (
+            target not in plan["targets"]
+            or plan["targets"][target]["version"] != version
+            or release_targets()[target].profile != "vscode-marketplace"
+        ):
+            raise ValueError("Rejection does not match a Marketplace release target")
+        rejected[target] = record
     sealed = {}
     with tempfile.TemporaryDirectory(prefix="kanagawa-release-") as temporary:
         output = Path(temporary)
-        for target, item in plan["targets"].items():
+        # Verify rejected identities before any ordinary candidate mutations.
+        for target in sorted(plan["targets"], key=lambda t: t not in rejected):
+            item = plan["targets"][target]
             directory = output / target
             directory.mkdir()
-            sealed[target] = candidate(target, item, source, directory)
+            sealed[target] = candidate(
+                target, item, source, directory, require_sealed=target in rejected
+            )
+            if target in rejected:
+                if (
+                    digest(directory / "candidate.json")
+                    != rejected[target]["candidate_sha256"]
+                ):
+                    raise ValueError("Rejected candidate metadata hash mismatch")
+                artifact = directory / next(iter(sealed[target]["artifacts"]))
+                if marketplace_matches(target, item["version"], artifact):
+                    raise ValueError("Cannot reject a published Marketplace package")
         refs = []
         for target, item in plan["targets"].items():
             tag = f"{target}-source-{item['version']}"
@@ -608,6 +645,12 @@ def publish(plan: dict, source: str) -> None:
             refs.append("refs/tags/" + tag)
         git("push", "--atomic", "origin", *refs)
         for target, item in plan["targets"].items():
+            if target in rejected:
+                print(
+                    f"Rejected {target} {item['version']}: {rejected[target]['reason']}",
+                    file=sys.stderr,
+                )
+                continue
             tag = f"{target}-{item['version']}"
             current = release(tag)
             url = f"https://github.com/{repo_name()}/releases/tag/{tag}"
@@ -671,8 +714,12 @@ def workflow() -> None:
                 env = dict(os.environ, KANAGAWA_VSCE=str(VSCE))
                 run(
                     sys.executable,
-                    "scripts/ci/release/coordinator.py",
+                    str(TOOL_ROOT / "scripts/ci/release/coordinator.py"),
                     "publish",
+                    "--source-root",
+                    str(checkout),
+                    "--source-sha",
+                    source,
                     cwd=checkout,
                     env=env,
                 )
@@ -683,6 +730,24 @@ def workflow() -> None:
         open_pr(plan)
 
 
+def configure_source(path: str, source: str) -> None:
+    global ROOT
+    checkout = Path(path).resolve()
+    if not re.fullmatch(r"[a-f0-9]{40}", source):
+        raise ValueError("Invalid publication source SHA")
+    if (
+        checkout != Path.cwd().resolve()
+        or Path(git("rev-parse", "--show-toplevel", cwd=checkout)).resolve() != checkout
+    ):
+        raise ValueError("Publication source must be the current worktree root")
+    common = ("rev-parse", "--path-format=absolute", "--git-common-dir")
+    if git(*common, cwd=checkout) != git(*common, cwd=TOOL_ROOT):
+        raise ValueError("Publication source belongs to another repository")
+    if git("rev-parse", "HEAD", cwd=checkout) != source:
+        raise ValueError("Publication source HEAD differs from requested SHA")
+    ROOT = checkout
+
+
 def main() -> None:
     global VSCE
     VSCE = Path(os.environ.get("KANAGAWA_VSCE", str(VSCE)))
@@ -690,7 +755,15 @@ def main() -> None:
     parser.add_argument(
         "command", choices=("prepare", "publish", "run", "check-plan", "check-packages")
     )
+    parser.add_argument("--source-root")
+    parser.add_argument("--source-sha")
     args = parser.parse_args()
+    if args.source_root or args.source_sha:
+        if args.command != "publish" or not (args.source_root and args.source_sha):
+            parser.error(
+                "--source-root and --source-sha require publish and each other"
+            )
+        configure_source(args.source_root, args.source_sha)
     if args.command == "check-packages":
         check_packages()
     elif args.command == "prepare":
