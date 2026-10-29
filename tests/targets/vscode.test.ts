@@ -7,7 +7,51 @@ import { spawnSync } from "node:child_process";
 import { build, root } from "../../scripts/build/build.ts";
 import { artifactParity } from "../support/files.ts";
 import type { NeovimColors } from "../../packages/neovim/adapter.ts";
-import { validateTheme } from "../../packages/vscode/build.ts";
+import {
+  validateIconDimensions,
+  validateTheme,
+} from "../../packages/vscode/build.ts";
+
+test("VS Code rejects icon dimensions that Marketplace cannot accept", async () => {
+  const icon = await readFile(join(root, "packages/vscode/assets/icon.png"));
+  assert.equal(icon.readUInt32BE(16), 512);
+  assert.equal(icon.readUInt32BE(20), 512);
+  validateIconDimensions(icon);
+  for (const [width, height] of [
+    [1024, 1024],
+    [1, 1],
+  ]) {
+    const candidate = Buffer.from(icon);
+    candidate.writeUInt32BE(width, 16);
+    candidate.writeUInt32BE(height, 20);
+    validateIconDimensions(candidate);
+  }
+  for (const [width, height] of [
+    [1025, 512],
+    [512, 1025],
+    [0, 512],
+    [512, 0],
+  ]) {
+    const candidate = Buffer.from(icon);
+    candidate.writeUInt32BE(width, 16);
+    candidate.writeUInt32BE(height, 20);
+    assert.throws(
+      () => validateIconDimensions(candidate),
+      /dimensions must be/,
+    );
+  }
+  const invalid = Buffer.from(icon);
+  invalid[0] = 0;
+  const wrongChunk = Buffer.from(icon);
+  wrongChunk.write("IDAT", 12);
+  for (const candidate of [
+    invalid,
+    wrongChunk,
+    icon.subarray(0, 23),
+    icon.subarray(0, 32),
+  ])
+    assert.throws(() => validateIconDimensions(candidate), /IHDR header/);
+});
 
 test("VS Code preserves baseline output and extension packaging contracts", async () => {
   const output = await mkdtemp(join(tmpdir(), "kanagawa vscode "));
