@@ -328,6 +328,8 @@ How to add a new extra template:
 
 ### Development
 
+Maintainer automation uses GitHub App authentication for Git pushes and trusted publishing for the VS Code Marketplace. See [CI automation](https://github.com/thesimonho/kanagawa-paper/blob/main/scripts/ci/README.md) for the required repository configuration.
+
 Install Node 22 or later and run `npm ci --ignore-scripts` at the repository root. Run `just build` to assemble Neovim, VS Code, Zed, and extras under `dist/`, or `just watch neovim` to rebuild the Neovim target after source edits.
 
 Run `npm test` for shared logic and target contracts, `just test` for Neovim runtime tests, and `just test-targets` for release tooling tests. The complete gate is `just check`. It also needs Neovim, Python 3, and the pinned Python and Node release dependencies described in [the release README](https://github.com/thesimonho/kanagawa-paper/blob/main/scripts/ci/release/README.md).
