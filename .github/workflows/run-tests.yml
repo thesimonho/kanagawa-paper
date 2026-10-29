@@ -4,6 +4,13 @@ on:
   pull_request:
   push:
     branches: [main, automation/release]
+    paths-ignore:
+      - '**/*.md'
+      - 'extras/**'
+      - packages/neovim/doc/kanagawa-paper.nvim.txt
+concurrency:
+  group: validation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
