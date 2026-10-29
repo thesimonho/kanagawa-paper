@@ -59,7 +59,7 @@ The pinned VSCE 4.1.0 passes this protocol check. Offline tests cover the instal
 
 The `authentication_only` dispatch input in `.github/workflows/release.yml` runs the live check on `main` with `contents: read` and `id-token: write`. It skips generation and publication. The probe requests a GitHub OIDC token, exchanges it through the installed VSCE helper, and discards the credential. It rejects redirects, limits request time, and omits response bodies and credentials from errors. Other branches skip this mode. A successful exchange establishes authentication only, not package publication.
 
-Publication uses `vsce publish --oidc --packagePath` with no PAT fallback. Publisher trust must match the repository, workflow filename, and any job environment restriction. Deployment records do not set a job environment.
+Publication uses `vsce publish --oidc --packagePath` with no PAT fallback. The workflow selects `vsce.sh` through `KANAGAWA_VSCE` to keep CLI progress and failures on stderr while the coordinator captures stdout. The wrapper forwards arguments and the exit status to the pinned client, including when retrying a frozen source. Publisher trust must match the repository, workflow filename, and any job environment restriction. Deployment records do not set a job environment.
 
 ## Zed archive
 

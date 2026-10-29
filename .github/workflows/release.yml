@@ -85,5 +85,6 @@ jobs:
       - name: Reconcile publication and prepare combined release PR
         env:
           KANAGAWA_GENERATED_SOURCE: ${{ needs.generate.outputs.source }}
+          KANAGAWA_VSCE: ${{ github.workspace }}/scripts/ci/release/vsce.sh
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/ci/release/coordinator.py run
