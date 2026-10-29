@@ -646,6 +646,34 @@ class Selection(unittest.TestCase):
 
 
 class ArtifactValidation(unittest.TestCase):
+    def test_marketplace_verifies_plain_and_gzip_payloads(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            artifact = Path(temporary) / "package.vsix"
+            with zipfile.ZipFile(artifact, "w") as archive:
+                archive.writestr("extension/package.json", '{"version":"3.0.1"}')
+            payload = artifact.read_bytes()
+            for encoding in ("", "gzip"):
+                with self.subTest(encoding=encoding):
+                    response = io.BytesIO(
+                        release.gzip.compress(payload) if encoding else payload
+                    )
+                    response.headers = {"Content-Encoding": encoding}
+                    with patch.object(
+                        release.urllib.request, "urlopen", return_value=response
+                    ):
+                        self.assertTrue(
+                            release.marketplace_matches("vscode", "3.0.1", artifact)
+                        )
+            response = io.BytesIO(release.gzip.compress(payload))
+            response.headers = {"Content-Encoding": "gzip"}
+            with zipfile.ZipFile(artifact, "w") as archive:
+                archive.writestr("extension/package.json", '{"version":"different"}')
+            with patch.object(release.urllib.request, "urlopen", return_value=response):
+                with self.assertRaisesRegex(
+                    ValueError, "Marketplace version collision"
+                ):
+                    release.marketplace_matches("vscode", "3.0.1", artifact)
+
     def test_rejection_declarations_fail_closed(self):
         record = {
             "source": "a" * 40,
