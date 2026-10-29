@@ -9,7 +9,7 @@ agent:
 
 # Application releases
 
-Python Semantic Release 10.7.0 selects commits and prepares versions and changelogs. `coordinator.py` combines those edits into one PR, assembles distributions, and publishes frozen artifacts. Install Python dependencies from `requirements.txt` and Node dependencies with `npm ci --prefix scripts/ci/release --ignore-scripts`. Node 22 or later is required by the pinned VSCE 4.0.0.
+Python Semantic Release 10.7.0 selects commits and prepares versions and changelogs. `coordinator.py` combines those edits into one PR, assembles distributions, and publishes frozen artifacts. Install Python dependencies from `requirements.txt` and Node dependencies with `npm ci --prefix scripts/ci/release --ignore-scripts`. Node 22 or later is required by the pinned VSCE 4.1.0.
 
 ## Verification
 
@@ -55,7 +55,7 @@ The workflow serializes release work and blocks the next release PR until the pr
 node --import tsx scripts/ci/release/check-marketplace-auth.mts --check-client
 ```
 
-The pinned VSCE 4.0.0 fails this protocol check. Offline tests cover the rejection, a compatible protocol fixture, and secret-free errors. The probe does not patch the installed client.
+The pinned VSCE 4.1.0 passes this protocol check. Offline tests cover the installed client, rejection of incompatible clients, an independent protocol fixture, and secret-free errors. The probe does not patch the installed client.
 
 The `authentication_only` dispatch input in `.github/workflows/release.yml` runs the live check on `main` with `contents: read` and `id-token: write`. It skips generation and publication. The probe requests a GitHub OIDC token, exchanges it through the installed VSCE helper, and discards the credential. It rejects redirects, limits request time, and omits response bodies and credentials from errors. Other branches skip this mode. A successful exchange establishes authentication only, not package publication.
 

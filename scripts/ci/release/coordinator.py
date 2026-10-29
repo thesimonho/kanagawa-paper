@@ -453,7 +453,7 @@ def candidate(target: str, item: dict, source: str, output: Path) -> dict:
         "version": item["version"],
         "distribution": distribution,
         "artifacts": {filename: digest(artifact)},
-        "tools": {"python-semantic-release": "10.7.0", "vsce": "4.0.0"},
+        "tools": {"python-semantic-release": "10.7.0", "vsce": "4.1.0"},
     }
     write_json(metadata_path, sealed)
     gh("release", "upload", tag, str(metadata_path))

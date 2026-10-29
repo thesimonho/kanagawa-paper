@@ -7,7 +7,7 @@ import {
   type CredentialClient,
 } from "../../scripts/ci/release/check-marketplace-auth.mts";
 
-// Model the upstream protocol while the pinned release still uses the old one.
+// Keep an independent protocol fixture for probe failure-path coverage.
 const compatibleClient: CredentialClient = async (publisherName, options) => {
   const url = new URL(options.environment.ACTIONS_ID_TOKEN_REQUEST_URL!);
   url.searchParams.set("audience", "marketplace.visualstudio.com");
@@ -37,10 +37,17 @@ const environment = {
   ACTIONS_ID_TOKEN_REQUEST_TOKEN: "secret-request-token",
 };
 
-test("pinned VSCE 4.0.0 is blocked before any live network request", async () => {
+test("pinned VSCE supports the required Marketplace exchange protocol", async () => {
+  await checkClient(installedClient);
+});
+
+test("incompatible clients are blocked before live network access", async () => {
   let calls = 0;
+  const incompatibleClient: CredentialClient = async () => {
+    throw new Error("unsupported protocol");
+  };
   await assert.rejects(
-    checkAuthentication(environment, installedClient, async () => {
+    checkAuthentication(environment, incompatibleClient, async () => {
       calls++;
       throw new Error("must not run");
     }),

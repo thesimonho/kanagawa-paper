@@ -1,5 +1,7 @@
 {
   "name": "kanagawa-paper-release-tools",
   "private": true,
-  "devDependencies": { "@vscode/vsce": "4.0.0" }
+  "devDependencies": {
+    "@vscode/vsce": "4.1.0"
+  }
 }
