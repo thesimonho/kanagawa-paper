@@ -98,13 +98,6 @@ return {
 		dev = false,
 	},
 	{
-		"thesimonho/kanagawa-paper.nvim",
-		optional = true,
-		name = "kanagawa-paper.nvim",
-		dir = root .. "/dist/neovim",
-		dev = false,
-	},
-	{
 		"nvim-mini/mini.hipatterns",
 		opts = function(_, opts)
 			local hi = require("mini.hipatterns")
