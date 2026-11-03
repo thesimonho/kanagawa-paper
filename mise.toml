@@ -1,0 +1,43 @@
+[tasks.default]
+description = "List available project tasks"
+run = "mise tasks --local"
+
+[tasks.test]
+description = "Run Neovim runtime tests"
+run = "bash scripts/test/test.sh"
+
+[tasks.test-targets]
+description = "Run release tooling tests"
+run = "npm run test:release && python3 -m unittest discover -s tests/release -p 'test_*.py'"
+
+[tasks.syntax-specimen]
+description = "Open the syntax specimen in Neovim"
+run = "nvim -c \"lua dofile(vim.env.MISE_CONFIG_ROOT .. '/scripts/theme-audit/syntax_specimen.lua')\""
+
+[tasks.build]
+description = "Build application distributions and copyable extras"
+usage = '''
+arg "[target]" default="all" help="Build target"
+arg "[output]" default="dist" help="Output directory"
+'''
+run = 'npm run build -- "${usage_target?}" --output "${usage_output?}"'
+
+[tasks.watch]
+description = "Rebuild targets after source edits"
+usage = '''
+arg "[target]" default="all" help="Build target"
+arg "[output]" default="dist" help="Output directory"
+'''
+run = 'npm run watch -- "${usage_target?}" --output "${usage_output?}"'
+
+[tasks.generate]
+description = "Generate extras and palette preview locally"
+run = "npm run generate"
+
+[tasks.check]
+description = "Run the complete validation pipeline"
+run = "npm run check"
+
+[tasks.theme-audit]
+description = "Collect headless editor highlighting evidence"
+run = "node scripts/theme-audit/headless.cjs"

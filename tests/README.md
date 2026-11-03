@@ -17,8 +17,8 @@ agent:
 
 Run `npm test` for the shared and target TypeScript suites after installing root dependencies. Neovim must be available for installed-runtime checks. `npm run test:release` separately runs the OIDC and authentication-probe contracts after installing the Node dependencies in `scripts/ci/release`; core build tests do not require Marketplace tooling.
 
-`just test` runs the Lua specs in `neovim/`. The other Lua files there are probes invoked by target tests, not standalone test suites. Keep Neovim operations in Lua rather than embedding Lua strings in another language.
+`mise run test` runs the Lua specs in `neovim/`. The other Lua files there are probes invoked by target tests, not standalone test suites. Keep Neovim operations in Lua rather than embedding Lua strings in another language.
 
-Run Python automation tests with `python3 -m unittest discover -s tests/release -p 'test_*.py'` after installing the pinned release dependencies. `just test-targets` runs those plus the OIDC and authentication-probe contracts. `just check` and CI both call `npm run check`, which includes all suites, builds every registered target, and packages/validates every release-enabled target without publishing.
+Run Python automation tests with `python3 -m unittest discover -s tests/release -p 'test_*.py'` after installing the pinned release dependencies. `mise run test-targets` runs those plus the OIDC and authentication-probe contracts. `mise run check` and CI both call `npm run check`, which includes all suites, builds every registered target, and packages/validates every release-enabled target without publishing.
 
 Do not rewrite baseline fixtures to make a regression pass. The generation action requires fresh, nonempty vimdoc output; repeatability checks use the pinned panvimdoc runtime outside these suites.

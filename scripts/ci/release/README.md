@@ -23,7 +23,7 @@ The existing PSR settings provide the version file/key, changelog path and sourc
 
 `git-archive` uses the deterministic tar and GitHub release/channel path. `vscode-marketplace` packages with VSCE and confirms the frozen payload in Marketplace before advancing its channel. Both use the same candidate sealing and retry rules below. A new target using either profile needs its package, builder registration, release TOML, source baseline tag and tests; common workflow YAML and coordinator routing remain unchanged. A different publisher or toolchain needs a separate implementation. Neovim and Zed use `git-archive`; VS Code uses `vscode-marketplace`. Extras remain build-only. Zed registry submission is separate from its archive release.
 
-`python scripts/ci/release/coordinator.py check-packages` packages and validates every release-enabled target from `dist/` using the same helpers as publication. Build first. It writes only temporary artifacts and performs no Git or registry publication. The shared `npm run check` pipeline builds all targets immediately before this step; CI and `just check` call that pipeline.
+`python scripts/ci/release/coordinator.py check-packages` packages and validates every release-enabled target from `dist/` using the same helpers as publication. Build first. It writes only temporary artifacts and performs no Git or registry publication. The shared `npm run check` pipeline builds all targets immediately before this step; CI and `mise run check` call that pipeline.
 
 ## Selection and preparation
 

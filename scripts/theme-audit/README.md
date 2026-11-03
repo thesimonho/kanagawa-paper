@@ -10,7 +10,7 @@ These contributor tools collect highlighting evidence from the same source probe
 
 ## Visual specimen
 
-Run `just syntax-specimen` to open a compact highlight-group preview in your configured Neovim. `syntax_specimen.lua` applies named groups directly to a scratch buffer, so it does not require a parser or language server. It previews group colors; use the collectors and source fixtures to check how real code receives those groups.
+Run `mise run syntax-specimen` to open a compact highlight-group preview in your configured Neovim. `syntax_specimen.lua` applies named groups directly to a scratch buffer, so it does not require a parser or language server. It previews group colors; use the collectors and source fixtures to check how real code receives those groups.
 
 ## Fixtures and reports
 
@@ -31,9 +31,9 @@ The comparison rejects different fixture contents or theme names. It compares ex
 Build the relevant theme target, then run from the repository root:
 
 ```sh
-just theme-audit neovim sample.py
-just theme-audit flatpak sample.ts
-just theme-audit vscode sample.ts
+mise run theme-audit neovim sample.py
+mise run theme-audit flatpak sample.ts
+mise run theme-audit vscode sample.ts
 ```
 
 `neovim` uses `nvim --headless` and your normal configuration, with swap and ShaDa writes disabled. It clears previously loaded theme modules, verifies the local built theme source, opens the fixture, starts its installed Tree-sitter parser, and waits for highlights. Missing parsers or highlight queries fail the run. An attached language server is not required; reports record attached clients and whether semantic tokens were observed. This is a syntax baseline, not proof that semantic analysis has completed. Use `--init /path/to/init.lua` for an explicit configuration; the runner does not install parsers or start language servers itself.
@@ -43,7 +43,7 @@ The VS Code modes require Linux with `xvfb-run`, Xvfb, and `xauth`. They run a f
 By default, VS Code uses an empty extension directory plus its built-in extensions, sufficient for TypeScript. For Python or Rust, pass an existing extension directory containing the required language extensions. Extensions in that directory can execute during the run; the collector does not install extensions. For example:
 
 ```sh
-just theme-audit flatpak sample.py --extensions-dir /path/to/extensions
+mise run theme-audit flatpak sample.py --extensions-dir /path/to/extensions
 ```
 
 VS Code waits for a document semantic provider to return nonempty tokens. Missing providers or unavailable runtimes fail instead of producing a successful empty report. A token response proves provider activity, not full analysis of every probe. Reports still leave effective styles unknown.
