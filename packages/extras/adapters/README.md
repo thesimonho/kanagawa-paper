@@ -10,4 +10,4 @@ These maintained TypeScript functions return files for the registry in `../regis
 
 Color references use typed shared roles; headers use the registry metadata fields. Do not emit legacy template placeholders in generated output.
 
-Use `npm run build -- extras` or `npm run watch -- extras --only kitty` from the repository root. A filtered build preserves other adapters' output; the selected adapter owns its generated subdirectory.
+Use `mise exec -- npm run build -- extras` or `mise exec -- npm run watch -- extras --only kitty` from the repository root. A filtered build preserves other adapters' output; the selected adapter owns its generated subdirectory.

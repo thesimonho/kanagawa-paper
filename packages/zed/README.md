@@ -6,7 +6,7 @@ agent:
 
 # Zed adapter
 
-`just build zed` writes a local extension with Ink and Canvas under `dist/zed`. In Zed, use **Install Dev Extension** and select that directory. Choose **Kanagawa Paper Ink** or **Kanagawa Paper Canvas** with the theme selector. The extension ID is `kanagawa-paper-theme`.
+`mise run build zed` writes a local extension with Ink and Canvas under `dist/zed`. In Zed, use **Install Dev Extension** and select that directory. Choose **Kanagawa Paper Ink** or **Kanagawa Paper Canvas** with the theme selector. The extension ID is `kanagawa-paper-theme`.
 
 `adapter.ts` exposes the theme assembled by `highlights/index.ts`. The `highlights/` modules map canonical UI, syntax, status, changes, and ANSI roles to all 142 fields in the pinned style schema. Transparent controls and dim terminal colors use alpha at the adapter boundary. General conflict colors and backgrounds use the error status treatment. Zed's player selection and cursor fields use the shared selection and main text colors. Syntax titles use the first rainbow heading color, and namespaces use the LSP keyword color. Built-in functions, tags, selectors, and default emphasis use the shared syntax roles and `shared/styles.ts`. Common syntax captures include dotted punctuation, selectors, namespaces, diff markers and builtin functions. Unassigned variable color retains Zed's inherited foreground; language-specific captures can fall back to a configured parent.
 

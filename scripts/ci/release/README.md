@@ -9,11 +9,11 @@ agent:
 
 # Application releases
 
-Python Semantic Release 10.7.0 selects commits and prepares versions and changelogs. `coordinator.py` combines those edits into one PR, assembles distributions, and publishes frozen artifacts. Install Python dependencies from `requirements.txt` and Node dependencies with `npm ci --prefix scripts/ci/release --ignore-scripts`. Node 22 or later is required by the pinned VSCE 4.1.0.
+Python Semantic Release 10.7.0 selects commits and prepares versions and changelogs. `coordinator.py` combines those edits into one PR, assembles distributions, and publishes frozen artifacts. Install Python dependencies from `requirements.txt` and Node dependencies with `mise exec -- npm ci --prefix scripts/ci/release --ignore-scripts`. Node 22 or later is required by the pinned VSCE 4.1.0.
 
 ## Verification
 
-`npm run test:release` runs the offline TypeScript VSCE credential-boundary and authentication-probe checks after both root and release Node dependencies are installed. Python tests under `tests/release/test_release.py` own coordinator behavior; `tests/release/test_assemble.py` owns its Python assembly wrapper. The target package contracts are TypeScript suites under `tests/targets/`. See `tests/README.md` for the complete ownership map.
+`mise exec -- npm run test:release` runs the offline TypeScript VSCE credential-boundary and authentication-probe checks after both root and release Node dependencies are installed. Python tests under `tests/release/test_release.py` own coordinator behavior; `tests/release/test_assemble.py` owns its Python assembly wrapper. The target package contracts are TypeScript suites under `tests/targets/`. See `tests/README.md` for the complete ownership map.
 
 ## Target definitions
 
@@ -23,7 +23,7 @@ The existing PSR settings provide the version file/key, changelog path and sourc
 
 `git-archive` uses the deterministic tar and GitHub release/channel path. `vscode-marketplace` packages with VSCE and confirms the frozen payload in Marketplace before advancing its channel. Both use the same candidate sealing and retry rules below. A new target using either profile needs its package, builder registration, release TOML, source baseline tag and tests; common workflow YAML and coordinator routing remain unchanged. A different publisher or toolchain needs a separate implementation. Neovim and Zed use `git-archive`; VS Code uses `vscode-marketplace`. Extras remain build-only. Zed registry submission is separate from its archive release.
 
-`python scripts/ci/release/coordinator.py check-packages` packages and validates every release-enabled target from `dist/` using the same helpers as publication. Build first. It writes only temporary artifacts and performs no Git or registry publication. The shared `npm run check` pipeline builds all targets immediately before this step; CI and `just check` call that pipeline.
+`python scripts/ci/release/coordinator.py check-packages` packages and validates every release-enabled target from `dist/` using the same helpers as publication. Build first. It writes only temporary artifacts and performs no Git or registry publication. The shared `npm run check` pipeline builds all targets immediately before this step; CI and `mise run check` call that pipeline.
 
 ## Selection and preparation
 
@@ -56,7 +56,7 @@ Reconciliation runs the current coordinator against the exact frozen source work
 `check-marketplace-auth.mts` checks the installed VSCE credential helper's token endpoint, authorization scheme, audience, and publisher before making live requests. Run the offline check from the repository root:
 
 ```sh
-node --import tsx scripts/ci/release/check-marketplace-auth.mts --check-client
+mise exec -- node --import tsx scripts/ci/release/check-marketplace-auth.mts --check-client
 ```
 
 The pinned VSCE 4.1.0 passes this protocol check. Offline tests cover the installed client, rejection of incompatible clients, an independent protocol fixture, and secret-free errors. The probe does not patch the installed client.

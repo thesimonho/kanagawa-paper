@@ -23,7 +23,7 @@ shared palette, theme roles, and text styles
     → application loads the theme
 ```
 
-`just build <target>` and `just watch <target>` use the common dispatcher in `scripts/build/` to call the target's `build.ts`. Neovim, VS Code, and Zed each have an `adapter.ts` and a `build.ts`. Extras have multiple application adapters and one shared builder. Source package directories are not installable; preview or package the assembled output instead. See `scripts/README.md` for commands and the source-to-output table.
+`mise run build <target>` and `mise run watch <target>` use the common dispatcher in `scripts/build/` to call the target's `build.ts`. Neovim, VS Code, and Zed each have an `adapter.ts` and a `build.ts`. Extras have multiple application adapters and one shared builder. Source package directories are not installable; preview or package the assembled output instead. See `scripts/README.md` for commands and the source-to-output table.
 
 ## Target boundaries
 

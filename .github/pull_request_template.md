@@ -13,7 +13,7 @@ and format. For color changes, identify Ink, Canvas, or both. -->
 
 ## Validation
 
-<!-- State what you checked and the results. Use `just check` for code changes.
+<!-- State what you checked and the results. Use `mise run check` for code changes.
 For target-specific changes, include a check in that application when possible.
 Edit maintained source; CI owns generated extras, palette documentation, and Neovim help. -->
 
