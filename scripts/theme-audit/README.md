@@ -19,9 +19,9 @@ Run `mise run syntax-specimen` to open a compact highlight-group preview in your
 Run from the repository root:
 
 ```sh
-node scripts/theme-audit/cli.cjs validate
-node --test scripts/theme-audit/core.test.cjs
-node scripts/theme-audit/cli.cjs compare scripts/theme-audit/reports/neovim-sample.py.json scripts/theme-audit/reports/vscode-sample.py.json
+mise exec -- node scripts/theme-audit/cli.cjs validate
+mise exec -- node --test scripts/theme-audit/core.test.cjs
+mise exec -- node scripts/theme-audit/cli.cjs compare scripts/theme-audit/reports/neovim-sample.py.json scripts/theme-audit/reports/vscode-sample.py.json
 ```
 
 The comparison rejects different fixture contents or theme names. It compares exact RGB colors and emphasis for matching probes. Missing or incomplete effective styles are **unknown**, never a match. Use exactly the same theme name in both reports, for example `Kanagawa Paper Canvas`.
@@ -58,7 +58,7 @@ nvim --headless -u NONE -n -i NONE --cmd 'set runtimepath+=dist/neovim' -c 'lua 
 
 ## VS Code
 
-Build the theme with `npm run build -- vscode`, then launch a separate development window without attaching a debugger. On systems where `code` is available:
+Build the theme with `mise run build vscode`, then launch a separate development window without attaching a debugger. On systems where `code` is available:
 
 ```sh
 code --new-window --extensionDevelopmentPath="$PWD/dist/vscode" --extensionDevelopmentPath="$PWD/scripts/theme-audit" "$PWD"

@@ -1,3 +1,6 @@
+[tools]
+node = "22"
+
 [tasks.default]
 description = "List available project tasks"
 run = "mise tasks --local"

@@ -330,9 +330,9 @@ How to add a new extra template:
 
 Maintainer automation uses GitHub App authentication for Git pushes and trusted publishing for the VS Code Marketplace. See [CI automation](https://github.com/thesimonho/kanagawa-paper/blob/main/scripts/ci/README.md) for the required repository configuration.
 
-Install [mise](https://mise.jdx.dev/getting-started.html) and Node 22 or later, then run `npm ci --ignore-scripts` at the repository root. Run `mise tasks` to list the available tasks. Run `mise run build` to assemble Neovim, VS Code, Zed, and extras under `dist/`, or `mise run watch neovim` to rebuild the Neovim target after source edits.
+Install [mise](https://mise.jdx.dev/getting-started.html), then run `mise install` and `mise exec -- npm ci --ignore-scripts` at the repository root. mise provides Node 22 and npm. Run `mise tasks` to list the available tasks. Run `mise run build` to assemble Neovim, VS Code, Zed, and extras under `dist/`, or `mise run watch neovim` to rebuild the Neovim target after source edits.
 
-Run `npm test` for shared logic and target contracts, `mise run test` for Neovim runtime tests, and `mise run test-targets` for release tooling tests. The complete gate is `mise run check`. It also needs Neovim, Python 3, and the pinned Python and Node release dependencies described in [the release README](https://github.com/thesimonho/kanagawa-paper/blob/main/scripts/ci/release/README.md).
+Run `mise exec -- npm test` for shared logic and target contracts, `mise run test` for Neovim runtime tests, and `mise run test-targets` for release tooling tests. The complete gate is `mise run check`. It also needs Neovim, Python 3, and the pinned Python and Node release dependencies described in [the release README](https://github.com/thesimonho/kanagawa-paper/blob/main/scripts/ci/release/README.md).
 
 Build once, then open Neovim from the repository root with your existing lazy.nvim setup. The local `.lazy.lua` selects `dist/neovim`, activates Canvas, and reloads the theme after a successful build. Keep `mise run watch neovim` running while editing source. The preview reads generated swatches and does not write source colors. After `.lazy.lua` changes, review the file, run `:trust` from its buffer, then restart Neovim so Lazy can apply the updated plugin path.
 
