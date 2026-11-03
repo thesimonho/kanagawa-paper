@@ -35,6 +35,7 @@ class Selection(unittest.TestCase):
         self.git("config", "user.name", "Test")
         self.git("config", "user.email", "test@example.com")
         self.git("config", "commit.gpgsign", "false")
+        self.git("config", "tag.gpgsign", "false")
         self.git("config", "core.hooksPath", "/dev/null")
         remote = Path(self.temporary.name) / "remote.git"
         subprocess.run(
