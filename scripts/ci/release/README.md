@@ -11,6 +11,8 @@ agent:
 
 Python Semantic Release 10.7.0 selects commits and prepares versions and changelogs. `coordinator.py` combines those edits into one PR, assembles distributions, and publishes frozen artifacts. Install Python dependencies from `requirements.txt` and Node dependencies with `mise exec -- npm ci --prefix scripts/ci/release --ignore-scripts`. Node 22 or later is required by the pinned VSCE 4.1.0.
 
+For local checks, use an existing Python virtual environment or, if uv is installed, create one with `uv venv` and `uv pip install -r scripts/ci/release/requirements.txt`. `mise run check` and `mise run test-targets` use the active virtual environment, or `.venv` if none is active.
+
 ## Verification
 
 `mise exec -- npm run test:release` runs the offline TypeScript VSCE credential-boundary and authentication-probe checks after both root and release Node dependencies are installed. Python tests under `tests/release/test_release.py` own coordinator behavior; `tests/release/test_assemble.py` owns its Python assembly wrapper. The target package contracts are TypeScript suites under `tests/targets/`. See `tests/README.md` for the complete ownership map.

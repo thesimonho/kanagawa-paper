@@ -11,7 +11,7 @@ run = "bash scripts/test/test.sh"
 
 [tasks.test-targets]
 description = "Run release tooling tests"
-run = "npm run test:release && python3 -m unittest discover -s tests/release -p 'test_*.py'"
+run = 'export PATH="${VIRTUAL_ENV:-$MISE_CONFIG_ROOT/.venv}/bin:$PATH"; npm run test:release && python3 -m unittest discover -s tests/release -p "test_*.py"'
 
 [tasks.syntax-specimen]
 description = "Open the syntax specimen in Neovim"
@@ -39,7 +39,7 @@ run = "npm run generate"
 
 [tasks.check]
 description = "Run the complete validation pipeline"
-run = "npm run check"
+run = 'export PATH="${VIRTUAL_ENV:-$MISE_CONFIG_ROOT/.venv}/bin:$PATH"; npm run check'
 
 [tasks.theme-audit]
 description = "Collect headless editor highlighting evidence"
