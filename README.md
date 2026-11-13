@@ -1,6 +1,10 @@
 # 🌊 Kanagawa Paper
 
 <p align="center">
+<img width="50%" height="50%" src="https://github.com/user-attachments/assets/45c68e41-8e16-4c1a-ace4-d392d0e21a04" />
+</p>
+
+<p align="center">
 Remixed light and dark Kanagawa color scheme with muted colors.
 </p>
 
@@ -17,8 +21,6 @@ Remixed light and dark Kanagawa color scheme with muted colors.
 
 <img alt="Zed release" src="https://img.shields.io/github/v/release/thesimonho/kanagawa-paper?filter=zed-*&label=Zed&style=for-the-badge&labelColor=1F1F28&color=887389">
 </p>
-
-**Get started:** [Neovim](#neovim) · [VS Code](#vs-code) · [Zed](#zed) · [Other applications](#other-applications)
 
 ## 💡 Motivation
 
