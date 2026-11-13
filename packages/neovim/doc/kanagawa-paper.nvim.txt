@@ -26,9 +26,6 @@ Remixed light and dark Kanagawa color scheme with muted colors.
 
 
 
-**Get started:** |kanagawa-paper.nvim-neovim| · |kanagawa-paper.nvim-vs-code|
-· |kanagawa-paper.nvim-zed| · |kanagawa-paper.nvim-other-applications|
-
 
 MOTIVATION                                    *kanagawa-paper.nvim-motivation*
 
