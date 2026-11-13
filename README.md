@@ -1,20 +1,26 @@
 # 🌊 Kanagawa Paper
 
 <p align="center">
-Remixed light and dark Kanagawa color scheme with muted colors. For Neovim, VS Code, and Zed.
+<img width="50%" height="50%" src="https://github.com/user-attachments/assets/45c68e41-8e16-4c1a-ace4-d392d0e21a04" />
+</p>
+
+<p align="center">
+Remixed light and dark Kanagawa color scheme with muted colors.
 </p>
 
 <p align="center">
 <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/thesimonho/kanagawa-paper?style=for-the-badge&labelColor=1F1F28&color=c4b28a">
 
-<img alt="GitHub Release" src="https://img.shields.io/github/v/release/thesimonho/kanagawa-paper?style=for-the-badge&labelColor=1F1F28&color=887389">
-
 <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/thesimonho/kanagawa-paper/main?display_timestamp=committer&style=for-the-badge&labelColor=1F1F28&color=5d7a88">
 
 <img alt="GitHub Actions validation" src="https://img.shields.io/github/actions/workflow/status/thesimonho/kanagawa-paper/run-tests.yml?branch=main&event=push&style=for-the-badge&label=build&labelColor=1F1F28&color=699469">
-</p>
+<br />
+<img alt="Neovim release" src="https://img.shields.io/github/v/release/thesimonho/kanagawa-paper?filter=neovim-*&label=Neovim&style=for-the-badge&labelColor=1F1F28&color=887389">
 
-**Get started:** [VS Code](#vs-code) · [Zed](#zed) · [Neovim](#neovim) · [Other applications](#other-applications)
+<img alt="VS Code release" src="https://img.shields.io/github/v/release/thesimonho/kanagawa-paper?filter=vscode-*&label=VS%20Code&style=for-the-badge&labelColor=1F1F28&color=887389">
+
+<img alt="Zed release" src="https://img.shields.io/github/v/release/thesimonho/kanagawa-paper?filter=zed-*&label=Zed&style=for-the-badge&labelColor=1F1F28&color=887389">
+</p>
 
 ## 💡 Motivation
 
@@ -138,8 +144,6 @@ return {
 
 > [!IMPORTANT]
 > Set the configuration **BEFORE** loading the color scheme to ensure the settings are applied, otherwise defaults will be used.
-
-The default configuration can be found [here](https://github.com/thesimonho/kanagawa-paper/blob/main/packages/neovim/lua/kanagawa-paper/config.lua)
 
 <details>
 <summary>Default configuration</summary>
@@ -319,18 +323,20 @@ How to add a new extra template:
 
 1. Create a new TypeScript adapter in [packages/extras/adapters](https://github.com/thesimonho/kanagawa-paper/tree/main/packages/extras/adapters).
 2. Register the adapter, name, and output file extension in the `extras` registry in [packages/extras/registry.ts](https://github.com/thesimonho/kanagawa-paper/blob/main/packages/extras/registry.ts).
-3. Open a PR. CI checks that the extras, palette, and Neovim help generators run successfully. For an optional local preview, run `just generate`.
+3. Open a PR. CI checks that the extras, palette, and Neovim help generators run successfully. For an optional local preview, run `mise run generate`.
 
 > [!IMPORTANT]
 > Post-merge automation on `main` generates and commits the extras, palette preview, and Neovim help. You do not need to generate or commit these outputs locally, including when contributing from a fork.
 
 ### Development
 
-Install Node 22 or later and run `npm ci --ignore-scripts` at the repository root. Run `just build` to assemble Neovim, VS Code, Zed, and extras under `dist/`, or `just watch neovim` to rebuild the Neovim target after source edits.
+Maintainer automation uses GitHub App authentication for Git pushes and trusted publishing for the VS Code Marketplace. See [CI automation](https://github.com/thesimonho/kanagawa-paper/blob/main/scripts/ci/README.md) for the required repository configuration.
 
-Run `npm test` for shared logic and target contracts, `just test` for Neovim runtime tests, and `just test-targets` for release tooling tests. The complete gate is `just check`. It also needs Neovim, Python 3, and the pinned Python and Node release dependencies described in [the release README](https://github.com/thesimonho/kanagawa-paper/blob/main/scripts/ci/release/README.md).
+Install [mise](https://mise.jdx.dev/getting-started.html), then run `mise install` and `mise exec -- npm ci --ignore-scripts` at the repository root. mise provides Node 22 and npm. Run `mise tasks` to list the available tasks. Run `mise run build` to assemble Neovim, VS Code, Zed, and extras under `dist/`, or `mise run watch neovim` to rebuild the Neovim target after source edits.
 
-Build once, then open Neovim from the repository root with your existing lazy.nvim setup. The local `.lazy.lua` selects `dist/neovim`, activates Canvas, and reloads the theme after a successful build. Keep `just watch neovim` running while editing source. The preview reads generated swatches and does not write source colors. After `.lazy.lua` changes, review the file, run `:trust` from its buffer, then restart Neovim so Lazy can apply the updated plugin path.
+Run `mise exec -- npm test` for shared logic and target contracts, `mise run test` for Neovim runtime tests, and `mise run test-targets` for release tooling tests. The complete gate is `mise run check`. It also needs Neovim, Python 3, and the pinned Python and Node release dependencies described in [the release README](https://github.com/thesimonho/kanagawa-paper/blob/main/scripts/ci/release/README.md).
+
+Build once, then open Neovim from the repository root with your existing lazy.nvim setup. The local `.lazy.lua` selects `dist/neovim`, activates Canvas, and reloads the theme after a successful build. Keep `mise run watch neovim` running while editing source. The preview reads generated swatches and does not write source colors. After `.lazy.lua` changes, review the file, run `:trust` from its buffer, then restart Neovim so Lazy can apply the updated plugin path.
 
 | Directory   | Purpose                                                |
 | ----------- | ------------------------------------------------------ |
